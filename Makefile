@@ -1,7 +1,7 @@
 CC = gcc
-FFLAGS = -O3 -Wall -std=c99
-LFLAGS = -lm -lgsl -lgslcblas
-OBJECTS = wavefunction.o main.o
+FFLAGS = -O3 -Wall -std=c99 -fopenmp
+LFLAGS = -lgomp -lm -lgsl -lgslcblas -lcuba
+OBJECTS = libcuba.a tdho.o main.o utility.o
 
 main.exe: $(OBJECTS)
 	$(CC) $(LFLAGS) $(OBJECTS) -o matelm.exe
