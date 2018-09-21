@@ -1,45 +1,50 @@
 #include <stdio.h>
-#include <gsl/gsl_sf_laguerre.h>
-#include <gsl/gsl_integration.h>
-#include <gsl/gsl_math.h>
+#include <stdlib.h>
 #include "tdho.h"
-#include "utility.h"
+#include "operator_id.h"
 
-double radial_1d(double p, void* gsl_params) {
-    wf_params* params = (wf_params*) gsl_params;
-    double b_factor = M_SQRT2 / gsl_pow_3(params->b);
-    return b_factor * norm_nl(params) * gsl_sf_laguerre_n(params->n, 0.5, 2*p);
-}
+#define HEADING "ISU Two-body matrix elements\n"
+#define OPERATOR "Operator: "
+#define CONSTANTS "Relevant constants: "
+#define QNUMS "Quantum numbers: "
 
 int main() {
-    wf_params iparams = { 100, 0, 0, 1 };
-    double N_nl;
+    int nmax = 200, lmax = 2, NMAX = 10, LMAX = 0;
+    int s = 1, j = 1, mj = 0, t = 0, mt = 0;
+    int sp = 1, jp = 1, mjp = 0, tp = 0, mtp = 0;
 
-    N_nl = norm_nl(&iparams);
+    double b = 1, result;
+    q_nums *i_nums = malloc(sizeof(q_nums));
+    q_nums *f_nums = malloc(sizeof(q_nums));
+
+    printf(HEADING);
+    printf(OPERATOR);
+    printf("Toy\n");
+    printf(CONSTANTS);
+    printf("None\n");
+    printf(QNUMS);
+    printf("s' = %d, j' = %d, t' = %d, s = %d, j = %d, t = %d\n",
+	   sp, jp, tp, s, j, t);
+    printf("nmax = %d, lmax = %d, NMAX = %d, LMAX = %d", nmax, lmax, NMAX, LMAX);
+    printf("\n");
+    printf("N\tL\tn\tl\tNp\tLp\tnp\tlp\tMatrix Element\n");
     
+    for (int L = 0, Lp = 0; L <= LMAX && Lp <= LMAX; L++, Lp++) {
+	for (int l = 0, lp = 0; l <= lmax && lp <= lmax; l++, lp++) {
+	    for (int N = 0, Np = 0; N <= NMAX && Np <= NMAX; N++, Np++) {
+		for (int n = 0, np = 0; n <= nmax && np <= nmax; n++, np++) {
+		    set_q_nums(i_nums, n, l, N, L, s, j, mj, t, mt);
+		    set_q_nums(f_nums, np, lp, Np, Lp, sp, jp, mjp, tp, mtp);
+		    result = operator_id(i_nums, f_nums, &b);
+		    if (result)
+			printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\n",
+			       N, L, n, l, Np, Lp, np, lp, result);
+		}
+	    }
+	}
+    }
 
-    gsl_integration_fixed_workspace* w
-	= gsl_integration_workspace_alloc(1000);
-    const gsl_integration_fixed_type* T = gsl_integration_fixed_laguerre;
-
-    int num_nodes = (iparams.n + 1) / 2 + 1;
-    w = gsl_integration_fixed_alloc(T, num_nodes, 0.0, 1.0, 0.5, 0.0); 
-
-    gsl_function F;
-    F.function = &radial_1d;
-    F.params = &iparams;
-
-    double result;
-    gsl_integration_fixed(&F, &result, w);
-
-    printf("%f\n", result);
-
-    gsl_integration_fixed_free(w);
-
-/* #pragma omp parallel for */
-/*     for (int i=0; i <= 4; ++i) */
-/* 	for (int j=0; j <= 4; ++j) */
-/* 	    if (i > j) */
-/* 		printf("%d\t %d\t %d\n", i, j, omp_get_thread_num()); */
-    
+    printf("-99999\n");
+    free(f_nums);
+    free(i_nums);
 }

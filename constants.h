@@ -1,6 +1,6 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
-const double pion_mass = 134.9770; // (in MeV)
+extern const double PION_MASS = 134.9770; // (in MeV)
 
 #endif
