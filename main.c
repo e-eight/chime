@@ -1,57 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "constants.h"
+#include "utility.h"
 #include "tdho.h"
-#include "operator_id.h"
-#include "operator_r_sq.h"
+#include "operators.h"
 
-#define HEADING "ISU Two-body matrix elements\n"
-#define OPERATOR "Operator: "
-#define CONSTANTS "Relevant constants: "
-#define QNUMS "Quantum numbers: "
+int main(int argc, char *argv[])
+{
+    int nmax = 7, lmax = 2, NMAX = 0, LMAX = 0;
+    int si = 1, ji = 1, mji = 0, ti = 0, mti = 0;
+    int sf = 1, jf = 1, mjf = 0, tf = 0, mtf = 0;
 
-int main() {
-    /* int nmax = 200, lmax = 2, NMAX = 10, LMAX = 0; */
-    /* int s = 1, j = 1, mj = 0, t = 0, mt = 0; */
-    /* int sp = 1, jp = 1, mjp = 0, tp = 0, mtp = 0; */
+    double osc_energy, osc_constant;
 
-    /* double b = 1, result; */
-    /* q_nums *i_nums = malloc(sizeof(q_nums)); */
-    /* q_nums *f_nums = malloc(sizeof(q_nums)); */
-
-    /* printf(HEADING); */
-    /* printf(OPERATOR); */
-    /* printf("Toy\n"); */
-    /* printf(CONSTANTS); */
-    /* printf("None\n"); */
-    /* printf(QNUMS); */
-    /* printf("s' = %d, j' = %d, t' = %d, s = %d, j = %d, t = %d\n", */
-    /* 	   sp, jp, tp, s, j, t); */
-    /* printf("nmax = %d, lmax = %d, NMAX = %d, LMAX = %d", nmax, lmax, NMAX, LMAX); */
-    /* printf("\n"); */
-    /* printf("N\tL\tn\tl\tNp\tLp\tnp\tlp\tMatrix Element\n"); */
+    osc_energy = 20; // in MeV
+    osc_constant = HBARC / sqrt(RED_NUCLEON_MASS * osc_energy);
     
-    /* for (int L = 0, Lp = 0; L <= LMAX && Lp <= LMAX; L++, Lp++) { */
-    /* 	for (int l = 0, lp = 0; l <= lmax && lp <= lmax; l++, lp++) { */
-    /* 	    for (int N = 0, Np = 0; N <= NMAX && Np <= NMAX; N++, Np++) { */
-    /* 		for (int n = 0, np = 0; n <= nmax && np <= nmax; n++, np++) { */
-    /* 		    set_q_nums(i_nums, n, l, N, L, s, j, mj, t, mt); */
-    /* 		    set_q_nums(f_nums, np, lp, Np, Lp, sp, jp, mjp, tp, mtp); */
-    /* 		    result = operator_id(i_nums, f_nums, &b); */
-    /* 		    if (result) */
-    /* 			printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\n", */
-    /* 			       N, L, n, l, Np, Lp, np, lp, result); */
-    /* 		} */
-    /* 	    } */
-    /* 	} */
-    /* } */
+    q_nums *ket = malloc(sizeof(q_nums));
+    q_nums *bra = malloc(sizeof(q_nums));
 
-    /* printf("-99999\n"); */
-    /* free(f_nums); */
-    /* free(i_nums); */
-
-    wf_params i_params = {0, 2, 0, 1};
-    wf_params f_params = {0, 2, 0, 1};
+    printf("nmax = %d, lmax = %d \n", 2*nmax + lmax, lmax);
+    printf(" ki  li  kf  lf   RME\n");
+    
     double result;
-    result = integral_l1(&i_params, &f_params);
-    printf("The result is %f \n", result);
+    // for (int L = 0, Lp = 0; L <= LMAX && Lp <= LMAX; L++, Lp++) {
+    for (int li = 0; li <= lmax; li = li + 2)
+    {
+        for (int lf = 0; lf <= lmax; lf = lf + 2)
+        {
+            //	    for (int N = 0, Np = 0; N <= NMAX && Np <= NMAX; N++, Np++) {
+            for (int ni = 0; ni <= nmax; ni++)
+            {
+                for (int nf = 0; nf <= nmax; nf++)
+                {
+                    set_q_nums(ket, ni, li, 0, 0, si, ji, mji, ti, mti);
+                    set_q_nums(bra, nf, lf, 0, 0, sf, jf, mjf, tf, mtf);
+                    result = operator_r_sq("N2LO Struct", ket, bra, &osc_constant);
+                    printf("%3d %3d %3d %3d   %e\n",
+                           2*ni + li, li, 2*nf + lf, lf, result);
+                }
+            }
+        }
+    }
+
+    printf("-99999\n");
+    free(bra);
+    free(ket);
 }

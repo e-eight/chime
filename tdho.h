@@ -10,11 +10,11 @@ typedef struct q_nums q_nums;
 struct q_nums { int n; int l; int N; int L; int s;
     int j; int mj; int t; int mt; };
 
-void set_q_nums(q_nums *i_nums, int n, int l, int N, int L,
+void set_q_nums(q_nums *nums, int n, int l, int N, int L,
 		int s, int j, int mj, int t, int mt);
 
-bool isequal_wf_params(wf_params *i_params, wf_params* f_params);
-bool isequal_q_nums(q_nums *i_nums, q_nums *f_nums);
+bool isequal_wf_params(wf_params *ket, wf_params* bra);
+bool isequal_q_nums(q_nums *ket, q_nums *bra);
 
 double radial_nl(double p, const wf_params *params);
 double norm_nl(const wf_params *params);

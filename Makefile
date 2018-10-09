@@ -1,8 +1,8 @@
 CC = gcc
 FFLAGS = -O3 -Wall -std=c99 -fopenmp
 LFLAGS = -lgomp -lm -lgsl -lgslcblas -lcuba
-OBJECTS = tdho.o main.o utility.o operator_id.o \
-	operator_r_sq.o hcubature.o
+OBJECTS = tdho.o constants.o utility.o main.o \
+	operator_r_sq.o 
 SHAREDLIBS = libcuba.a
 
 main.exe: $(OBJECTS)

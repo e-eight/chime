@@ -1,45 +1,124 @@
 #include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_integration.h>
-#include <gsl/gsl_sf_laguerre.h>
+#include <string.h>
+#include "constants.h"
 #include "tdho.h"
-#include "operator_r_sq.h"
-//#include "cubature.h"
+#include "utility.h"
+#include "operators.h"
 
-double integrand_l(double y, void *gsl_params) {
-    integrand_l_params *params = (integrand_l_params *) gsl_params;
-    return gsl_sf_laguerre_n(params->n, params->alpha, y)
-	* gsl_sf_laguerre_n(params->np, params->alphap, y);
+double p_one(int l)
+{
+    return (2*l - 1) * (2*l + 1);
 }
 
-double integral_l1(wf_params *i_params, wf_params *f_params) {
-    int n = i_params->n, l = i_params->l, np = f_params->n, lp = f_params->l;
-    double GSL_A = 0, GSL_B = 1, GSL_ALPHA = (lp + l - 1) / 2;
-    integrand_l_params params = { n, l+0.5, np, lp+0.5 };
+double p_two(int l, int m)
+{
+    return (l - m) * (l + m);
+}
+
+double p_three(int l, int m)
+{
+    return sqrt((l - m -1) * (l - m) * (l + m - 1) * (l + m));
+}
+
+double integral_y(int li, int mli, int lf, int mlf)
+{
+    if (mlf != mli)
+    {
+        return 0;
+    }
+    else if (lf == li + 2)
+    {
+        double coeff = sqrt((2*li + 5) / (2*li + 1));
+        return coeff * p_three(li + 2, mli) / p_one(li + 1);
+    }
+    else if (lf == li - 2)
+    {
+        double coeff = sqrt((2*li - 3) / (2*li + 1));
+        return coeff * p_three(li, mli) / p_one(li);
+    }
+    else if (lf == li)
+    {
+        double term1 = p_two(li, mli) / p_one(li);
+        double term2 = p_two(li + 1, mli) / p_one(li + 1);
+        return term1 + term2;
+    }
+
+    return 0;
+}
+
+double integral_l(int ni, int li, int nf, int lf, double b)
+{
+    double result = 0;
     
-    gsl_integration_fixed_workspace *workspace
-    	= gsl_integration_workspace_alloc(1000);
-    const gsl_integration_fixed_type *T = gsl_integration_fixed_laguerre;
+    if (lf == li + 2)
+    {
+        result = (sqrt((ni + li + 2.5) * (ni + li + 1.5)) * delta(nf, ni)
+                  + 2 * sqrt(ni * (ni + li + 1.5)) * delta(nf, ni - 1)
+                  + sqrt(ni * (ni - 1)) * delta(nf, ni - 2)) ;
+    }
+    else if (lf == li - 2)
+    {
+        result = (sqrt((ni + li + 0.5) * (ni + li - 0.5)) * delta(nf, ni)
+                  + 2 * sqrt((ni + 1) * (ni + li - 0.5)) * delta(nf, ni - 1)
+                  + sqrt((ni + 1) * (ni + 2)) * delta(nf, ni - 2));
+    }
+    else if (lf == li)
+    {
+        result = ((2*ni + li + 1.5) * delta(nf, ni)
+                  + sqrt(ni * (ni + li + 0.5)) * delta(nf, ni - 1)
+                  + sqrt((ni + 1) * (ni + li + 1.5)) * delta(ni, nf - 1));
+    }
 
-    int num_nodes =  (n + np + 1) / 2 + 5;
-    workspace = gsl_integration_fixed_alloc(T, num_nodes, GSL_A, GSL_B, GSL_ALPHA, 0.0);
+    return 6 * b * b * result;
 
-    /* gsl_integration_workspace *workspace */
-    /* 	= gsl_integration_workspace_alloc(1000); */
-        
-    gsl_function F;
-    F.function = &integrand_l;
-    F.params = &params;
+}
     
-    double result;
-    gsl_integration_fixed(&F, &result, workspace);
+double r_sq_lo(q_nums *ket, q_nums *bra, double *b)
+{   
+    int ni = ket->n, li = ket->l, si = ket->s, ji = ket->j, ti = ket->t;
+    int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
+    int mji = ket->mj, mjf = bra->mj, mti = ket->mt, mtf = bra->mt;
 
-    /* gsl_integration_qags (&F, 0, 1, 0, 1e-3, 1000, workspace, &result, &error); */
+    if (sf != si || tf != ti || mjf != mji || mtf != mti)
+        return 0;
 
-    gsl_integration_fixed_free(workspace);
+    double result = 0;
+#pragma omp parallel for
+    for (int ms = -si; ms <= si; ms++)
+    {
+        double cgproduct = (cg_coeff(li, si, ji, mji-ms, ms, mji)
+                            * cg_coeff(lf, sf, jf, mjf-ms, ms, mjf));
+        result += (cgproduct * integral_l(ni, li, nf, lf, *b)
+                   * integral_y(li, mji-ms, lf, mjf-ms));
+    }
+    return 0.5 * result;
+}
 
-    //  hcubature_v(1, &integrand_l, &integrand_params, 1, &tmin, &tmax,
-//	      0, 0, 1e-4, ERROR_INDIVIDUAL, &result, &error);
+double r_sq_struct(q_nums *ket, q_nums *bra, double *b)
+{
+    int ni = ket->n, li = ket->l, si = ket->s, ji = ket->j, ti = ket->t;
+    int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
+    int mji = ket->mj, mjf = bra->mj, mti = ket->mt, mtf = bra->mt;
+
+    if (sf != si || tf != ti || mjf != mji || mtf != mti)
+        return 0;
     
-    return result;
+    double result = 0;
+#pragma omp parallel for
+    for (int ms = -si; ms <= si; ms++)
+    {
+        double cgproduct = (cg_coeff(li, si, ji, mji-ms, ms, mji)
+                            * cg_coeff(lf, sf, jf, mjf-ms, ms, mjf));
+        result += (cgproduct * delta(ni, nf) * delta(li, lf)
+                   * delta(mji-ms, mjf-ms));
+    }
+    return 2 * R_ES_SQUARED * result;
+}
+
+double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)
+{
+    if (!strcmp(order, "LO"))
+        return r_sq_lo(ket, bra, b);
+    else if (!strcmp(order, "N2LO Struct"))
+        return r_sq_struct(ket, bra, b);
 }
