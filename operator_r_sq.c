@@ -53,20 +53,20 @@ double integral_l(int ni, int li, int nf, int lf, double b)
     if (lf == li + 2)
     {
         result = (sqrt((ni + li + 2.5) * (ni + li + 1.5)) * delta(nf, ni)
-                  + 2 * sqrt(ni * (ni + li + 1.5)) * delta(nf, ni - 1)
+                  - 2 * sqrt(ni * (ni + li + 1.5)) * delta(nf, ni - 1)
                   + sqrt(ni * (ni - 1)) * delta(nf, ni - 2)) ;
     }
     else if (lf == li - 2)
     {
         result = (sqrt((ni + li + 0.5) * (ni + li - 0.5)) * delta(nf, ni)
-                  + 2 * sqrt((ni + 1) * (ni + li - 0.5)) * delta(nf, ni - 1)
+                  - 2 * sqrt((ni + 1) * (ni + li - 0.5)) * delta(nf, ni - 1)
                   + sqrt((ni + 1) * (ni + 2)) * delta(nf, ni - 2));
     }
     else if (lf == li)
     {
         result = ((2*ni + li + 1.5) * delta(nf, ni)
-                  + sqrt(ni * (ni + li + 0.5)) * delta(nf, ni - 1)
-                  + sqrt((ni + 1) * (ni + li + 1.5)) * delta(ni, nf - 1));
+                  - sqrt(ni * (ni + li + 0.5)) * delta(nf, ni - 1)
+                  - sqrt((ni + 1) * (ni + li + 1.5)) * delta(ni, nf - 1));
     }
 
     return 6 * b * b * result;
@@ -94,7 +94,7 @@ double r_sq_lo(q_nums *ket, q_nums *bra, double *b)
     return 0.5 * result;
 }
 
-double r_sq_struct(q_nums *ket, q_nums *bra, double *b)
+double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)
 {
     int ni = ket->n, li = ket->l, si = ket->s, ji = ket->j, ti = ket->t;
     int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
@@ -117,8 +117,10 @@ double r_sq_struct(q_nums *ket, q_nums *bra, double *b)
 
 double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)
 {
-    if (!strcmp(order, "LO"))
+    if (!strcmp(order, "lo"))
         return r_sq_lo(ket, bra, b);
-    else if (!strcmp(order, "N2LO Struct"))
-        return r_sq_struct(ket, bra, b);
+    else if (!strcmp(order, "n2lo"))
+        return r_sq_n2lo(ket, bra, b);
+    else if (!strcmp(order, "all"))
+        return r_sq_lo(ket, bra, b) + r_sq_n2lo(ket, bra, b);
 }
