@@ -117,10 +117,12 @@ double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)
 
 double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)
 {
-    if (!strcmp(order, "lo"))
+    if (strcmp(order, "lo") == 0)
         return r_sq_lo(ket, bra, b);
-    else if (!strcmp(order, "n2lo"))
+    else if (strcmp(order, "nlo") == 0)
+        return 0;
+    else if (strcmp(order, "n2lo") == 0)
         return r_sq_n2lo(ket, bra, b);
-    else if (!strcmp(order, "all"))
+    else if (strcmp(order, "all") == 0)
         return r_sq_lo(ket, bra, b) + r_sq_n2lo(ket, bra, b);
 }

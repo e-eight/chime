@@ -7,6 +7,15 @@
 #include "tdho.h"
 #include "operators.h"
 
+void print_rme(char *operator, char *order, q_nums *ket,
+               q_nums *bra, double *osc_constant)
+{
+    double result;
+    if (strcmp(operator, "rsq") == 0)
+        result = operator_r_sq(order, ket, bra, osc_constant);
+    printf("%3d %3d %3d %3d   %e\n", ni, li, nf, lf, result);
+}
+
 int main(int argc, char *argv[])
 {
     
@@ -26,36 +35,33 @@ int main(int argc, char *argv[])
     ji = argv[9];
     jf = argv[10];
 
-    int si = 1, mji = 0, ti = 0, mti = 0;
-    int sf = 1, mjf = 0, tf = 0, mtf = 0;
+    int mji = 0, mti = 0;
+    int mjf = 0, mtf = 0;
 
     osc_constant = HBARC / sqrt(RED_NUCLEON_MASS * atof(osc_energy));
     
     q_nums *ket = malloc(sizeof(q_nums));
     q_nums *bra = malloc(sizeof(q_nums));
 
-    // printf("nmax = %d \n", 2 * atoi(nmax) + atoi(lmax));
     printf(" ni  li  nf  lf   RME\n");
     
-    double result;
-    // for (int L = 0, Lp = 0; L <= LMAX && Lp <= LMAX; L++, Lp++) {
     for (int li = atoi(lmin_i); li <= atoi(lmax_i); li = li + 2)
     {
         for (int lf = atoi(lmin_f); lf <= atoi(lmax_f); lf = lf + 2)
         {
-            //	    for (int N = 0, Np = 0; N <= NMAX && Np <= NMAX; N++, Np++) {
-            for (int ni = 0; ni <= atoi(nmax); ni++)
+            for (int ni = 0; ni <= atoi(nmax); ni = ni + 2)
             {
-                for (int nf = 0; nf <= atoi(nmax); nf++)
+                for (int nf = 0; nf <= atoi(nmax); nf = nf + 2)
                 {
-                    set_q_nums(ket, ni, li, 0, 0, si, atoi(ji), mji, ti, mti);
-                    set_q_nums(bra, nf, lf, 0, 0, sf, atoi(jf), mjf, tf, mtf);
-
-                    if (!strcmp(operator, "rsq"))
+                    if (ni >= li && nf >= lf)
                     {
-                        result = operator_r_sq(order, ket, bra, &osc_constant);
-                        printf("%3d %3d %3d %3d   %e\n",
-                               2*ni + li, li, 2*nf + lf, lf, result);
+                        int nri = (ni - li) / 2;
+                        int nrf = (nf - lf) / 2;
+                        set_q_nums(ket, nri, li, 0, 0, si,
+                                   atoi(ji), mji, ti, mti);
+                        set_q_nums(bra, nrf, lf, 0, 0, sf,
+                                   atoi(jf), mjf, tf, mtf);
+                        print_rme(operator, order, ket, bra, &osc_constant);
                     }
                 }
             }
