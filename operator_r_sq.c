@@ -5,81 +5,69 @@
 #include "utility.h"
 #include "operators.h"
 
-double p_one(int l)
+double plm(int l, int m)
 {
-    return (2*l - 1) * (2*l + 1);
-}
-
-double p_two(int l, int m)
-{
-    return (l - m) * (l + m);
-}
-
-double p_three(int l, int m)
-{
-    return sqrt((l - m -1) * (l - m) * (l + m - 1) * (l + m));
-}
-
-double integral_y(int li, int mli, int lf, int mlf)
-{
-    if (mlf != mli)
-    {
-        return 0;
-    }
-    else if (lf == li + 2)
-    {
-        double coeff = sqrt((2*li + 5) / (2*li + 1));
-        return coeff * p_three(li + 2, mli) / p_one(li + 1);
-    }
-    else if (lf == li - 2)
-    {
-        double coeff = sqrt((2*li - 3) / (2*li + 1));
-        return coeff * p_three(li, mli) / p_one(li);
-    }
-    else if (lf == li)
-    {
-        double term1 = p_two(li, mli) / p_one(li);
-        double term2 = p_two(li + 1, mli) / p_one(li + 1);
-        return term1 + term2;
-    }
-
+    if (l != 0 && l != m && l != -m)
+        return sqrt((l - m) * (l + m) / (2*l + 1.0) / (2*l - 1.0));
     return 0;
 }
 
-double integral_l(int ni, int li, int nf, int lf, double b)
+double spherical_integral_lo(int li, int mli, int lf, int mlf)
 {
     double result = 0;
-    
-    if (lf == li + 2)
+    if (mlf == mli)
     {
-        result = (sqrt((ni + li + 2.5) * (ni + li + 1.5)) * delta(nf, ni)
-                  - 2 * sqrt(ni * (ni + li + 1.5)) * delta(nf, ni - 1)
-                  + sqrt(ni * (ni - 1)) * delta(nf, ni - 2)) ;
+        result = ((plm(li, mli) * plm(li, mli)
+                   + plm(li + 1, mli) * plm(li + 1, mli)) * delta(lf, li)
+                  + plm(li + 1, mli) * plm(li + 2, mli) * delta(lf, li + 2)
+                  + plm(lf + 1, mli) * plm(lf + 2, mli) * delta(li, lf + 2));
     }
-    else if (lf == li - 2)
-    {
-        result = (sqrt((ni + li + 0.5) * (ni + li - 0.5)) * delta(nf, ni)
-                  - 2 * sqrt((ni + 1) * (ni + li - 0.5)) * delta(nf, ni - 1)
-                  + sqrt((ni + 1) * (ni + 2)) * delta(nf, ni - 2));
-    }
-    else if (lf == li)
+
+    return result;
+}
+
+double radial_integral_bare(int ni, int li, int nf, int lf, double b)
+{
+    double result = 0;
+    if (lf == li)
     {
         result = ((2*ni + li + 1.5) * delta(nf, ni)
-                  - sqrt(ni * (ni + li + 0.5)) * delta(nf, ni - 1)
-                  - sqrt((ni + 1) * (ni + li + 1.5)) * delta(ni, nf - 1));
+                  - sqrt((ni + 1) * (ni + li + 1.5)) * delta(nf, ni + 1)
+                  - sqrt((nf + 1) * (nf + li + 1.5)) * delta(ni, nf + 1));
+        result = b * b * result;
     }
-
-    return 6 * b * b * result;
-
+    return result;
 }
-    
-double r_sq_lo(q_nums *ket, q_nums *bra, double *b)
-{   
+
+double radial_integral_lo(int ni, int li, int nf, int lf, double b)
+{
+    double result = 0;
+    if (lf == li)
+    {
+        result = radial_integral_bare(ni, li, nf, lf, b);
+    }
+    else if (lf == li + 2)
+    {
+        result = (sqrt((nf + li + 2.5) * (nf + li + 3.5)) * delta(ni, nf)
+                  + 2 * sqrt((nf + 1) / (nf + li + 2.5)) * delta(ni, nf + 1)
+                  + (sqrt((nf + 1) * (nf + 2))
+                     / (nf + li + 3.5) / (nf + li + 2.5)) * delta(ni, nf + 2));
+        result = b * b * result;
+    }
+    else if (li == lf + 2)
+    {
+        result = radial_integral_lo(nf, lf, ni, li, b);
+    }
+    return result;
+}
+
+double r_sq_bare(q_nums *ket, q_nums *bra, double *b)
+{
     int ni = ket->n, li = ket->l, si = ket->s, ji = ket->j, ti = ket->t;
     int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
     int mji = ket->mj, mjf = bra->mj, mti = ket->mt, mtf = bra->mt;
 
-    if (sf != si || tf != ti || mjf != mji || mtf != mti)
+    if (sf != si || jf != ji || tf != ti || mjf != mji || mtf != mti)
         return 0;
 
     double result = 0;
@@ -88,10 +76,31 @@ double r_sq_lo(q_nums *ket, q_nums *bra, double *b)
     {
         double cgproduct = (cg_coeff(li, si, ji, mji-ms, ms, mji)
                             * cg_coeff(lf, sf, jf, mjf-ms, ms, mjf));
-        result += (cgproduct * integral_l(ni, li, nf, lf, *b)
-                   * integral_y(li, mji-ms, lf, mjf-ms));
+        result += (cgproduct * delta(lf, li)
+                   * radial_integral_bare(ni, li, nf, lf, *b));
     }
-    return 0.5 * result;
+    return result;
+}
+    
+double r_sq_lo(q_nums *ket, q_nums *bra, double *b)
+{   
+    int ni = ket->n, li = ket->l, si = ket->s, ji = ket->j, ti = ket->t;
+    int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
+    int mji = ket->mj, mjf = bra->mj, mti = ket->mt, mtf = bra->mt;
+
+    if (sf != si || jf != ji || tf != ti || mjf != mji || mtf != mti)
+        return 0;
+
+    double result = 0;
+#pragma omp parallel for
+    for (int ms = -si; ms <= si; ms++)
+    {
+        double cgproduct = (cg_coeff(li, si, ji, mji-ms, ms, mji)
+                            * cg_coeff(lf, sf, jf, mjf-ms, ms, mjf));
+        result += (cgproduct * radial_integral_lo(ni, li, nf, lf, *b)
+                   * spherical_integral_lo(li, mji-ms, lf, mjf-ms));
+    }
+    return 0.75 * result;
 }
 
 double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)
@@ -100,7 +109,7 @@ double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)
     int nf = bra->n, lf = bra->l, sf = bra->s, jf = bra->j, tf = bra->t;
     int mji = ket->mj, mjf = bra->mj, mti = ket->mt, mtf = bra->mt;
 
-    if (sf != si || tf != ti || mjf != mji || mtf != mti)
+    if (sf != si || jf != ji || tf != ti || mjf != mji || mtf != mti)
         return 0;
     
     double result = 0;
@@ -112,12 +121,14 @@ double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)
         result += (cgproduct * delta(ni, nf) * delta(li, lf)
                    * delta(mji-ms, mjf-ms));
     }
-    return 2 * R_ES_SQUARED * result;
+    return R_ES_SQUARED * result;
 }
 
 double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)
 {
-    if (strcmp(order, "lo") == 0)
+    if (strcmp(order, "bare") == 0)
+        return r_sq_bare(ket, bra, b);
+    else if (strcmp(order, "lo") == 0)
         return r_sq_lo(ket, bra, b);
     else if (strcmp(order, "nlo") == 0)
         return 0;

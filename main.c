@@ -10,10 +10,11 @@
 void print_rme(char *operator, char *order, q_nums *ket,
                q_nums *bra, double *osc_constant)
 {
-    double result;
+    double result = 0;
+    int ni = ket->n, li = ket->l, nf = bra->n, lf = bra->l;
     if (strcmp(operator, "rsq") == 0)
         result = operator_r_sq(order, ket, bra, osc_constant);
-    printf("%3d %3d %3d %3d   %e\n", ni, li, nf, lf, result);
+    printf("%3d %3d %3d %3d   %e\n", 2*ni + li, li, 2*nf + lf, lf, result);
 }
 
 int main(int argc, char *argv[])
@@ -35,8 +36,8 @@ int main(int argc, char *argv[])
     ji = argv[9];
     jf = argv[10];
 
-    int mji = 0, mti = 0;
-    int mjf = 0, mtf = 0;
+    int si = 1, ti = 0, mji = 0, mti = 0;
+    int sf = 1, tf = 0, mjf = 0, mtf = 0;
 
     osc_constant = HBARC / sqrt(RED_NUCLEON_MASS * atof(osc_energy));
     
