@@ -1,12 +1,39 @@
-#! /usr/bin/env python
+ #! /usr/bin/env python
 
+from itertools import product
 from subprocess import run
 
+def add_to_file(operator, osc_energy, order, nmax, jmax,
+                lmin_i, lmax_i, lmin_f, lmax_f,
+                si, sf, ji, jf, ti, tf):
+    sep = ""
+    jval = sep.join(["j", jmax])
+    osc_val = sep.join([osc_energy, "MeV"])
+    sep = "."
+    fname = sep.join([operator, order, osc_val, jval, 'dat'])
+    out = open(fname, "a+")
+    out.write(f"# s = {si}, j = {ji}, t = {ti}, ")
+    out.write(f"s' = {sf}, j' = {jf}, t' = {tf}\n")
+    run(["./matelm.exe", operator, osc_energy, order, nmax, lmin_i,
+         lmax_i, lmin_f, lmax_f, si, sf, ji, jf, ti, tf], stdout=out)
+    out.write("\n")
+    out.close()    
+
+def generate_all_channels(operator, order, osc_energy, nmax, jmax):
+    for (ji, jf) in product(range(jmax + 1), range(jmax + 1)):
+        for (si, sf, ti, tf) in product(range(2), range(2), range(2), range(2)):
+            lmin_i, lmax_i = ji - si, ji + si
+            lmin_f, lmax_f = jf - sf, jf + sf
+            if (lmin_i >= 0 and lmin_f >= 0):
+                add_to_file(operator, order, osc_energy, nmax, jmax
+                            lmin_i, lmax_i, lmin_f, lmax_f,
+                            si, sf, ji, jf, ti, tf)
+                
 def main():
     run(["make", "clean"])
     run("make")
     
-    operator = input("Operator? (rsq, e2, m1) ")
+    operator = input("Operator? (rsq)")
     osc_energy = input("Oscillator Energy? ")
     nmax = input("Enter the maximum radial quantum number. ")
 
