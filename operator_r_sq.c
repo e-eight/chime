@@ -135,5 +135,7 @@ double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)
     else if (strcmp(order, "n2lo") == 0)
         return r_sq_n2lo(ket, bra, b);
     else if (strcmp(order, "all") == 0)
-        return r_sq_lo(ket, bra, b) + r_sq_n2lo(ket, bra, b);
+        return (r_sq_bare(ket, bra, b)
+                + r_sq_lo(ket, bra, b)
+                + r_sq_n2lo(ket, bra, b));
 }

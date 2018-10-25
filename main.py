@@ -53,6 +53,22 @@ def main():
     sep = "."
     cname = sep.join([operator, li, fn_ji, lf, fn_jf])
 
+    filename = sep.join([cname, "bare", osc_energy, "dat"])
+    f = open(filename, "w");
+    f.write("# ISU Two Body Reduced Matrix Elements\n")
+    f.write("# Operator = ")
+    f.write(operator)
+    f.write("\n")
+    f.write("# Order = LO\n")
+    f.write("# Relevant LECs: None\n")
+    f.write("# Oscillator Energy: 20 MeV\n")
+    f.write(f"# s = 1, j = {ji}, t = 0, s' = 1, j' = {jf}, t' = 0\n")
+    f.close()
+    f = open(filename, "a")
+    run(["./matelm.exe", operator, "bare", osc_energy, nmax, str(lmin_i),
+         str(lmax_i), str(lmin_f), str(lmax_f), ji, jf], stdout=f)
+    f.close()
+
     filename = sep.join([cname, "lo", osc_energy, "dat"])
     f = open(filename, "w");
     f.write("# ISU Two Body Reduced Matrix Elements\n")
