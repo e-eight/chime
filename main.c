@@ -19,10 +19,8 @@ void print_rme(char *operator, char *order, q_nums *ket,
 
 int main(int argc, char *argv[])
 {
-    
-
     char *operator, *order, *osc_energy, *nmax;
-    char *lmin_i, *lmax_i, *lmin_f, *lmax_f, *ji, *jf;
+    char *lmin_i, *lmax_i, *lmin_f, *lmax_f, *si, *sf, *ji, *jf, *ti, *tf;
     double osc_constant;
 
     operator = argv[1];
@@ -33,19 +31,21 @@ int main(int argc, char *argv[])
     lmax_i = argv[6];
     lmin_f = argv[7];
     lmax_f = argv[8];
-    ji = argv[9];
-    jf = argv[10];
+    si = argv[9];
+    sf = argv[10];
+    ji = argv[11];
+    jf = argv[12];
+    ti = argv[13];
+    tf = argv[14];
 
-    int si = 1, ti = 0, mji = 0, mti = 0;
-    int sf = 1, tf = 0, mjf = 0, mtf = 0;
+    int mji = 0, mti = 0;
+    int mjf = 0, mtf = 0;
 
     osc_constant = HBARC / sqrt(RED_NUCLEON_MASS * atof(osc_energy));
     
     q_nums *ket = malloc(sizeof(q_nums));
     q_nums *bra = malloc(sizeof(q_nums));
 
-    printf(" ni  li  nf  lf   RME\n");
-    
     for (int li = atoi(lmin_i); li <= atoi(lmax_i); li = li + 2)
     {
         for (int lf = atoi(lmin_f); lf <= atoi(lmax_f); lf = lf + 2)
@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
                     {
                         int nri = (ni - li) / 2;
                         int nrf = (nf - lf) / 2;
-                        set_q_nums(ket, nri, li, 0, 0, si,
-                                   atoi(ji), mji, ti, mti);
-                        set_q_nums(bra, nrf, lf, 0, 0, sf,
-                                   atoi(jf), mjf, tf, mtf);
+                        set_q_nums(ket, nri, li, 0, 0, atoi(si),
+                                   atoi(ji), mji, atoi(ti), mti);
+                        set_q_nums(bra, nrf, lf, 0, 0, atoi(sf),
+                                   atoi(jf), mjf, atoi(tf), mtf);
                         print_rme(operator, order, ket, bra, &osc_constant);
                     }
                 }
