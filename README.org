@@ -4,6 +4,18 @@ This project is for computing the two body (reduced) matrix elements of
 operators developed using chiral EFT, in the three dimensional harmonic
 oscillator basis. It depends on the GNU Scientific Library.
 
+** Requirements
+   - GNU Scientific Library
+   - GCC
+   - libgomp
+
+** Installation and Usage
+   #+BEGIN_SRC 
+     git clone https://github.com/e-eight/chiral-nme.git
+     cd chiral-nme
+     python main.py
+   #+END_SRC
+
 ** Implemented
    - Rms charge radius (upto N2LO)
 
