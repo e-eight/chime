@@ -1,6 +1,6 @@
 * Two body matrix elements of chiral eft operators
 
-χ-nme computes the two body (reduced) matrix elements of operators
+χNME computes the two body (reduced) matrix elements of operators
 developed using heavy baryon chiral effective field theory, in the three
 dimensional harmonic oscillator basis.
 
