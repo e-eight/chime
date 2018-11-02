@@ -64,6 +64,7 @@ class MatrixFile:
             
 def main():
     run(["make", "clean"])
+    run(["make", "build"])
     run("make")
 
     mf = MatrixFile.from_input()

@@ -1,15 +1,32 @@
 CC = gcc
 FFLAGS = -O3 -Wall -std=c99 -fopenmp
 LFLAGS = -lgomp -lm -lgsl -lgslcblas -lcuba
-OBJECTS = tdho.o constants.o utility.o main.o \
-	operator_r_sq.o 
-SHAREDLIBS = libcuba.a
 
-main.exe: $(OBJECTS)
-	$(CC) $(LFLAGS) $(OBJECTS) $(SHAREDLIBS) -o matelm.exe
+MKDIR_P = mkdir -p
 
-%.o: %.c
-	$(CC) $(LFLAGS) $(FFLAGS) -c $<
+SOURCEDIR = src
+BUILDDIR = build
+LIBDIR = local/lib
+
+EXECUTABLE = matelm.exe
+SOURCES = $(wildcard $(SOURCEDIR)/*.c)
+OBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES)) 
+SHAREDLIBS = $(wildcard $(LIBDIR)/*.a)
+
+.PHONY = directories all clean
+
+all: $(EXECUTABLE)
+
+directories: $(BUILDDIR)
 
 clean:
-	rm -f $(OBJECTS) *.exe *.out *.dat
+	rm -rf $(BUILDDIR) *.exe *.out *.dat
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(SHAREDLIBS) $(LFLAGS) -o $@
+
+$(OBJECTS): $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
+	$(CC) $(LFLAGS) $(FFLAGS) -c $< -o $@
+
+$(BUILDDIR):
+	$(MKDIR_P) $(BUILDDIR)
