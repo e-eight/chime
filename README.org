@@ -1,8 +1,8 @@
 * Two body matrix elements of chiral eft operators
 
-This project is for computing the two body (reduced) matrix elements of
-operators developed using chiral EFT, in the three dimensional harmonic
-oscillator basis. It depends on the GNU Scientific Library.
+χ-nme computes the two body (reduced) matrix elements of operators
+developed using heavy baryon chiral effective field theory, in the three
+dimensional harmonic oscillator basis.
 
 ** Requirements
    - GNU Scientific Library
