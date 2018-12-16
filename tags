@@ -1,0 +1,945 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/4f9f6f83/
+$(BUILDDIR)	Makefile	/^$(BUILDDIR):$/;"	t
+$(BUILDDIR)/%.o	Makefile	/^$(OBJECTS): $(BUILDDIR)\/%.o: $(SOURCEDIR)\/%.c$/;"	t
+$(EXECUTABLE)	Makefile	/^$(EXECUTABLE): $(OBJECTS)$/;"	t
+$(OBJECTS)	Makefile	/^$(OBJECTS): $(BUILDDIR)\/%.o: $(SOURCEDIR)\/%.c$/;"	t
+.PHONY	Makefile	/^.PHONY = directories all clean$/;"	m
+AllocatedEntries	src/lib/basis/operator.h	/^    std::size_t AllocatedEntries(const basis::OperatorBlocks<tFloat>& matrices)$/;"	f	namespace:basis	typeref:typename:std::size_t
+BASIS_BASIS_H_	src/lib/basis/basis.h	/^#define BASIS_BASIS_H_$/;"	d
+BASIS_DEGENERATE_H_	src/lib/basis/degenerate.h	/^#define BASIS_DEGENERATE_H_$/;"	d
+BASIS_HYPERSECTOR_H_	src/lib/basis/hypersector.h	/^#define BASIS_HYPERSECTOR_H_$/;"	d
+BASIS_JJJPN_OPERATOR_H_	src/lib/basis/jjjpn_operator.h	/^#define BASIS_JJJPN_OPERATOR_H_$/;"	d
+BASIS_JJJPN_SCHEME_H_	src/lib/basis/jjjpn_scheme.h	/^#define BASIS_JJJPN_SCHEME_H_$/;"	d
+BASIS_JJJT_OPERATOR_H_	src/lib/basis/jjjt_operator.h	/^#define BASIS_JJJT_OPERATOR_H_$/;"	d
+BASIS_JJJT_SCHEME_H_	src/lib/basis/jjjt_scheme.h	/^#define BASIS_JJJT_SCHEME_H_$/;"	d
+BASIS_JT_OPERATOR_H_	src/lib/basis/jt_operator.h	/^#define BASIS_JT_OPERATOR_H_$/;"	d
+BASIS_LSJT_OPERATOR_H_	src/lib/basis/lsjt_operator.h	/^#define BASIS_LSJT_OPERATOR_H_$/;"	d
+BASIS_LSJT_SCHEME_H_	src/lib/basis/lsjt_scheme.h	/^#define BASIS_LSJT_SCHEME_H_$/;"	d
+BASIS_MANY_BODY_H_	src/lib/basis/many_body.h	/^#define BASIS_MANY_BODY_H_$/;"	d
+BASIS_M_SCHEME_H_	src/lib/basis/m_scheme.h	/^#define BASIS_M_SCHEME_H_$/;"	d
+BASIS_NLJ_OPERATOR_H_	src/lib/basis/nlj_operator.h	/^#define BASIS_NLJ_OPERATOR_H_$/;"	d
+BASIS_NLJ_ORBITAL_H_	src/lib/basis/nlj_orbital.h	/^#define BASIS_NLJ_ORBITAL_H_$/;"	d
+BASIS_OPERATOR_H_	src/lib/basis/operator.h	/^#define BASIS_OPERATOR_H_$/;"	d
+BASIS_PROTON_NEUTRON_H_	src/lib/basis/proton_neutron.h	/^#define BASIS_PROTON_NEUTRON_H_$/;"	d
+BUILDDIR	Makefile	/^BUILDDIR = build$/;"	m
+BaseDegenerateSpace	src/lib/basis/degenerate.h	/^    class BaseDegenerateSpace$/;"	c	namespace:basis
+BaseDegenerateState	src/lib/basis/degenerate.h	/^      BaseDegenerateState(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::BaseDegenerateState
+BaseDegenerateState	src/lib/basis/degenerate.h	/^      BaseDegenerateState(const SubspaceType& subspace, int index)$/;"	f	class:basis::BaseDegenerateState
+BaseDegenerateState	src/lib/basis/degenerate.h	/^    class BaseDegenerateState$/;"	c	namespace:basis
+BaseDegenerateSubspace	src/lib/basis/degenerate.h	/^    BaseDegenerateSubspace() : full_dimension_(0) {}$/;"	f	class:basis::BaseDegenerateSubspace
+BaseDegenerateSubspace	src/lib/basis/degenerate.h	/^    class BaseDegenerateSubspace$/;"	c	namespace:basis
+BaseHypersector	src/lib/basis/hypersector.h	/^      BaseHypersector($/;"	f	class:basis::BaseHypersector
+BaseHypersector	src/lib/basis/hypersector.h	/^    class BaseHypersector$/;"	c	namespace:basis
+BaseHypersectors	src/lib/basis/hypersector.h	/^    class BaseHypersectors$/;"	c	namespace:basis
+BaseSector	src/lib/basis/basis.h	/^      BaseSector($/;"	f	class:basis::BaseSector
+BaseSector	src/lib/basis/basis.h	/^    class BaseSector$/;"	c	namespace:basis
+BaseSectors	src/lib/basis/basis.h	/^    class BaseSectors$/;"	c	namespace:basis
+BaseSpace	src/lib/basis/basis.h	/^    class BaseSpace$/;"	c	namespace:basis
+BaseState	src/lib/basis/basis.h	/^      BaseState(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::BaseState
+BaseState	src/lib/basis/basis.h	/^      BaseState(const SubspaceType& subspace, int index)$/;"	f	class:basis::BaseState
+BaseState	src/lib/basis/basis.h	/^    class BaseState$/;"	c	namespace:basis
+BaseSubspace	src/lib/basis/basis.h	/^    BaseSubspace() : dimension_(0) {}$/;"	f	class:basis::BaseSubspace
+BaseSubspace	src/lib/basis/basis.h	/^    class BaseSubspace$/;"	c	namespace:basis
+CC	Makefile	/^CC = gcc$/;"	m
+CHIRAL_H	src/chiral.h	/^#define CHIRAL_H$/;"	d
+CONSTANTS	src/utility.h	/^#define CONSTANTS /;"	d
+CanonicalizeIndices	src/lib/basis/operator.h	/^    CanonicalizeIndices($/;"	f	namespace:basis	typeref:typename:std::tuple<int,int,int,int,bool>
+CanonicalizeIndicesJT	src/lib/basis/jt_operator.h	/^    std::tuple<int,int,bool,double> CanonicalizeIndicesJT($/;"	f	namespace:basis	typeref:typename:std::tuple<int,int,bool,double>
+CanonicalizeIndicesJT	src/lib/basis/jt_operator.h	/^    std::tuple<int,int,int,int,bool,double> CanonicalizeIndicesJT($/;"	f	namespace:basis	typeref:typename:std::tuple<int,int,int,int,bool,double>
+ChiralOperator	src/chiral.h	/^        ChiralOperator() {};$/;"	f	class:chiral::ChiralOperator
+ChiralOperator	src/chiral.h	/^        ChiralOperator(const std::string s): name{s} {}$/;"	f	class:chiral::ChiralOperator
+ChiralOperator	src/chiral.h	/^    class ChiralOperator$/;"	c	namespace:chiral
+ChiralOrder	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	g	namespace:chiral
+ClearOperatorJT	src/lib/basis/jt_operator.h	/^    void ClearOperatorJT($/;"	f	namespace:basis	typeref:typename:void
+ConstructIdentityOperatorRelativeLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ConstructIdentityOperatorRelativeLSJT($/;"	f	namespace:basis	typeref:typename:void
+ConstructZeroOperatorRelativeLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ConstructZeroOperatorRelativeLSJT($/;"	f	namespace:basis	typeref:typename:void
+ContainsHypersector	src/lib/basis/hypersector.h	/^      bool ContainsHypersector($/;"	f	class:basis::BaseHypersectors	typeref:typename:bool
+ContainsSector	src/lib/basis/basis.h	/^      bool ContainsSector(const typename SectorType::KeyType& key) const$/;"	f	class:basis::BaseSectors	typeref:typename:DEPRECATED ("")bool
+ContainsSector	src/lib/basis/basis.h	/^      bool ContainsSector(int bra_subspace_index, int ket_subspace_index, int multiplicity_index/;"	f	class:basis::BaseSectors	typeref:typename:bool
+ContainsState	src/lib/basis/basis.h	/^    bool ContainsState(const StateLabelsType& state_labels) const$/;"	f	class:basis::BaseSubspace	typeref:typename:bool
+ContainsSubspace	src/lib/basis/basis.h	/^      bool ContainsSubspace(const typename SubspaceType::SubspaceLabelsType& subspace_labels) co/;"	f	class:basis::BaseSpace	typeref:typename:bool
+DebugStr	src/lib/basis/basis.h	/^    std::string BaseSectors<tSpaceType>::DebugStr() const$/;"	f	class:basis::BaseSectors	typeref:typename:std::string
+DebugStr	src/lib/basis/degenerate_test.cpp	/^  std::string RelativeDegenerateSpaceLSJT::DebugStr(bool show_subspaces) const$/;"	f	class:basis::RelativeDegenerateSpaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/degenerate_test.cpp	/^  std::string RelativeDegenerateSubspaceLSJT::DebugStr() const$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/hypersector.h	/^    std::string BaseHypersectors<tSpaceType,tOperatorSpaceType>::DebugStr() const$/;"	f	class:basis::BaseHypersectors	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjpn_scheme.cpp	/^  std::string TwoBodySpaceJJJPN::DebugStr() const$/;"	f	class:basis::TwoBodySpaceJJJPN	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjpn_scheme.cpp	/^  std::string TwoBodySubspaceJJJPN::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySpaceJJJT::DebugStr() const$/;"	f	class:basis::TwoBodySpaceJJJT	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySpaceJJJTN::DebugStr() const$/;"	f	class:basis::TwoBodySpaceJJJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySubspaceJJJT::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:std::string
+DebugStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySubspaceJJJTN::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSpaceLSJT::DebugStr() const$/;"	f	class:basis::RelativeCMSpaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSpaceLSJTN::DebugStr() const$/;"	f	class:basis::RelativeCMSpaceLSJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSubspaceLSJT::DebugStr() const$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSubspaceLSJTN::DebugStr() const$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeSpaceLSJT::DebugStr() const$/;"	f	class:basis::RelativeSpaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeSubspaceLSJT::DebugStr() const$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySpaceLSJT::DebugStr() const$/;"	f	class:basis::TwoBodySpaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySpaceLSJTN::DebugStr() const$/;"	f	class:basis::TwoBodySpaceLSJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJT::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:std::string
+DebugStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJTN::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:std::string
+DebugStr	src/lib/basis/m_scheme.cpp	/^  std::string SingleParticleSpacePN::DebugStr() const$/;"	f	class:basis::SingleParticleSpacePN	typeref:typename:std::string
+DebugStr	src/lib/basis/m_scheme.cpp	/^  std::string SingleParticleSubspacePN::DebugStr() const$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:std::string
+DebugStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSectorsLJPN::DebugStr() const$/;"	f	class:basis::OrbitalSectorsLJPN	typeref:typename:std::string
+DebugStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSpaceLJPN::DebugStr() const {$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:std::string
+DebugStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSpacePN::DebugStr() const$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:std::string
+DebugStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSubspaceLJPN::DebugStr() const {$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:std::string
+DebugStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSubspacePN::DebugStr() const$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:std::string
+Dimension	src/lib/basis/basis.h	/^      int Dimension() const$/;"	f	class:basis::BaseSpace	typeref:typename:int
+EXECUTABLE	Makefile	/^EXECUTABLE = matelm.exe$/;"	m
+FFLAGS	Makefile	/^FFLAGS = -O3 -Wall -std=c99 -fopenmp$/;"	m
+FullDimension	src/lib/basis/degenerate.h	/^      int FullDimension() const$/;"	f	class:basis::BaseDegenerateSpace	typeref:typename:int
+FullOrbitalLabels	src/lib/basis/nlj_orbital.h	/^  typedef std::tuple<OrbitalSpeciesPN,int,int,HalfInt> FullOrbitalLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<OrbitalSpeciesPN,int,int,HalfInt>
+FullSingleParticleStateLabels	src/lib/basis/m_scheme.h	/^  typedef std::tuple<OrbitalSpeciesPN,int,int,HalfInt,HalfInt> FullSingleParticleStateLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<OrbitalSpeciesPN,int,int,HalfInt,HalfInt>
+GatherOperatorRelativeCMLSJTNToRelativeCMLSJT	src/lib/basis/lsjt_operator.cpp	/^  void GatherOperatorRelativeCMLSJTNToRelativeCMLSJT($/;"	f	namespace:basis	typeref:typename:void
+GatherOperatorTwoBodyJJJTNToTwoBodyJJJT	src/lib/basis/jjjt_operator.cpp	/^  void GatherOperatorTwoBodyJJJTNToTwoBodyJJJT($/;"	f	namespace:basis	typeref:typename:void
+GatherOperatorTwoBodyLSJTNToTwoBodyLSJT	src/lib/basis/lsjt_operator.cpp	/^  void GatherOperatorTwoBodyLSJTNToTwoBodyLSJT($/;"	f	namespace:basis	typeref:typename:void
+GetHypersector	src/lib/basis/hypersector.h	/^      const HypersectorType& GetHypersector(int hypersector_index) const$/;"	f	class:basis::BaseHypersectors	typeref:typename:const HypersectorType &
+GetNumHyperoperatorME	src/lib/basis/hypersector.h	/^  long int GetNumHyperoperatorME($/;"	f	namespace:basis	typeref:typename:long int
+GetOrbital1	src/lib/basis/jjjpn_scheme.h	/^    const OrbitalStatePN GetOrbital1() const {return OrbitalStatePN(orbital_subspace1(),index1()/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:const OrbitalStatePN
+GetOrbital2	src/lib/basis/jjjpn_scheme.h	/^    const OrbitalStatePN GetOrbital2() const {return OrbitalStatePN(orbital_subspace2(),index2()/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:const OrbitalStatePN
+GetSector	src/lib/basis/basis.h	/^      const SectorType& GetSector(int sector_index) const$/;"	f	class:basis::BaseSectors	typeref:typename:const SectorType &
+GetStateLabels	src/lib/basis/basis.h	/^      const StateLabelsType& GetStateLabels() const$/;"	f	class:basis::BaseState	typeref:typename:DEPRECATED ("")const StateLabelsType &
+GetStateLabels	src/lib/basis/basis.h	/^    const StateLabelsType& GetStateLabels(int index) const$/;"	f	class:basis::BaseSubspace	typeref:typename:const StateLabelsType &
+GetSubspace	src/lib/basis/basis.h	/^      const SubspaceType& GetSubspace(int i) const$/;"	f	class:basis::BaseSpace	typeref:typename:const SubspaceType &
+GetSubspaceLabels	src/lib/basis/basis.h	/^    const SubspaceLabelsType& GetSubspaceLabels() const$/;"	f	class:basis::BaseSubspace	typeref:typename:DEPRECATED ("")const SubspaceLabelsType &
+HBARC	src/constants.c	/^const double HBARC = 197.3269602; \/\/ (in MeV fm)$/;"	v	typeref:typename:const double
+HEADING	src/utility.h	/^#define HEADING /;"	d
+HypersectorType	src/lib/basis/hypersector.h	/^      typedef BaseHypersector<SubspaceType,OperatorSubspaceType> HypersectorType;$/;"	t	class:basis::BaseHypersectors	typeref:typename:BaseHypersector<SubspaceType,OperatorSubspaceType>
+IdentityTestOLD	src/lib/basis/lsjt_operator_test.cpp	/^void IdentityTestOLD()$/;"	f	typeref:typename:void
+IsDiagonal	src/lib/basis/basis.h	/^      inline bool IsDiagonal() const$/;"	f	class:basis::BaseSector	typeref:typename:bool
+IsDiagonal	src/lib/basis/hypersector.h	/^      inline bool IsDiagonal() const$/;"	f	class:basis::BaseHypersector	typeref:typename:bool
+IsOscillatorLike_	src/lib/basis/nlj_orbital.cpp	/^  bool OrbitalSpaceLJPN::IsOscillatorLike_() const$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:bool
+IsOscillatorLike_	src/lib/basis/nlj_orbital.cpp	/^  bool OrbitalSpacePN::IsOscillatorLike_() const$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:bool
+IsOscillatorLike_	src/lib/basis/nlj_orbital.cpp	/^  bool OrbitalSubspaceLJPN::IsOscillatorLike_() const$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:bool
+IsOscillatorLike_	src/lib/basis/nlj_orbital.cpp	/^  bool OrbitalSubspacePN::IsOscillatorLike_() const$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:bool
+IsUpperTriangle	src/lib/basis/basis.h	/^      inline bool IsUpperTriangle() const$/;"	f	class:basis::BaseSector	typeref:typename:bool
+IsUpperTriangle	src/lib/basis/hypersector.h	/^      inline bool IsUpperTriangle() const$/;"	f	class:basis::BaseHypersector	typeref:typename:bool
+J	src/lib/basis/degenerate_test.cpp	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+J	src/lib/basis/degenerate_test.cpp	/^    int J() const {return subspace().J();}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+J	src/lib/basis/jjjpn_scheme.h	/^      int J() const {return std::get<1>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:int
+J	src/lib/basis/jjjpn_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:int
+J	src/lib/basis/jjjt_scheme.h	/^      int J() const {return std::get<0>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+J	src/lib/basis/jjjt_scheme.h	/^      int J() const {return std::get<0>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+J	src/lib/basis/jjjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+J	src/lib/basis/jjjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^      int J() const {return std::get<2>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+J	src/lib/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+J0	src/lib/basis/jjjpn_scheme.h	/^    int J0() const {return J0_;};$/;"	f	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+J0	src/lib/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+J0_	src/lib/basis/jjjpn_scheme.h	/^    int J0_, g0_, Tz0_;$/;"	m	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+Jmax	src/lib/basis/degenerate_test.cpp	/^    int Jmax() const {return Jmax_;}$/;"	f	class:basis::RelativeDegenerateSpaceLSJT	typeref:typename:int	file:
+Jmax	src/lib/basis/lsjt_operator.h	/^    int Nmax, Jmax;$/;"	m	struct:basis::RelativeOperatorParametersLSJT	typeref:typename:int
+Jmax	src/lib/basis/lsjt_scheme.h	/^    int Jmax() const {return Jmax_;}$/;"	f	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Jmax_	src/lib/basis/degenerate_test.cpp	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeDegenerateSpaceLSJT	typeref:typename:int	file:
+Jmax_	src/lib/basis/lsjt_scheme.h	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Key	src/lib/basis/basis.h	/^      inline KeyType Key() const$/;"	f	class:basis::BaseSector	typeref:typename:KeyType
+Key	src/lib/basis/hypersector.h	/^      inline KeyType Key() const$/;"	f	class:basis::BaseHypersector	typeref:typename:KeyType
+Key	src/lib/basis/nlj_orbital.h	/^    inline FullOrbitalLabels Key() const {$/;"	f	struct:basis::OrbitalPNInfo	typeref:typename:FullOrbitalLabels
+KeyType	src/lib/basis/basis.h	/^      typedef std::tuple<int,int,int> KeyType;$/;"	t	class:basis::BaseSector	typeref:typename:std::tuple<int,int,int>
+KeyType	src/lib/basis/hypersector.h	/^      typedef std::tuple<int,int,int,int> KeyType;$/;"	t	class:basis::BaseHypersector	typeref:typename:std::tuple<int,int,int,int>
+L	src/lib/basis/degenerate_test.cpp	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+L	src/lib/basis/degenerate_test.cpp	/^    int L() const {return subspace().L();}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+L	src/lib/basis/lsjt_scheme.h	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^      int L() const {return std::get<0>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^    int L() const {return subspace().L();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^    int L() const {return subspace().L();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^    int L() const {return subspace().L();}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^    int L() const {return subspace().L();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+L	src/lib/basis/lsjt_scheme.h	/^    int L() const {return subspace().L();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+L	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
+LFLAGS	Makefile	/^LFLAGS = -lgomp -lm -lgsl -lgslcblas -lcuba$/;"	m
+LIBDIR	Makefile	/^LIBDIR = local\/lib$/;"	m
+LabelStr	src/lib/basis/degenerate_test.cpp	/^  std::string RelativeDegenerateStateLSJT::LabelStr() const$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:std::string
+LabelStr	src/lib/basis/degenerate_test.cpp	/^  std::string RelativeDegenerateSubspaceLSJT::LabelStr() const$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:std::string
+LabelStr	src/lib/basis/jjjpn_scheme.cpp	/^  std::string TwoBodyStateJJJPN::LabelStr() const$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:std::string
+LabelStr	src/lib/basis/jjjpn_scheme.cpp	/^  std::string TwoBodySubspaceJJJPN::LabelStr() const$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:std::string
+LabelStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySubspaceJJJT::LabelStr() const$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:std::string
+LabelStr	src/lib/basis/jjjt_scheme.cpp	/^  std::string TwoBodySubspaceJJJTN::LabelStr() const$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:std::string
+LabelStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSubspaceLSJT::LabelStr() const$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:std::string
+LabelStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeCMSubspaceLSJTN::LabelStr() const$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:std::string
+LabelStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string RelativeSubspaceLSJT::LabelStr() const$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:std::string
+LabelStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJT::LabelStr() const$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:std::string
+LabelStr	src/lib/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJTN::LabelStr() const$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:std::string
+LabelStr	src/lib/basis/m_scheme.cpp	/^  std::string SingleParticleStatePN::LabelStr() const$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:std::string
+LabelStr	src/lib/basis/m_scheme.cpp	/^  std::string SingleParticleSubspacePN::LabelStr() const$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:std::string
+LabelStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalStatePN::LabelStr() const$/;"	f	class:basis::OrbitalStatePN	typeref:typename:std::string
+LabelStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSubspaceLJPN::LabelStr() const {$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:std::string
+LabelStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalSubspacePN::LabelStr() const$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:std::string
+LookUpHypersectorIndex	src/lib/basis/hypersector.h	/^      int LookUpHypersectorIndex($/;"	f	class:basis::BaseHypersectors	typeref:typename:int
+LookUpSectorIndex	src/lib/basis/basis.h	/^      int LookUpSectorIndex(const typename SectorType::KeyType& key) const$/;"	f	class:basis::BaseSectors	typeref:typename:DEPRECATED ("")int
+LookUpSectorIndex	src/lib/basis/basis.h	/^      int LookUpSectorIndex(int bra_subspace_index, int ket_subspace_index, int multiplicity_ind/;"	f	class:basis::BaseSectors	typeref:typename:int
+LookUpStateIndex	src/lib/basis/basis.h	/^    int LookUpStateIndex(const StateLabelsType& state_labels) const$/;"	f	class:basis::BaseSubspace	typeref:typename:int
+LookUpSubspace	src/lib/basis/basis.h	/^      const SubspaceType& LookUpSubspace(const typename SubspaceType::SubspaceLabelsType& subspa/;"	f	class:basis::BaseSpace	typeref:typename:const SubspaceType &
+LookUpSubspaceIndex	src/lib/basis/basis.h	/^      int LookUpSubspaceIndex(const typename SubspaceType::SubspaceLabelsType& subspace_labels) /;"	f	class:basis::BaseSpace	typeref:typename:int
+MAKEFILE_STANDALONE	src/lib/basis/project.mk	/^MAKEFILE_STANDALONE = true$/;"	m
+MFDnOrbitalFormat	src/lib/basis/nlj_orbital.cpp	/^  enum class MFDnOrbitalFormat : int {kVersion15099=15099};$/;"	g	namespace:basis	typeref:typename:int	file:
+MKDIR_P	Makefile	/^MKDIR_P = mkdir -p$/;"	m
+MatrixElementIndicesLJPN	src/lib/basis/nlj_operator.cpp	/^  MatrixElementIndicesLJPN($/;"	f	namespace:basis	typeref:typename:std::tuple<int,int,int>
+MatrixElementLJPN	src/lib/basis/nlj_operator.cpp	/^  double MatrixElementLJPN($/;"	f	namespace:basis	typeref:typename:double
+MatrixFile	main.py	/^class MatrixFile:$/;"	c
+MatrixVector	src/lib/basis/operator.h	/^  typedef basis::OperatorBlocks<double> MatrixVector;$/;"	t	namespace:basis	typeref:typename:basis::OperatorBlocks<double>
+N	src/lib/basis/degenerate_test.cpp	/^    int N() const {return std::get<0>(labels());}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+N	src/lib/basis/jjjt_scheme.h	/^      int N() const {return std::get<3>(labels_);}  \/\/ (MODIFICATION for subspacing by N)$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N	src/lib/basis/jjjt_scheme.h	/^    int N() const {return N1()+N2();}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+N	src/lib/basis/jjjt_scheme.h	/^    int N() const {return N1()+N2();}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^      int N() const {return std::get<5>(labels_);}  \/\/ (MODIFICATION for subspacing by N)$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^      int N() const {return std::get<5>(labels_);}  \/\/ (MODIFICATION for subspacing by N)$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^    int N() const {return  Nr()+Nc();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^    int N() const {return  Nr()+Nc();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^    int N() const {return N1()+N2();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^    int N() const {return N1()+N2();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+N	src/lib/basis/lsjt_scheme.h	/^    int N() const {return std::get<0>(labels());}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+N	src/lib/basis/m_scheme.h	/^      int N() const {return 2*n()+l();}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:int
+N	src/lib/basis/nlj_orbital.h	/^    int N() const {return 2*n()+l();}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:int
+N	src/lib/basis/nlj_orbital.h	/^    int N() const {return 2*n()+l();}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:int
+N	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
+N1	src/lib/basis/jjjt_scheme.h	/^    int N1() const {return std::get<0>(labels());}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+N1	src/lib/basis/jjjt_scheme.h	/^    int N1() const {return std::get<0>(labels());}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+N1	src/lib/basis/lsjt_scheme.h	/^    int N1() const {return std::get<0>(labels());}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+N1	src/lib/basis/lsjt_scheme.h	/^    int N1() const {return std::get<0>(labels());}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+N1max	src/lib/basis/jjjt_scheme.h	/^      int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+N1max	src/lib/basis/jjjt_scheme.h	/^      int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N1max	src/lib/basis/jjjt_scheme.h	/^    int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySpaceJJJT	typeref:typename:int
+N1max	src/lib/basis/jjjt_scheme.h	/^    int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySpaceJJJTN	typeref:typename:int
+N1max	src/lib/basis/lsjt_scheme.h	/^      int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+N1max	src/lib/basis/lsjt_scheme.h	/^      int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+N1max	src/lib/basis/lsjt_scheme.h	/^    int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySpaceLSJT	typeref:typename:int
+N1max	src/lib/basis/lsjt_scheme.h	/^    int N1max() const {return N1max_;}$/;"	f	class:basis::TwoBodySpaceLSJTN	typeref:typename:int
+N1max_	src/lib/basis/jjjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+N1max_	src/lib/basis/jjjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N1max_	src/lib/basis/jjjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceJJJT	typeref:typename:int
+N1max_	src/lib/basis/jjjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceJJJTN	typeref:typename:int
+N1max_	src/lib/basis/lsjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+N1max_	src/lib/basis/lsjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+N1max_	src/lib/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceLSJT	typeref:typename:int
+N1max_	src/lib/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceLSJTN	typeref:typename:int
+N2	src/lib/basis/jjjt_scheme.h	/^    int N2() const {return std::get<2>(labels());}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+N2	src/lib/basis/jjjt_scheme.h	/^    int N2() const {return std::get<2>(labels());}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+N2	src/lib/basis/lsjt_scheme.h	/^    int N2() const {return std::get<2>(labels());}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+N2	src/lib/basis/lsjt_scheme.h	/^    int N2() const {return std::get<2>(labels());}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+N2max	src/lib/basis/jjjt_scheme.h	/^      int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+N2max	src/lib/basis/jjjt_scheme.h	/^      int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N2max	src/lib/basis/jjjt_scheme.h	/^    int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySpaceJJJT	typeref:typename:int
+N2max	src/lib/basis/jjjt_scheme.h	/^    int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySpaceJJJTN	typeref:typename:int
+N2max	src/lib/basis/lsjt_scheme.h	/^      int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+N2max	src/lib/basis/lsjt_scheme.h	/^      int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+N2max	src/lib/basis/lsjt_scheme.h	/^    int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySpaceLSJT	typeref:typename:int
+N2max	src/lib/basis/lsjt_scheme.h	/^    int N2max() const {return N2max_;}$/;"	f	class:basis::TwoBodySpaceLSJTN	typeref:typename:int
+N2max_	src/lib/basis/jjjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+N2max_	src/lib/basis/jjjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N2max_	src/lib/basis/jjjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceJJJT	typeref:typename:int
+N2max_	src/lib/basis/jjjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceJJJTN	typeref:typename:int
+N2max_	src/lib/basis/lsjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+N2max_	src/lib/basis/lsjt_scheme.h	/^      int N1max_, N2max_;$/;"	m	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+N2max_	src/lib/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceLSJT	typeref:typename:int
+N2max_	src/lib/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceLSJTN	typeref:typename:int
+N_	src/lib/basis/jjjt_scheme.h	/^      int N_;  \/\/ (MODIFICATION for subspacing by N)$/;"	m	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+N_	src/lib/basis/lsjt_scheme.h	/^      int N_;  \/\/ (MODIFICATION for subspacing by N)$/;"	m	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+N_	src/lib/basis/lsjt_scheme.h	/^      int N_;  \/\/ (MODIFICATION for subspacing by N)$/;"	m	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+Nc	src/lib/basis/lsjt_scheme.h	/^    int Nc() const {return std::get<2>(labels());}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+Nc	src/lib/basis/lsjt_scheme.h	/^    int Nc() const {return std::get<2>(labels());}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+Nmax	src/lib/basis/degenerate_test.cpp	/^      int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+Nmax	src/lib/basis/degenerate_test.cpp	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeDegenerateSpaceLSJT	typeref:typename:int	file:
+Nmax	src/lib/basis/lsjt_operator.h	/^    int Nmax, Jmax;$/;"	m	struct:basis::RelativeOperatorParametersLSJT	typeref:typename:int
+Nmax	src/lib/basis/lsjt_operator.h	/^    int Nmax;$/;"	m	struct:basis::RelativeCMOperatorParametersLSJT	typeref:typename:int
+Nmax	src/lib/basis/lsjt_scheme.h	/^      int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+Nmax	src/lib/basis/lsjt_scheme.h	/^      int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+Nmax	src/lib/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeCMSpaceLSJT	typeref:typename:int
+Nmax	src/lib/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeCMSpaceLSJTN	typeref:typename:int
+Nmax	src/lib/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Nmax	src/lib/basis/m_scheme.h	/^      int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:int
+Nmax	src/lib/basis/m_scheme.h	/^    int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::SingleParticleSpacePN	typeref:typename:int
+Nmax	src/lib/basis/nlj_orbital.h	/^      int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:int
+Nmax	src/lib/basis/nlj_orbital.h	/^      int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:int
+Nmax	src/lib/basis/nlj_orbital.h	/^    int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:int
+Nmax	src/lib/basis/nlj_orbital.h	/^    int Nmax() const {assert(is_oscillator_like()); return Nmax_;}$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:int
+Nmax_	src/lib/basis/degenerate_test.cpp	/^      int Nmax_;$/;"	m	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+Nmax_	src/lib/basis/degenerate_test.cpp	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeDegenerateSpaceLSJT	typeref:typename:int	file:
+Nmax_	src/lib/basis/lsjt_scheme.h	/^      int Nmax_;$/;"	m	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+Nmax_	src/lib/basis/lsjt_scheme.h	/^      int Nmax_;$/;"	m	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+Nmax_	src/lib/basis/lsjt_scheme.h	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Nmax_	src/lib/basis/lsjt_scheme.h	/^    int Nmax_;$/;"	m	class:basis::RelativeCMSpaceLSJT	typeref:typename:int
+Nmax_	src/lib/basis/lsjt_scheme.h	/^    int Nmax_;$/;"	m	class:basis::RelativeCMSpaceLSJTN	typeref:typename:int
+Nmax_	src/lib/basis/m_scheme.h	/^      int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::SingleParticleSubspacePN	typeref:typename:int
+Nmax_	src/lib/basis/m_scheme.h	/^    int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::SingleParticleSpacePN	typeref:typename:int
+Nmax_	src/lib/basis/nlj_orbital.h	/^      int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::OrbitalSubspaceLJPN	typeref:typename:int
+Nmax_	src/lib/basis/nlj_orbital.h	/^      int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::OrbitalSubspacePN	typeref:typename:int
+Nmax_	src/lib/basis/nlj_orbital.h	/^    int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::OrbitalSpaceLJPN	typeref:typename:int
+Nmax_	src/lib/basis/nlj_orbital.h	/^    int Nmax_;  \/\/ only meaningful if oscillator scheme constructor used$/;"	m	class:basis::OrbitalSpacePN	typeref:typename:int
+NormalizationConversion	src/lib/basis/many_body.h	/^  enum class NormalizationConversion {kNone, kASToNAS, kNASToAS};$/;"	g	namespace:basis
+Nr	src/lib/basis/lsjt_scheme.h	/^    int Nr() const {return std::get<0>(labels());}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+Nr	src/lib/basis/lsjt_scheme.h	/^    int Nr() const {return std::get<0>(labels());}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+OBJECTS	Makefile	/^OBJECTS = $(patsubst $(SOURCEDIR)\/%.c, $(BUILDDIR)\/%.o, $(SOURCES)) $/;"	m
+OPERATOR	src/utility.h	/^#define OPERATOR /;"	d
+OneBodyOperatorLJPN	src/lib/basis/nlj_operator.h	/^  struct OneBodyOperatorLJPN$/;"	s	namespace:basis
+OneBodyOperatorType	src/lib/basis/nlj_operator.h	/^  enum class OneBodyOperatorType : char {$/;"	g	namespace:basis	typeref:typename:char
+OperatorBlock	src/lib/basis/operator.h	/^    using OperatorBlock = Eigen::Matrix<tFloat,Eigen::Dynamic,Eigen::Dynamic>;$/;"	t	namespace:basis	typeref:typename:Eigen::Matrix<tFloat,Eigen::Dynamic,Eigen::Dynamic>
+OperatorBlocks	src/lib/basis/operator.h	/^    using OperatorBlocks = std::vector<OperatorBlock<tFloat>>;$/;"	t	namespace:basis	typeref:typename:std::vector<OperatorBlock<tFloat>>
+OperatorHyperblocks	src/lib/basis/hypersector.h	/^    using OperatorHyperblocks = std::vector<std::vector<OperatorBlock<tFloat>>>;$/;"	t	namespace:basis	typeref:typename:std::vector<std::vector<OperatorBlock<tFloat>>>
+OperatorLabelsJT	src/lib/basis/jt_operator.h	/^  OperatorLabelsJT()$/;"	f	struct:basis::OperatorLabelsJT
+OperatorLabelsJT	src/lib/basis/jt_operator.h	/^  OperatorLabelsJT(int J0_, int g0_, int T0_min_, int T0_max_, basis::SymmetryPhaseMode symmetry/;"	f	struct:basis::OperatorLabelsJT
+OperatorLabelsJT	src/lib/basis/jt_operator.h	/^  struct OperatorLabelsJT$/;"	s	namespace:basis
+OperatorSpaceType	src/lib/basis/hypersector.h	/^      typedef tOperatorSpaceType OperatorSpaceType;$/;"	t	class:basis::BaseHypersectors	typeref:typename:tOperatorSpaceType
+OperatorSubspaceType	src/lib/basis/hypersector.h	/^      typedef tOperatorSubspaceType OperatorSubspaceType;$/;"	t	class:basis::BaseHypersector	typeref:typename:tOperatorSubspaceType
+OperatorSubspaceType	src/lib/basis/hypersector.h	/^      typedef typename tOperatorSpaceType::SubspaceType OperatorSubspaceType;$/;"	t	class:basis::BaseHypersectors	typeref:typename:tOperatorSpaceType::SubspaceType
+OperatorTypePN	src/lib/basis/proton_neutron.h	/^  enum class OperatorTypePN {kP=0,kN=1,kTotal=2};$/;"	g	namespace:basis
+OrbitalDefinitionStr	src/lib/basis/nlj_orbital.cpp	/^  std::string OrbitalDefinitionStr(const OrbitalPNList& orbitals, bool standalone)$/;"	f	namespace:basis	typeref:typename:std::string
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNInfo OrbitalStateLJPN::OrbitalInfo() const$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:OrbitalPNInfo
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNInfo OrbitalStatePN::OrbitalInfo() const$/;"	f	class:basis::OrbitalStatePN	typeref:typename:OrbitalPNInfo
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNList OrbitalSpaceLJPN::OrbitalInfo() const$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:OrbitalPNList
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNList OrbitalSpacePN::OrbitalInfo() const$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:OrbitalPNList
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNList OrbitalSubspaceLJPN::OrbitalInfo() const$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:OrbitalPNList
+OrbitalInfo	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNList OrbitalSubspacePN::OrbitalInfo() const$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:OrbitalPNList
+OrbitalPNInfo	src/lib/basis/nlj_orbital.h	/^    OrbitalPNInfo(OrbitalSpeciesPN os, int n, int l, HalfInt j, double weight)$/;"	f	struct:basis::OrbitalPNInfo
+OrbitalPNInfo	src/lib/basis/nlj_orbital.h	/^  struct OrbitalPNInfo$/;"	s	namespace:basis
+OrbitalPNList	src/lib/basis/nlj_orbital.h	/^  typedef std::vector<OrbitalPNInfo> OrbitalPNList;$/;"	t	namespace:basis	typeref:typename:std::vector<OrbitalPNInfo>
+OrbitalSectorsLJPN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSectorsLJPN::OrbitalSectorsLJPN($/;"	f	class:basis::OrbitalSectorsLJPN
+OrbitalSectorsLJPN	src/lib/basis/nlj_orbital.h	/^    OrbitalSectorsLJPN($/;"	f	class:basis::OrbitalSectorsLJPN
+OrbitalSectorsLJPN	src/lib/basis/nlj_orbital.h	/^    explicit OrbitalSectorsLJPN($/;"	f	class:basis::OrbitalSectorsLJPN
+OrbitalSectorsLJPN	src/lib/basis/nlj_orbital.h	/^  class OrbitalSectorsLJPN$/;"	c	namespace:basis
+OrbitalSortCmpWeight	src/lib/basis/nlj_orbital.h	/^  inline bool OrbitalSortCmpWeight(const OrbitalPNInfo& lhs, const OrbitalPNInfo& rhs) {$/;"	f	namespace:basis	typeref:typename:bool
+OrbitalSpaceLJPN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSpaceLJPN::OrbitalSpaceLJPN(const OrbitalPNList& states)$/;"	f	class:basis::OrbitalSpaceLJPN
+OrbitalSpaceLJPN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSpaceLJPN::OrbitalSpaceLJPN(int Nmax) {$/;"	f	class:basis::OrbitalSpaceLJPN
+OrbitalSpaceLJPN	src/lib/basis/nlj_orbital.h	/^  class OrbitalSpaceLJPN$/;"	c	namespace:basis
+OrbitalSpacePN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSpacePN::OrbitalSpacePN(const OrbitalPNList& states)$/;"	f	class:basis::OrbitalSpacePN
+OrbitalSpacePN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSpacePN::OrbitalSpacePN(int Nmax)$/;"	f	class:basis::OrbitalSpacePN
+OrbitalSpacePN	src/lib/basis/nlj_orbital.h	/^  class OrbitalSpacePN$/;"	c	namespace:basis
+OrbitalSpeciesPN	src/lib/basis/proton_neutron.h	/^  enum class OrbitalSpeciesPN {kP=0,kN=1};$/;"	g	namespace:basis
+OrbitalStateLJPN	src/lib/basis/nlj_orbital.h	/^    OrbitalStateLJPN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::OrbitalStateLJPN
+OrbitalStateLJPN	src/lib/basis/nlj_orbital.h	/^    OrbitalStateLJPN(const SubspaceType& subspace, int index)$/;"	f	class:basis::OrbitalStateLJPN
+OrbitalStateLJPN	src/lib/basis/nlj_orbital.h	/^  class OrbitalStateLJPN$/;"	c	namespace:basis
+OrbitalStateLJPNLabels	src/lib/basis/nlj_orbital.h	/^  typedef std::tuple<int> OrbitalStateLJPNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int>
+OrbitalStatePN	src/lib/basis/nlj_orbital.h	/^    OrbitalStatePN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::OrbitalStatePN
+OrbitalStatePN	src/lib/basis/nlj_orbital.h	/^    OrbitalStatePN(const SubspaceType& subspace, int index)$/;"	f	class:basis::OrbitalStatePN
+OrbitalStatePN	src/lib/basis/nlj_orbital.h	/^  class OrbitalStatePN$/;"	c	namespace:basis
+OrbitalStatePNLabels	src/lib/basis/nlj_orbital.h	/^  typedef std::tuple<int,int,HalfInt> OrbitalStatePNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,HalfInt>
+OrbitalSubspaceLJPN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSubspaceLJPN::OrbitalSubspaceLJPN(OrbitalSpeciesPN orbital_species,$/;"	f	class:basis::OrbitalSubspaceLJPN
+OrbitalSubspaceLJPN	src/lib/basis/nlj_orbital.h	/^  class OrbitalSubspaceLJPN$/;"	c	namespace:basis
+OrbitalSubspaceLJPNLabels	src/lib/basis/nlj_orbital.h	/^  typedef std::tuple<OrbitalSpeciesPN,int,HalfInt> OrbitalSubspaceLJPNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<OrbitalSpeciesPN,int,HalfInt>
+OrbitalSubspacePN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSubspacePN::OrbitalSubspacePN(OrbitalSpeciesPN orbital_species, int Nmax)$/;"	f	class:basis::OrbitalSubspacePN
+OrbitalSubspacePN	src/lib/basis/nlj_orbital.cpp	/^  OrbitalSubspacePN::OrbitalSubspacePN(OrbitalSpeciesPN orbital_species,$/;"	f	class:basis::OrbitalSubspacePN
+OrbitalSubspacePN	src/lib/basis/nlj_orbital.h	/^  class OrbitalSubspacePN$/;"	c	namespace:basis
+OrbitalSubspacePNLabels	src/lib/basis/nlj_orbital.h	/^  typedef std::tuple<OrbitalSpeciesPN> OrbitalSubspacePNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<OrbitalSpeciesPN>
+PION_MASS	src/constants.c	/^const double PION_MASS = 134.9770; \/\/ (in MeV\/c^2)$/;"	v	typeref:typename:const double
+ParseOrbitalPNStream	src/lib/basis/nlj_orbital.cpp	/^  OrbitalPNList ParseOrbitalPNStream(std::istream& is, bool standalone)$/;"	f	namespace:basis	typeref:typename:OrbitalPNList
+PushHypersector	src/lib/basis/hypersector.h	/^      void PushHypersector(const HypersectorType& hypersector)$/;"	f	class:basis::BaseHypersectors	typeref:typename:void
+PushSector	src/lib/basis/basis.h	/^      void PushSector(const SectorType& sector)$/;"	f	class:basis::BaseSectors	typeref:typename:void
+PushStateLabels	src/lib/basis/basis.h	/^    void PushStateLabels(const StateLabelsType& state_labels)$/;"	f	class:basis::BaseSubspace	typeref:typename:void
+PushStateLabels	src/lib/basis/degenerate.h	/^    void PushStateLabels(const StateLabelsType& state_labels, int degeneracy)$/;"	f	class:basis::BaseDegenerateSubspace	typeref:typename:void
+PushSubspace	src/lib/basis/basis.h	/^      void PushSubspace(const SubspaceType& subspace)$/;"	f	class:basis::BaseSpace	typeref:typename:void
+QNUMS	src/utility.h	/^#define QNUMS /;"	d
+RED_NUCLEON_MASS	src/constants.c	/^const double RED_NUCLEON_MASS = 469.4593340; \/\/ (in MeV\/c^2)$/;"	v	typeref:typename:const double
+R_ES_SQUARED	src/constants.c	/^const double R_ES_SQUARED = 0.777; $/;"	v	typeref:typename:const double
+Rank	src/lib/basis/many_body.h	/^  enum class Rank {kOneBody=1, kTwoBody=2, kThreeBody=3, kFourBody=4};$/;"	g	namespace:basis
+ReadRelativeCMOperatorParametersLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ReadRelativeCMOperatorParametersLSJT($/;"	f	namespace:basis	typeref:typename:void
+ReadRelativeOperatorComponentLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ReadRelativeOperatorComponentLSJT($/;"	f	namespace:basis	typeref:typename:void
+ReadRelativeOperatorLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ReadRelativeOperatorLSJT($/;"	f	namespace:basis	typeref:typename:void
+ReadRelativeOperatorParametersLSJT	src/lib/basis/lsjt_operator.cpp	/^  void ReadRelativeOperatorParametersLSJT($/;"	f	namespace:basis	typeref:typename:void
+ReadTestRelative	src/lib/basis/lsjt_operator_test.cpp	/^void ReadTestRelative(const std::string& filename)$/;"	f	typeref:typename:void
+ReadTestRelativeManual	src/lib/basis/lsjt_operator_test.cpp	/^void ReadTestRelativeManual(const std::string& filename)$/;"	f	typeref:typename:void
+RecastLabelsRelativeCMLSJTToRelativeCMLSJTN	src/lib/basis/lsjt_operator.cpp	/^  void RecastLabelsRelativeCMLSJTToRelativeCMLSJTN($/;"	f	namespace:basis	typeref:typename:void
+RecastLabelsTwoBodyJJJTToTwoBodyJJJTN	src/lib/basis/jjjt_operator.cpp	/^  void RecastLabelsTwoBodyJJJTToTwoBodyJJJTN($/;"	f	namespace:basis	typeref:typename:void
+RecastLabelsTwoBodyLSJTToTwoBodyLSJTN	src/lib/basis/lsjt_operator.cpp	/^  void RecastLabelsTwoBodyLSJTToTwoBodyLSJTN($/;"	f	namespace:basis	typeref:typename:void
+RelativeCMOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^    RelativeCMOperatorParametersLSJT($/;"	f	struct:basis::RelativeCMOperatorParametersLSJT
+RelativeCMOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^    RelativeCMOperatorParametersLSJT()$/;"	f	struct:basis::RelativeCMOperatorParametersLSJT
+RelativeCMOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^  struct RelativeCMOperatorParametersLSJT$/;"	s	namespace:basis
+RelativeCMSectorsLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSectorsLSJT::RelativeCMSectorsLSJT($/;"	f	class:basis::RelativeCMSectorsLSJT
+RelativeCMSectorsLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeCMSectorsLSJT() {};$/;"	f	class:basis::RelativeCMSectorsLSJT
+RelativeCMSectorsLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSectorsLSJT$/;"	c	namespace:basis
+RelativeCMSectorsLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSectorsLSJTN::RelativeCMSectorsLSJTN($/;"	f	class:basis::RelativeCMSectorsLSJTN
+RelativeCMSectorsLSJTN	src/lib/basis/lsjt_scheme.h	/^    RelativeCMSectorsLSJTN() {};$/;"	f	class:basis::RelativeCMSectorsLSJTN
+RelativeCMSectorsLSJTN	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSectorsLSJTN$/;"	c	namespace:basis
+RelativeCMSpaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSpaceLSJT::RelativeCMSpaceLSJT(int Nmax)$/;"	f	class:basis::RelativeCMSpaceLSJT
+RelativeCMSpaceLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeCMSpaceLSJT() {};$/;"	f	class:basis::RelativeCMSpaceLSJT
+RelativeCMSpaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSpaceLSJT$/;"	c	namespace:basis
+RelativeCMSpaceLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSpaceLSJTN::RelativeCMSpaceLSJTN(int Nmax)$/;"	f	class:basis::RelativeCMSpaceLSJTN
+RelativeCMSpaceLSJTN	src/lib/basis/lsjt_scheme.h	/^    RelativeCMSpaceLSJTN() {};$/;"	f	class:basis::RelativeCMSpaceLSJTN
+RelativeCMSpaceLSJTN	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSpaceLSJTN$/;"	c	namespace:basis
+RelativeCMStateLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeCMStateLSJT(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::RelativeCMStateLSJT
+RelativeCMStateLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeCMStateLSJT(const SubspaceType& subspace, int index)$/;"	f	class:basis::RelativeCMStateLSJT
+RelativeCMStateLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMStateLSJT$/;"	c	namespace:basis
+RelativeCMStateLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int> RelativeCMStateLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int>
+RelativeCMStateLSJTN	src/lib/basis/lsjt_scheme.h	/^    RelativeCMStateLSJTN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::RelativeCMStateLSJTN
+RelativeCMStateLSJTN	src/lib/basis/lsjt_scheme.h	/^    RelativeCMStateLSJTN(const SubspaceType& subspace, int index)$/;"	f	class:basis::RelativeCMStateLSJTN
+RelativeCMStateLSJTN	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMStateLSJTN$/;"	c	namespace:basis
+RelativeCMStateLSJTNLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int> RelativeCMStateLSJTNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int>
+RelativeCMSubspaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSubspaceLSJT::RelativeCMSubspaceLSJT(int L, int S, int J, int T, int g, int Nmax)$/;"	f	class:basis::RelativeCMSubspaceLSJT
+RelativeCMSubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^      RelativeCMSubspaceLSJT() {};$/;"	f	class:basis::RelativeCMSubspaceLSJT
+RelativeCMSubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSubspaceLSJT$/;"	c	namespace:basis
+RelativeCMSubspaceLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int,int> RelativeCMSubspaceLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int>
+RelativeCMSubspaceLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  RelativeCMSubspaceLSJTN::RelativeCMSubspaceLSJTN(int L, int S, int J, int T, int g, int N)$/;"	f	class:basis::RelativeCMSubspaceLSJTN
+RelativeCMSubspaceLSJTN	src/lib/basis/lsjt_scheme.h	/^      RelativeCMSubspaceLSJTN() {};$/;"	f	class:basis::RelativeCMSubspaceLSJTN
+RelativeCMSubspaceLSJTN	src/lib/basis/lsjt_scheme.h	/^  class RelativeCMSubspaceLSJTN$/;"	c	namespace:basis
+RelativeCMSubspaceLSJTNLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int,int,int> RelativeCMSubspaceLSJTNLabels;  \/\/ (MODIFICATION/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int,int>
+RelativeDegenerateSpaceLSJT	src/lib/basis/degenerate_test.cpp	/^    RelativeDegenerateSpaceLSJT() {};$/;"	f	class:basis::RelativeDegenerateSpaceLSJT	file:
+RelativeDegenerateSpaceLSJT	src/lib/basis/degenerate_test.cpp	/^  RelativeDegenerateSpaceLSJT::RelativeDegenerateSpaceLSJT(int Nmax, int Jmax)$/;"	f	class:basis::RelativeDegenerateSpaceLSJT
+RelativeDegenerateSpaceLSJT	src/lib/basis/degenerate_test.cpp	/^  class RelativeDegenerateSpaceLSJT$/;"	c	namespace:basis	file:
+RelativeDegenerateStateLSJT	src/lib/basis/degenerate_test.cpp	/^    RelativeDegenerateStateLSJT(const SubspaceType& subspace, const StateLabelsType& state_label/;"	f	class:basis::RelativeDegenerateStateLSJT	file:
+RelativeDegenerateStateLSJT	src/lib/basis/degenerate_test.cpp	/^    RelativeDegenerateStateLSJT(const SubspaceType& subspace, int index)$/;"	f	class:basis::RelativeDegenerateStateLSJT	file:
+RelativeDegenerateStateLSJT	src/lib/basis/degenerate_test.cpp	/^  class RelativeDegenerateStateLSJT$/;"	c	namespace:basis	file:
+RelativeDegenerateSubspaceLSJT	src/lib/basis/degenerate_test.cpp	/^      RelativeDegenerateSubspaceLSJT() {};$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	file:
+RelativeDegenerateSubspaceLSJT	src/lib/basis/degenerate_test.cpp	/^  RelativeDegenerateSubspaceLSJT::RelativeDegenerateSubspaceLSJT(int L, int S, int J, int T, int/;"	f	class:basis::RelativeDegenerateSubspaceLSJT
+RelativeDegenerateSubspaceLSJT	src/lib/basis/degenerate_test.cpp	/^  class RelativeDegenerateSubspaceLSJT$/;"	c	namespace:basis	file:
+RelativeHypersectorsLSJT	src/lib/basis/hypersector_test.cpp	/^    RelativeHypersectorsLSJT() {};$/;"	f	class:basis::RelativeHypersectorsLSJT	file:
+RelativeHypersectorsLSJT	src/lib/basis/hypersector_test.cpp	/^  RelativeHypersectorsLSJT::RelativeHypersectorsLSJT($/;"	f	class:basis::RelativeHypersectorsLSJT
+RelativeHypersectorsLSJT	src/lib/basis/hypersector_test.cpp	/^  class RelativeHypersectorsLSJT$/;"	c	namespace:basis	file:
+RelativeOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^    RelativeOperatorParametersLSJT($/;"	f	struct:basis::RelativeOperatorParametersLSJT
+RelativeOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^    RelativeOperatorParametersLSJT()$/;"	f	struct:basis::RelativeOperatorParametersLSJT
+RelativeOperatorParametersLSJT	src/lib/basis/lsjt_operator.h	/^  struct RelativeOperatorParametersLSJT$/;"	s	namespace:basis
+RelativeSectorsLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeSectorsLSJT::RelativeSectorsLSJT($/;"	f	class:basis::RelativeSectorsLSJT
+RelativeSectorsLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeSectorsLSJT() {};$/;"	f	class:basis::RelativeSectorsLSJT
+RelativeSectorsLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeSectorsLSJT$/;"	c	namespace:basis
+RelativeSpaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeSpaceLSJT::RelativeSpaceLSJT(int Nmax, int Jmax)$/;"	f	class:basis::RelativeSpaceLSJT
+RelativeSpaceLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeSpaceLSJT() {};$/;"	f	class:basis::RelativeSpaceLSJT
+RelativeSpaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeSpaceLSJT$/;"	c	namespace:basis
+RelativeStateLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeStateLSJT(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::RelativeStateLSJT
+RelativeStateLSJT	src/lib/basis/lsjt_scheme.h	/^    RelativeStateLSJT(const SubspaceType& subspace, int index)$/;"	f	class:basis::RelativeStateLSJT
+RelativeStateLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeStateLSJT$/;"	c	namespace:basis
+RelativeStateLSJTLabels	src/lib/basis/degenerate_test.cpp	/^  typedef std::tuple<int> RelativeStateLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int>	file:
+RelativeStateLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int> RelativeStateLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int>
+RelativeSubspaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  RelativeSubspaceLSJT::RelativeSubspaceLSJT(int L, int S, int J, int T, int g, int Nmax)$/;"	f	class:basis::RelativeSubspaceLSJT
+RelativeSubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^      RelativeSubspaceLSJT() {};$/;"	f	class:basis::RelativeSubspaceLSJT
+RelativeSubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class RelativeSubspaceLSJT$/;"	c	namespace:basis
+RelativeSubspaceLSJTLabels	src/lib/basis/degenerate_test.cpp	/^  typedef std::tuple<int,int,int,int,int> RelativeSubspaceLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int>	file:
+RelativeSubspaceLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int,int> RelativeSubspaceLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int>
+S	src/lib/basis/degenerate_test.cpp	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+S	src/lib/basis/degenerate_test.cpp	/^    int S() const {return subspace().S();}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+S	src/lib/basis/lsjt_scheme.h	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^      int S() const {return std::get<1>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+S	src/lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+SHAREDLIBS	Makefile	/^SHAREDLIBS = $(wildcard $(LIBDIR)\/*.a)$/;"	m
+SOURCEDIR	Makefile	/^SOURCEDIR = src$/;"	m
+SOURCES	Makefile	/^SOURCES = $(wildcard $(SOURCEDIR)\/*.c)$/;"	m
+SectorDirection	src/lib/basis/basis.h	/^  enum class SectorDirection {kCanonical,kBoth};$/;"	g	namespace:basis
+SectorType	src/lib/basis/basis.h	/^      typedef BaseSector<SubspaceType> SectorType;$/;"	t	class:basis::BaseSectors	typeref:typename:BaseSector<SubspaceType>
+SetHyperoperatorToZero	src/lib/basis/hypersector.h	/^  void SetHyperoperatorToZero($/;"	f	namespace:basis	typeref:typename:void
+SetOperatorToDiagonalConstant	src/lib/basis/operator.h	/^  void SetOperatorToDiagonalConstant($/;"	f	namespace:basis	typeref:typename:void
+SetOperatorToIdentity	src/lib/basis/operator.h	/^  void SetOperatorToIdentity($/;"	f	namespace:basis	typeref:typename:void
+SetOperatorToZero	src/lib/basis/operator.h	/^  void SetOperatorToZero($/;"	f	namespace:basis	typeref:typename:void
+SingleParticleSpacePN	src/lib/basis/m_scheme.cpp	/^  SingleParticleSpacePN::SingleParticleSpacePN(const OrbitalSpacePN& orbital_space)$/;"	f	class:basis::SingleParticleSpacePN
+SingleParticleSpacePN	src/lib/basis/m_scheme.h	/^    explicit SingleParticleSpacePN(const OrbitalPNList& states)$/;"	f	class:basis::SingleParticleSpacePN
+SingleParticleSpacePN	src/lib/basis/m_scheme.h	/^  class SingleParticleSpacePN$/;"	c	namespace:basis
+SingleParticleStatePN	src/lib/basis/m_scheme.h	/^      SingleParticleStatePN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::SingleParticleStatePN
+SingleParticleStatePN	src/lib/basis/m_scheme.h	/^      SingleParticleStatePN(const SubspaceType& subspace, int index)$/;"	f	class:basis::SingleParticleStatePN
+SingleParticleStatePN	src/lib/basis/m_scheme.h	/^  class SingleParticleStatePN$/;"	c	namespace:basis
+SingleParticleStatePNLabels	src/lib/basis/m_scheme.h	/^  typedef std::tuple<int,int,HalfInt,HalfInt> SingleParticleStatePNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,HalfInt,HalfInt>
+SingleParticleSubspacePN	src/lib/basis/m_scheme.cpp	/^  SingleParticleSubspacePN::SingleParticleSubspacePN(const OrbitalSubspacePN& orbital_subspace)$/;"	f	class:basis::SingleParticleSubspacePN
+SingleParticleSubspacePN	src/lib/basis/m_scheme.h	/^      SingleParticleSubspacePN($/;"	f	class:basis::SingleParticleSubspacePN
+SingleParticleSubspacePN	src/lib/basis/m_scheme.h	/^  class SingleParticleSubspacePN$/;"	c	namespace:basis
+SingleParticleSubspacePNLabels	src/lib/basis/m_scheme.h	/^  typedef std::tuple<OrbitalSpeciesPN> SingleParticleSubspacePNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<OrbitalSpeciesPN>
+SpaceType	src/lib/basis/basis.h	/^      typedef tSpaceType SpaceType;$/;"	t	class:basis::BaseSectors	typeref:typename:tSpaceType
+SpaceType	src/lib/basis/hypersector.h	/^      typedef tSpaceType SpaceType;$/;"	t	class:basis::BaseHypersectors	typeref:typename:tSpaceType
+StateLabelsType	src/lib/basis/basis.h	/^      typedef typename SubspaceType::StateLabelsType StateLabelsType;$/;"	t	class:basis::BaseState	typeref:typename:SubspaceType::StateLabelsType
+StateLabelsType	src/lib/basis/basis.h	/^    typedef tStateLabelsType StateLabelsType;$/;"	t	class:basis::BaseSubspace	typeref:typename:tStateLabelsType
+StateLabelsType	src/lib/basis/degenerate.h	/^      typedef typename SubspaceType::StateLabelsType StateLabelsType;$/;"	t	class:basis::BaseDegenerateState	typeref:typename:SubspaceType::StateLabelsType
+StateLabelsType	src/lib/basis/degenerate.h	/^    typedef tStateLabelsType StateLabelsType;$/;"	t	class:basis::BaseDegenerateSubspace	typeref:typename:tStateLabelsType
+Subspace	src/lib/basis/basis.h	/^      const SubspaceType& Subspace() const$/;"	f	class:basis::BaseState	typeref:typename:DEPRECATED ("")const SubspaceType &
+SubspaceLabelsType	src/lib/basis/basis.h	/^    typedef tSubspaceLabelsType SubspaceLabelsType;$/;"	t	class:basis::BaseSubspace	typeref:typename:tSubspaceLabelsType
+SubspaceLabelsType	src/lib/basis/degenerate.h	/^    typedef tSubspaceLabelsType SubspaceLabelsType;$/;"	t	class:basis::BaseDegenerateSubspace	typeref:typename:tSubspaceLabelsType
+SubspaceType	src/lib/basis/basis.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseSector	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/basis.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseSpace	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/basis.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseState	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/basis.h	/^      typedef typename tSpaceType::SubspaceType SubspaceType;$/;"	t	class:basis::BaseSectors	typeref:typename:tSpaceType::SubspaceType
+SubspaceType	src/lib/basis/degenerate.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseDegenerateSpace	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/degenerate.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseDegenerateState	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/hypersector.h	/^      typedef tSubspaceType SubspaceType;$/;"	t	class:basis::BaseHypersector	typeref:typename:tSubspaceType
+SubspaceType	src/lib/basis/hypersector.h	/^      typedef typename tSpaceType::SubspaceType SubspaceType;$/;"	t	class:basis::BaseHypersectors	typeref:typename:tSpaceType::SubspaceType
+SymmetryPhaseMode	src/lib/basis/jt_operator.h	/^  enum class SymmetryPhaseMode {kHermitian=0};$/;"	g	namespace:basis
+T	src/lib/basis/degenerate_test.cpp	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+T	src/lib/basis/degenerate_test.cpp	/^    int T() const {return subspace().T();}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+T	src/lib/basis/jjjt_scheme.h	/^      int T() const {return std::get<1>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+T	src/lib/basis/jjjt_scheme.h	/^      int T() const {return std::get<1>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+T	src/lib/basis/jjjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+T	src/lib/basis/jjjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^      int T() const {return std::get<3>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+T	src/lib/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+T0_max	src/lib/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+T0_min	src/lib/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+Test	src/lib/basis/degenerate_test.cpp	/^void Test()$/;"	f	typeref:typename:void
+TestHyprersectors	src/lib/basis/hypersector_test.cpp	/^void TestHyprersectors()$/;"	f	typeref:typename:void
+TestLJOrbitalsNmax	src/lib/basis/nlj_orbital_test.cpp	/^void TestLJOrbitalsNmax(const std::string& filename)$/;"	f	typeref:typename:void
+TestLJOrbitalsRead	src/lib/basis/nlj_orbital_test.cpp	/^void TestLJOrbitalsRead(const std::string& filename) {$/;"	f	typeref:typename:void
+TestLJSectors	src/lib/basis/nlj_orbital_test.cpp	/^void TestLJSectors() {$/;"	f	typeref:typename:void
+TestNotation	src/lib/basis/jjjpn_scheme_test.cpp	/^void TestNotation()$/;"	f	typeref:typename:void
+TestOrbitalsNmax	src/lib/basis/nlj_orbital_test.cpp	/^void TestOrbitalsNmax(const std::string& filename)$/;"	f	typeref:typename:void
+TestOrbitalsRead	src/lib/basis/nlj_orbital_test.cpp	/^void TestOrbitalsRead(const std::string& filename) {$/;"	f	typeref:typename:void
+TestRelative	src/lib/basis/lsjt_scheme_test.cpp	/^void TestRelative()$/;"	f	typeref:typename:void
+TestRelativeCM	src/lib/basis/lsjt_scheme_test.cpp	/^void TestRelativeCM()$/;"	f	typeref:typename:void
+TestRelativeCMN	src/lib/basis/lsjt_scheme_test.cpp	/^void TestRelativeCMN()$/;"	f	typeref:typename:void
+TestStatesNmax	src/lib/basis/m_scheme_test.cpp	/^void TestStatesNmax()$/;"	f	typeref:typename:void
+TestTwoBody	src/lib/basis/jjjt_scheme_test.cpp	/^void TestTwoBody()$/;"	f	typeref:typename:void
+TestTwoBody	src/lib/basis/lsjt_scheme_test.cpp	/^void TestTwoBody()$/;"	f	typeref:typename:void
+TestTwoBodyN	src/lib/basis/jjjt_scheme_test.cpp	/^void TestTwoBodyN()$/;"	f	typeref:typename:void
+TestTwoBodyN	src/lib/basis/lsjt_scheme_test.cpp	/^void TestTwoBodyN()$/;"	f	typeref:typename:void
+TestTwoBodyN1max	src/lib/basis/lsjt_scheme_test.cpp	/^void TestTwoBodyN1max()$/;"	f	typeref:typename:void
+TestTwoBodyNmax	src/lib/basis/jjjpn_scheme_test.cpp	/^void TestTwoBodyNmax()$/;"	f	typeref:typename:void
+TestTwoBodyTz	src/lib/basis/jjjpn_scheme_test.cpp	/^void TestTwoBodyTz()$/;"	f	typeref:typename:void
+TwoBodyCutoffs	src/lib/basis/many_body.cpp	/^  std::tuple<int,int> TwoBodyCutoffs(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	namespace:basis	typeref:typename:std::tuple<int,int>
+TwoBodySectorsJJJPN	src/lib/basis/jjjpn_scheme.cpp	/^  TwoBodySectorsJJJPN::TwoBodySectorsJJJPN($/;"	f	class:basis::TwoBodySectorsJJJPN
+TwoBodySectorsJJJPN	src/lib/basis/jjjpn_scheme.h	/^  class TwoBodySectorsJJJPN$/;"	c	namespace:basis
+TwoBodySectorsJJJT	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySectorsJJJT::TwoBodySectorsJJJT($/;"	f	class:basis::TwoBodySectorsJJJT
+TwoBodySectorsJJJT	src/lib/basis/jjjt_scheme.h	/^    TwoBodySectorsJJJT() {};$/;"	f	class:basis::TwoBodySectorsJJJT
+TwoBodySectorsJJJT	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySectorsJJJT$/;"	c	namespace:basis
+TwoBodySectorsJJJTN	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySectorsJJJTN::TwoBodySectorsJJJTN($/;"	f	class:basis::TwoBodySectorsJJJTN
+TwoBodySectorsJJJTN	src/lib/basis/jjjt_scheme.h	/^    TwoBodySectorsJJJTN() {};$/;"	f	class:basis::TwoBodySectorsJJJTN
+TwoBodySectorsJJJTN	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySectorsJJJTN$/;"	c	namespace:basis
+TwoBodySectorsLSJT	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySectorsLSJT::TwoBodySectorsLSJT($/;"	f	class:basis::TwoBodySectorsLSJT
+TwoBodySectorsLSJT	src/lib/basis/lsjt_scheme.h	/^    TwoBodySectorsLSJT() {};$/;"	f	class:basis::TwoBodySectorsLSJT
+TwoBodySectorsLSJT	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySectorsLSJT$/;"	c	namespace:basis
+TwoBodySectorsLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySectorsLSJTN::TwoBodySectorsLSJTN($/;"	f	class:basis::TwoBodySectorsLSJTN
+TwoBodySectorsLSJTN	src/lib/basis/lsjt_scheme.h	/^    TwoBodySectorsLSJTN() {};$/;"	f	class:basis::TwoBodySectorsLSJTN
+TwoBodySectorsLSJTN	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySectorsLSJTN$/;"	c	namespace:basis
+TwoBodySpaceJJJPN	src/lib/basis/jjjpn_scheme.cpp	/^  TwoBodySpaceJJJPN::TwoBodySpaceJJJPN($/;"	f	class:basis::TwoBodySpaceJJJPN
+TwoBodySpaceJJJPN	src/lib/basis/jjjpn_scheme.h	/^  class TwoBodySpaceJJJPN$/;"	c	namespace:basis
+TwoBodySpaceJJJT	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySpaceJJJT::TwoBodySpaceJJJT(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	class:basis::TwoBodySpaceJJJT
+TwoBodySpaceJJJT	src/lib/basis/jjjt_scheme.h	/^    TwoBodySpaceJJJT() {};$/;"	f	class:basis::TwoBodySpaceJJJT
+TwoBodySpaceJJJT	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySpaceJJJT$/;"	c	namespace:basis
+TwoBodySpaceJJJTN	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySpaceJJJTN::TwoBodySpaceJJJTN(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	class:basis::TwoBodySpaceJJJTN
+TwoBodySpaceJJJTN	src/lib/basis/jjjt_scheme.h	/^    TwoBodySpaceJJJTN() {};$/;"	f	class:basis::TwoBodySpaceJJJTN
+TwoBodySpaceJJJTN	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySpaceJJJTN$/;"	c	namespace:basis
+TwoBodySpaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySpaceLSJT::TwoBodySpaceLSJT(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	class:basis::TwoBodySpaceLSJT
+TwoBodySpaceLSJT	src/lib/basis/lsjt_scheme.h	/^    TwoBodySpaceLSJT() {};$/;"	f	class:basis::TwoBodySpaceLSJT
+TwoBodySpaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySpaceLSJT$/;"	c	namespace:basis
+TwoBodySpaceLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySpaceLSJTN::TwoBodySpaceLSJTN(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	class:basis::TwoBodySpaceLSJTN
+TwoBodySpaceLSJTN	src/lib/basis/lsjt_scheme.h	/^    TwoBodySpaceLSJTN() {};$/;"	f	class:basis::TwoBodySpaceLSJTN
+TwoBodySpaceLSJTN	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySpaceLSJTN$/;"	c	namespace:basis
+TwoBodySpeciesPN	src/lib/basis/proton_neutron.h	/^  enum class TwoBodySpeciesPN {kPP=0,kNN=1,kPN=2};$/;"	g	namespace:basis
+TwoBodyStateJJJPN	src/lib/basis/jjjpn_scheme.h	/^    TwoBodyStateJJJPN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::TwoBodyStateJJJPN
+TwoBodyStateJJJPN	src/lib/basis/jjjpn_scheme.h	/^    TwoBodyStateJJJPN(const SubspaceType& subspace, int index)$/;"	f	class:basis::TwoBodyStateJJJPN
+TwoBodyStateJJJPN	src/lib/basis/jjjpn_scheme.h	/^  class TwoBodyStateJJJPN$/;"	c	namespace:basis
+TwoBodyStateJJJPNLabels	src/lib/basis/jjjpn_scheme.h	/^  typedef std::tuple<int,int> TwoBodyStateJJJPNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int>
+TwoBodyStateJJJT	src/lib/basis/jjjt_scheme.h	/^    TwoBodyStateJJJT(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::TwoBodyStateJJJT
+TwoBodyStateJJJT	src/lib/basis/jjjt_scheme.h	/^    TwoBodyStateJJJT(const SubspaceType& subspace, int index)$/;"	f	class:basis::TwoBodyStateJJJT
+TwoBodyStateJJJT	src/lib/basis/jjjt_scheme.h	/^  class TwoBodyStateJJJT$/;"	c	namespace:basis
+TwoBodyStateJJJTLabels	src/lib/basis/jjjt_scheme.h	/^  typedef std::tuple<int,HalfInt,int,HalfInt> TwoBodyStateJJJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,HalfInt,int,HalfInt>
+TwoBodyStateJJJTN	src/lib/basis/jjjt_scheme.h	/^    TwoBodyStateJJJTN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::TwoBodyStateJJJTN
+TwoBodyStateJJJTN	src/lib/basis/jjjt_scheme.h	/^    TwoBodyStateJJJTN(const SubspaceType& subspace, int index)$/;"	f	class:basis::TwoBodyStateJJJTN
+TwoBodyStateJJJTN	src/lib/basis/jjjt_scheme.h	/^  class TwoBodyStateJJJTN$/;"	c	namespace:basis
+TwoBodyStateJJJTNLabels	src/lib/basis/jjjt_scheme.h	/^  typedef std::tuple<int,HalfInt,int,HalfInt> TwoBodyStateJJJTNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,HalfInt,int,HalfInt>
+TwoBodyStateLSJT	src/lib/basis/lsjt_scheme.h	/^    TwoBodyStateLSJT(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::TwoBodyStateLSJT
+TwoBodyStateLSJT	src/lib/basis/lsjt_scheme.h	/^    TwoBodyStateLSJT(const SubspaceType& subspace, int index)$/;"	f	class:basis::TwoBodyStateLSJT
+TwoBodyStateLSJT	src/lib/basis/lsjt_scheme.h	/^  class TwoBodyStateLSJT$/;"	c	namespace:basis
+TwoBodyStateLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int> TwoBodyStateLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int>
+TwoBodyStateLSJTN	src/lib/basis/lsjt_scheme.h	/^    TwoBodyStateLSJTN(const SubspaceType& subspace, const StateLabelsType& state_labels)$/;"	f	class:basis::TwoBodyStateLSJTN
+TwoBodyStateLSJTN	src/lib/basis/lsjt_scheme.h	/^    TwoBodyStateLSJTN(const SubspaceType& subspace, int index)$/;"	f	class:basis::TwoBodyStateLSJTN
+TwoBodyStateLSJTN	src/lib/basis/lsjt_scheme.h	/^  class TwoBodyStateLSJTN$/;"	c	namespace:basis
+TwoBodyStateLSJTNLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int> TwoBodyStateLSJTNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int>
+TwoBodySubspaceJJJPN	src/lib/basis/jjjpn_scheme.cpp	/^  TwoBodySubspaceJJJPN::TwoBodySubspaceJJJPN($/;"	f	class:basis::TwoBodySubspaceJJJPN
+TwoBodySubspaceJJJPN	src/lib/basis/jjjpn_scheme.h	/^  class TwoBodySubspaceJJJPN$/;"	c	namespace:basis
+TwoBodySubspaceJJJPNLabels	src/lib/basis/jjjpn_scheme.h	/^  typedef std::tuple<TwoBodySpeciesPN,int,int> TwoBodySubspaceJJJPNLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<TwoBodySpeciesPN,int,int>
+TwoBodySubspaceJJJT	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySubspaceJJJT::TwoBodySubspaceJJJT($/;"	f	class:basis::TwoBodySubspaceJJJT
+TwoBodySubspaceJJJT	src/lib/basis/jjjt_scheme.h	/^      TwoBodySubspaceJJJT() {};$/;"	f	class:basis::TwoBodySubspaceJJJT
+TwoBodySubspaceJJJT	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySubspaceJJJT$/;"	c	namespace:basis
+TwoBodySubspaceJJJTLabels	src/lib/basis/jjjt_scheme.h	/^  typedef std::tuple<int,int,int> TwoBodySubspaceJJJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int>
+TwoBodySubspaceJJJTN	src/lib/basis/jjjt_scheme.cpp	/^  TwoBodySubspaceJJJTN::TwoBodySubspaceJJJTN($/;"	f	class:basis::TwoBodySubspaceJJJTN
+TwoBodySubspaceJJJTN	src/lib/basis/jjjt_scheme.h	/^      TwoBodySubspaceJJJTN() {};$/;"	f	class:basis::TwoBodySubspaceJJJTN
+TwoBodySubspaceJJJTN	src/lib/basis/jjjt_scheme.h	/^  class TwoBodySubspaceJJJTN$/;"	c	namespace:basis
+TwoBodySubspaceJJJTNLabels	src/lib/basis/jjjt_scheme.h	/^  typedef std::tuple<int,int,int,int> TwoBodySubspaceJJJTNLabels;  \/\/ (MODIFICATION for subspa/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int>
+TwoBodySubspaceLSJT	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySubspaceLSJT::TwoBodySubspaceLSJT($/;"	f	class:basis::TwoBodySubspaceLSJT
+TwoBodySubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^      TwoBodySubspaceLSJT() {};$/;"	f	class:basis::TwoBodySubspaceLSJT
+TwoBodySubspaceLSJT	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySubspaceLSJT$/;"	c	namespace:basis
+TwoBodySubspaceLSJTLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int,int> TwoBodySubspaceLSJTLabels;$/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int>
+TwoBodySubspaceLSJTN	src/lib/basis/lsjt_scheme.cpp	/^  TwoBodySubspaceLSJTN::TwoBodySubspaceLSJTN($/;"	f	class:basis::TwoBodySubspaceLSJTN
+TwoBodySubspaceLSJTN	src/lib/basis/lsjt_scheme.h	/^      TwoBodySubspaceLSJTN() {};$/;"	f	class:basis::TwoBodySubspaceLSJTN
+TwoBodySubspaceLSJTN	src/lib/basis/lsjt_scheme.h	/^  class TwoBodySubspaceLSJTN$/;"	c	namespace:basis
+TwoBodySubspaceLSJTNLabels	src/lib/basis/lsjt_scheme.h	/^  typedef std::tuple<int,int,int,int,int,int> TwoBodySubspaceLSJTNLabels;  \/\/ (MODIFICATION fo/;"	t	namespace:basis	typeref:typename:std::tuple<int,int,int,int,int,int>
+Tz	src/lib/basis/m_scheme.h	/^      HalfInt Tz() const {return kOrbitalSpeciesPNCodeTz[int(orbital_species())];}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:HalfInt
+Tz	src/lib/basis/m_scheme.h	/^      HalfInt Tz() const {return subspace().Tz();}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:HalfInt
+Tz	src/lib/basis/nlj_orbital.h	/^      HalfInt Tz() const {return kOrbitalSpeciesPNCodeTz[int(orbital_species())];}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:HalfInt
+Tz	src/lib/basis/nlj_orbital.h	/^      HalfInt Tz() const {return kOrbitalSpeciesPNCodeTz[int(orbital_species())];}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:HalfInt
+Tz	src/lib/basis/nlj_orbital.h	/^    HalfInt Tz() const {return subspace().Tz();}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:HalfInt
+Tz	src/lib/basis/nlj_orbital.h	/^    HalfInt Tz() const {return subspace().Tz();}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:HalfInt
+Tz0	src/lib/basis/jjjpn_scheme.h	/^    int Tz0() const {return Tz0_;};$/;"	f	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+Tz0	src/lib/basis/nlj_orbital.h	/^    int Tz0()    const {return Tz0_;}$/;"	f	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+Tz0_	src/lib/basis/jjjpn_scheme.h	/^    int J0_, g0_, Tz0_;$/;"	m	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+Tz0_	src/lib/basis/nlj_orbital.h	/^    int j0_, g0_, Tz0_;$/;"	m	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+UpperTriangularEntries	src/lib/basis/operator.h	/^    int UpperTriangularEntries($/;"	f	namespace:basis	typeref:typename:int
+ValidIndex	src/lib/basis/basis.h	/^      int ValidIndex() const$/;"	f	class:basis::BaseState	typeref:typename:int
+ValidLabels	src/lib/basis/degenerate_test.cpp	/^  bool RelativeDegenerateSubspaceLSJT::ValidLabels() const$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:bool
+ValidLabels	src/lib/basis/jjjt_scheme.cpp	/^  bool TwoBodySubspaceJJJT::ValidLabels() const$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:bool
+ValidLabels	src/lib/basis/jjjt_scheme.cpp	/^  bool TwoBodySubspaceJJJTN::ValidLabels() const$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:bool
+ValidLabels	src/lib/basis/lsjt_scheme.cpp	/^  bool RelativeCMSubspaceLSJT::ValidLabels() const$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:bool
+ValidLabels	src/lib/basis/lsjt_scheme.cpp	/^  bool RelativeCMSubspaceLSJTN::ValidLabels() const$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:bool
+ValidLabels	src/lib/basis/lsjt_scheme.cpp	/^  bool RelativeSubspaceLSJT::ValidLabels() const$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:bool
+ValidLabels	src/lib/basis/lsjt_scheme.cpp	/^  bool TwoBodySubspaceLSJT::ValidLabels() const$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:bool
+ValidLabels	src/lib/basis/lsjt_scheme.cpp	/^  bool TwoBodySubspaceLSJTN::ValidLabels() const$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:bool
+WeightMax	src/lib/basis/jjjpn_scheme.h	/^    WeightMax() {};$/;"	f	struct:basis::WeightMax
+WeightMax	src/lib/basis/jjjpn_scheme.h	/^    WeightMax(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	struct:basis::WeightMax
+WeightMax	src/lib/basis/jjjpn_scheme.h	/^    WeightMax(double wp, double wn, double wpp, double wnn, double wpn)$/;"	f	struct:basis::WeightMax
+WeightMax	src/lib/basis/jjjpn_scheme.h	/^    WeightMax(int N1max, int N2max)$/;"	f	struct:basis::WeightMax
+WeightMax	src/lib/basis/jjjpn_scheme.h	/^  struct WeightMax$/;"	s	namespace:basis
+WriteRelativeCMOperatorComponentLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteRelativeCMOperatorComponentLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteRelativeCMOperatorParametersLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteRelativeCMOperatorParametersLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteRelativeOperatorComponentLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteRelativeOperatorComponentLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteRelativeOperatorLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteRelativeOperatorLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteRelativeOperatorParametersLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteRelativeOperatorParametersLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteTest	src/lib/basis/jjjpn_operator_test.cpp	/^void WriteTest(const std::string& filename)$/;"	f	typeref:typename:void
+WriteTestRelative	src/lib/basis/lsjt_operator_test.cpp	/^void WriteTestRelative(const std::string& filename)$/;"	f	typeref:typename:void
+WriteTestRelativeCM	src/lib/basis/lsjt_operator_test.cpp	/^void WriteTestRelativeCM(const std::string& filename)$/;"	f	typeref:typename:void
+WriteTestRelativeManual	src/lib/basis/lsjt_operator_test.cpp	/^void WriteTestRelativeManual(const std::string& filename)$/;"	f	typeref:typename:void
+WriteTestTwoBody	src/lib/basis/lsjt_operator_test.cpp	/^void WriteTestTwoBody(const std::string& filename)$/;"	f	typeref:typename:void
+WriteTwoBodyOperatorComponentJJJT	src/lib/basis/jjjt_operator.cpp	/^  void WriteTwoBodyOperatorComponentJJJT($/;"	f	namespace:basis	typeref:typename:void
+WriteTwoBodyOperatorComponentLSJT	src/lib/basis/lsjt_operator.cpp	/^  void WriteTwoBodyOperatorComponentLSJT($/;"	f	namespace:basis	typeref:typename:void
+WriteTwoBodyOperatorJJJPN	src/lib/basis/jjjpn_operator.cpp	/^  void WriteTwoBodyOperatorJJJPN($/;"	f	namespace:basis	typeref:typename:void
+__CONSTANTS_H__	src/constants.h	/^#define __CONSTANTS_H__$/;"	d
+__OPERATORS_H__	src/operators.h	/^#define __OPERATORS_H__$/;"	d
+__TDHO_H__	src/tdho.h	/^#define __TDHO_H__$/;"	d
+__UTILITY_H__	src/utility.h	/^#define __UTILITY_H__$/;"	d
+__init__	main.py	/^    def __init__(self, operator, osc_energy, nmax, jmax):$/;"	m	class:MatrixFile
+add_to_file	main.py	/^        def add_to_file(fname):$/;"	f	member:MatrixFile.generate_files	file:
+all	Makefile	/^all: $(EXECUTABLE)$/;"	t
+b	src/tdho.h	/^struct wf_params { int n; int l; int ml; double b; };$/;"	m	struct:wf_params	typeref:typename:double
+basis	src/lib/basis/basis.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/degenerate.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/degenerate_test.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/hypersector.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/hypersector_test.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/jjjpn_operator.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/jjjpn_operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/jjjpn_scheme.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/jjjpn_scheme.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/jjjt_operator.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/jjjt_operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/jjjt_scheme.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/jjjt_scheme.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/jt_operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/lsjt_operator.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/lsjt_operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/lsjt_scheme.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/lsjt_scheme.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/m_scheme.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/m_scheme.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/many_body.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/many_body.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/nlj_operator.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/nlj_operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/nlj_orbital.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/nlj_orbital.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/operator.h	/^namespace basis {$/;"	n
+basis	src/lib/basis/proton_neutron.cpp	/^namespace basis {$/;"	n	file:
+basis	src/lib/basis/proton_neutron.h	/^namespace basis {$/;"	n
+bra_orbital_space	src/lib/basis/nlj_operator.h	/^    OrbitalSpaceLJPN bra_orbital_space;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:OrbitalSpaceLJPN
+bra_subspace	src/lib/basis/basis.h	/^      const SubspaceType& bra_subspace() const {return *bra_subspace_ptr_;}$/;"	f	class:basis::BaseSector	typeref:typename:const SubspaceType &
+bra_subspace	src/lib/basis/hypersector.h	/^      const SubspaceType& bra_subspace() const {return *bra_subspace_ptr_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:const SubspaceType &
+bra_subspace_index	src/lib/basis/basis.h	/^      int bra_subspace_index() const {return bra_subspace_index_;}$/;"	f	class:basis::BaseSector	typeref:typename:int
+bra_subspace_index	src/lib/basis/hypersector.h	/^      int bra_subspace_index() const {return bra_subspace_index_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:int
+bra_subspace_index_	src/lib/basis/basis.h	/^      int bra_subspace_index_, ket_subspace_index_;$/;"	m	class:basis::BaseSector	typeref:typename:int
+bra_subspace_index_	src/lib/basis/hypersector.h	/^      int bra_subspace_index_, ket_subspace_index_, operator_subspace_index_;$/;"	m	class:basis::BaseHypersector	typeref:typename:int
+bra_subspace_ptr_	src/lib/basis/basis.h	/^      const SubspaceType* bra_subspace_ptr_;$/;"	m	class:basis::BaseSector	typeref:typename:const SubspaceType *
+bra_subspace_ptr_	src/lib/basis/hypersector.h	/^      const SubspaceType* bra_subspace_ptr_;$/;"	m	class:basis::BaseHypersector	typeref:typename:const SubspaceType *
+cg_coeff	src/utility.c	/^double cg_coeff (int ja, int jb, int j, int mja, int mjb, int mj)$/;"	f	typeref:typename:double
+chiral	src/chiral.h	/^namespace chiral$/;"	n
+clean	Makefile	/^clean:$/;"	t
+create_file	main.py	/^        def create_file():$/;"	f	member:MatrixFile.generate_files	file:
+data	src/operator_gt.c	/^struct data { int n; int l; }; $/;"	s	file:
+degeneracy	src/lib/basis/degenerate.h	/^      int degeneracy() const$/;"	f	class:basis::BaseDegenerateState	typeref:typename:int
+delta	src/utility.h	/^inline int delta(int a, int b) { return a == b ? 1 : 0; };$/;"	f	typeref:typename:int
+dimension_	src/lib/basis/basis.h	/^    int dimension_;$/;"	m	class:basis::BaseSubspace	typeref:typename:int
+directories	Makefile	/^directories: $(BUILDDIR)$/;"	t
+extras	src/lib/basis/project.mk	/^extras := README.md LICENSE.md$/;"	m
+from_input	main.py	/^    def from_input(cls):$/;"	m	class:MatrixFile
+full_dimension	src/lib/basis/degenerate.h	/^    int full_dimension() const$/;"	f	class:basis::BaseDegenerateSubspace	typeref:typename:int
+full_dimension_	src/lib/basis/degenerate.h	/^    int full_dimension_;  \/\/ total number of substates$/;"	m	class:basis::BaseDegenerateSubspace	typeref:typename:int
+full_labels	src/lib/basis/m_scheme.h	/^      FullSingleParticleStateLabels full_labels() const$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:FullSingleParticleStateLabels
+full_labels	src/lib/basis/nlj_orbital.h	/^    FullOrbitalLabels full_labels() const$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:FullOrbitalLabels
+full_labels	src/lib/basis/nlj_orbital.h	/^    FullOrbitalLabels full_labels() const$/;"	f	class:basis::OrbitalStatePN	typeref:typename:FullOrbitalLabels
+g	src/lib/basis/degenerate_test.cpp	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::RelativeDegenerateSubspaceLSJT	typeref:typename:int	file:
+g	src/lib/basis/degenerate_test.cpp	/^    int g() const {return subspace().g();}$/;"	f	class:basis::RelativeDegenerateStateLSJT	typeref:typename:int	file:
+g	src/lib/basis/jjjpn_scheme.h	/^      int g() const {return std::get<2>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:int
+g	src/lib/basis/jjjpn_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:int
+g	src/lib/basis/jjjt_scheme.h	/^      int g() const {return std::get<2>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJT	typeref:typename:int
+g	src/lib/basis/jjjt_scheme.h	/^      int g() const {return std::get<2>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJTN	typeref:typename:int
+g	src/lib/basis/jjjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+g	src/lib/basis/jjjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::RelativeSubspaceLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^      int g() const {return std::get<4>(labels_);}$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+g	src/lib/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+g	src/lib/basis/m_scheme.h	/^      int g() const {return l()%2;}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:int
+g	src/lib/basis/nlj_orbital.h	/^      int g() const {return l()%2;}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:int
+g	src/lib/basis/nlj_orbital.h	/^    int g() const {return l()%2;}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:int
+g	src/lib/basis/nlj_orbital.h	/^    int g() const {return l()%2;}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:int
+g0	src/lib/basis/jjjpn_scheme.h	/^    int g0() const {return g0_;};$/;"	f	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+g0	src/lib/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+g0	src/lib/basis/nlj_orbital.h	/^    int g0()     const {return g0_;}$/;"	f	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+g0_	src/lib/basis/jjjpn_scheme.h	/^    int J0_, g0_, Tz0_;$/;"	m	class:basis::TwoBodySectorsJJJPN	typeref:typename:int
+g0_	src/lib/basis/nlj_orbital.h	/^    int j0_, g0_, Tz0_;$/;"	m	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+gamow_teller_bare	src/operator_gt.c	/^double gamow_teller_bare(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+gamow_teller_n2lo	src/operator_gt.c	/^double gamow_teller_n2lo(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+gamow_teller_n2lo_d_term	src/operator_gt.c	/^double gamow_teller_n2lo_d_term(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+generate_files	main.py	/^    def generate_files(self):$/;"	m	class:MatrixFile
+get_matrix_element	src/chiral.h	/^        double get_matrix_element() const {return matrix_element;};$/;"	f	class:chiral::ChiralOperator	typeref:typename:double
+get_matrix_element	src/lib/basis/nlj_operator.h	/^    double get_matrix_element(const OrbitalStatePN& bra, const OrbitalStatePN& ket) const$/;"	f	struct:basis::OneBodyOperatorLJPN	typeref:typename:double
+get_name	src/chiral.h	/^        std::string get_name() const {return name;};$/;"	f	class:chiral::ChiralOperator	typeref:typename:std::string
+hypersectors_	src/lib/basis/hypersector.h	/^      std::vector<HypersectorType> hypersectors_;$/;"	m	class:basis::BaseHypersectors	typeref:typename:std::vector<HypersectorType>
+index	src/lib/basis/basis.h	/^      int index() const$/;"	f	class:basis::BaseState	typeref:typename:int
+index1	src/lib/basis/jjjpn_scheme.h	/^    int index1() const {return std::get<0>(labels());}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:int
+index2	src/lib/basis/jjjpn_scheme.h	/^    int index2() const {return std::get<1>(labels());}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:int
+index_	src/lib/basis/basis.h	/^      int index_;   \/\/\/< 0-based index within space$/;"	m	class:basis::BaseState	typeref:typename:int
+is_oscillator_like	src/lib/basis/m_scheme.h	/^      bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:bool
+is_oscillator_like	src/lib/basis/m_scheme.h	/^    bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::SingleParticleSpacePN	typeref:typename:bool
+is_oscillator_like	src/lib/basis/nlj_orbital.h	/^      bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:bool
+is_oscillator_like	src/lib/basis/nlj_orbital.h	/^      bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:bool
+is_oscillator_like	src/lib/basis/nlj_orbital.h	/^    bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:bool
+is_oscillator_like	src/lib/basis/nlj_orbital.h	/^    bool is_oscillator_like() const {return is_oscillator_like_;}$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/m_scheme.h	/^      bool is_oscillator_like_;$/;"	m	class:basis::SingleParticleSubspacePN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/m_scheme.h	/^    bool is_oscillator_like_;$/;"	m	class:basis::SingleParticleSpacePN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/nlj_orbital.h	/^      bool is_oscillator_like_;$/;"	m	class:basis::OrbitalSubspaceLJPN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/nlj_orbital.h	/^      bool is_oscillator_like_;$/;"	m	class:basis::OrbitalSubspacePN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/nlj_orbital.h	/^    bool is_oscillator_like_;$/;"	m	class:basis::OrbitalSpaceLJPN	typeref:typename:bool
+is_oscillator_like_	src/lib/basis/nlj_orbital.h	/^    bool is_oscillator_like_;$/;"	m	class:basis::OrbitalSpacePN	typeref:typename:bool
+isequal_q_nums	src/tdho.c	/^bool isequal_q_nums(q_nums *ket, q_nums *bra)$/;"	f	typeref:typename:bool
+isequal_wf_params	src/tdho.c	/^bool isequal_wf_params(wf_params *ket, wf_params *bra)$/;"	f	typeref:typename:bool
+j	src/lib/basis/m_scheme.h	/^      HalfInt j() const {return std::get<2>(labels());}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:HalfInt
+j	src/lib/basis/nlj_orbital.h	/^      HalfInt j() const {return std::get<2>(labels_);}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:HalfInt
+j	src/lib/basis/nlj_orbital.h	/^    HalfInt j() const {return std::get<2>(labels());}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:HalfInt
+j	src/lib/basis/nlj_orbital.h	/^    HalfInt j() const {return subspace().j();}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:HalfInt
+j	src/lib/basis/nlj_orbital.h	/^    HalfInt j;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:HalfInt
+j	src/tdho.h	/^    int j; int mj; int t; int mt; };$/;"	m	struct:q_nums	typeref:typename:int
+j0	src/lib/basis/nlj_orbital.h	/^    int j0()     const {return j0_;}$/;"	f	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+j0_	src/lib/basis/nlj_orbital.h	/^    int j0_, g0_, Tz0_;$/;"	m	class:basis::OrbitalSectorsLJPN	typeref:typename:int
+j1	src/lib/basis/jjjt_scheme.h	/^    HalfInt j1() const {return std::get<1>(labels());}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:HalfInt
+j1	src/lib/basis/jjjt_scheme.h	/^    HalfInt j1() const {return std::get<1>(labels());}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:HalfInt
+j2	src/lib/basis/jjjt_scheme.h	/^    HalfInt j2() const {return std::get<3>(labels());}$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:HalfInt
+j2	src/lib/basis/jjjt_scheme.h	/^    HalfInt j2() const {return std::get<3>(labels());}$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:HalfInt
+kASToNAS	src/lib/basis/many_body.h	/^  enum class NormalizationConversion {kNone, kASToNAS, kNASToAS};$/;"	e	enum:basis::NormalizationConversion
+kBoth	src/lib/basis/basis.h	/^  enum class SectorDirection {kCanonical,kBoth};$/;"	e	enum:basis::SectorDirection
+kCanonical	src/lib/basis/basis.h	/^  enum class SectorDirection {kCanonical,kBoth};$/;"	e	enum:basis::SectorDirection
+kFourBody	src/lib/basis/many_body.h	/^  enum class Rank {kOneBody=1, kTwoBody=2, kThreeBody=3, kFourBody=4};$/;"	e	enum:basis::Rank
+kHermitian	src/lib/basis/jt_operator.h	/^  enum class SymmetryPhaseMode {kHermitian=0};$/;"	e	enum:basis::SymmetryPhaseMode
+kN	src/lib/basis/proton_neutron.h	/^  enum class OperatorTypePN {kP=0,kN=1,kTotal=2};$/;"	e	enum:basis::OperatorTypePN
+kN	src/lib/basis/proton_neutron.h	/^  enum class OrbitalSpeciesPN {kP=0,kN=1};$/;"	e	enum:basis::OrbitalSpeciesPN
+kNASToAS	src/lib/basis/many_body.h	/^  enum class NormalizationConversion {kNone, kASToNAS, kNASToAS};$/;"	e	enum:basis::NormalizationConversion
+kNN	src/lib/basis/proton_neutron.h	/^  enum class TwoBodySpeciesPN {kPP=0,kNN=1,kPN=2};$/;"	e	enum:basis::TwoBodySpeciesPN
+kNone	src/lib/basis/basis.h	/^  static const int kNone = -1;$/;"	v	namespace:basis	typeref:typename:const int
+kNone	src/lib/basis/many_body.h	/^  enum class NormalizationConversion {kNone, kASToNAS, kNASToAS};$/;"	e	enum:basis::NormalizationConversion
+kOneBody	src/lib/basis/many_body.h	/^  enum class Rank {kOneBody=1, kTwoBody=2, kThreeBody=3, kFourBody=4};$/;"	e	enum:basis::Rank
+kOperatorTypePNCodeChar	src/lib/basis/proton_neutron.cpp	/^  const std::array<const char*,3> kOperatorTypePNCodeChar({"p","n","total"});$/;"	v	namespace:basis	typeref:typename:const std::array<const char *,3>
+kOrbitalSpeciesPNCodeChar	src/lib/basis/proton_neutron.cpp	/^  const std::array<const char*,2> kOrbitalSpeciesPNCodeChar({"p","n"});$/;"	v	namespace:basis	typeref:typename:const std::array<const char *,2>
+kOrbitalSpeciesPNCodeDecimal	src/lib/basis/proton_neutron.cpp	/^  const std::array<int,2> kOrbitalSpeciesPNCodeDecimal({1,2});$/;"	v	namespace:basis	typeref:typename:const std::array<int,2>
+kOrbitalSpeciesPNCodeTz	src/lib/basis/proton_neutron.cpp	/^  const std::array<HalfInt,2> kOrbitalSpeciesPNCodeTz({HalfInt(+1,2),HalfInt(-1,2)});$/;"	v	namespace:basis	typeref:typename:const std::array<HalfInt,2>
+kP	src/lib/basis/proton_neutron.h	/^  enum class OperatorTypePN {kP=0,kN=1,kTotal=2};$/;"	e	enum:basis::OperatorTypePN
+kP	src/lib/basis/proton_neutron.h	/^  enum class OrbitalSpeciesPN {kP=0,kN=1};$/;"	e	enum:basis::OrbitalSpeciesPN
+kPN	src/lib/basis/proton_neutron.h	/^  enum class TwoBodySpeciesPN {kPP=0,kNN=1,kPN=2};$/;"	e	enum:basis::TwoBodySpeciesPN
+kPP	src/lib/basis/proton_neutron.h	/^  enum class TwoBodySpeciesPN {kPP=0,kNN=1,kPN=2};$/;"	e	enum:basis::TwoBodySpeciesPN
+kRadial	src/lib/basis/nlj_operator.h	/^    kRadial = 'R',$/;"	e	enum:basis::OneBodyOperatorType
+kSpherical	src/lib/basis/nlj_operator.h	/^    kSpherical = 'S'$/;"	e	enum:basis::OneBodyOperatorType
+kThreeBody	src/lib/basis/many_body.h	/^  enum class Rank {kOneBody=1, kTwoBody=2, kThreeBody=3, kFourBody=4};$/;"	e	enum:basis::Rank
+kTotal	src/lib/basis/proton_neutron.h	/^  enum class OperatorTypePN {kP=0,kN=1,kTotal=2};$/;"	e	enum:basis::OperatorTypePN
+kTwoBody	src/lib/basis/many_body.h	/^  enum class Rank {kOneBody=1, kTwoBody=2, kThreeBody=3, kFourBody=4};$/;"	e	enum:basis::Rank
+kTwoBodySpeciesPNCodeChar	src/lib/basis/proton_neutron.cpp	/^  const std::array<const char*,3> kTwoBodySpeciesPNCodeChar({"pp","nn","pn"});$/;"	v	namespace:basis	typeref:typename:const std::array<const char *,3>
+kTwoBodySpeciesPNCodeDecimal	src/lib/basis/proton_neutron.cpp	/^  const std::array<int,3> kTwoBodySpeciesPNCodeDecimal({11,22,12});$/;"	v	namespace:basis	typeref:typename:const std::array<int,3>
+kTwoBodySpeciesPNCodeTz	src/lib/basis/proton_neutron.cpp	/^  const std::array<int,3> kTwoBodySpeciesPNCodeTz({+1,-1,0});$/;"	v	namespace:basis	typeref:typename:const std::array<int,3>
+kVersion15099	src/lib/basis/nlj_orbital.cpp	/^  enum class MFDnOrbitalFormat : int {kVersion15099=15099};$/;"	e	enum:basis::MFDnOrbitalFormat	file:
+kWeightTolerance	src/lib/basis/nlj_orbital.h	/^    static constexpr double kWeightTolerance = 1e-8;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:double
+ket_orbital_space	src/lib/basis/nlj_operator.h	/^    OrbitalSpaceLJPN ket_orbital_space;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:OrbitalSpaceLJPN
+ket_subspace	src/lib/basis/basis.h	/^      const SubspaceType& ket_subspace() const {return *ket_subspace_ptr_;}$/;"	f	class:basis::BaseSector	typeref:typename:const SubspaceType &
+ket_subspace	src/lib/basis/hypersector.h	/^      const SubspaceType& ket_subspace() const {return *ket_subspace_ptr_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:const SubspaceType &
+ket_subspace_index	src/lib/basis/basis.h	/^      int ket_subspace_index() const {return ket_subspace_index_;}$/;"	f	class:basis::BaseSector	typeref:typename:int
+ket_subspace_index	src/lib/basis/hypersector.h	/^      int ket_subspace_index() const {return ket_subspace_index_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:int
+ket_subspace_index_	src/lib/basis/basis.h	/^      int bra_subspace_index_, ket_subspace_index_;$/;"	m	class:basis::BaseSector	typeref:typename:int
+ket_subspace_index_	src/lib/basis/hypersector.h	/^      int bra_subspace_index_, ket_subspace_index_, operator_subspace_index_;$/;"	m	class:basis::BaseHypersector	typeref:typename:int
+ket_subspace_ptr_	src/lib/basis/basis.h	/^      const SubspaceType* ket_subspace_ptr_;$/;"	m	class:basis::BaseSector	typeref:typename:const SubspaceType *
+ket_subspace_ptr_	src/lib/basis/hypersector.h	/^      const SubspaceType* ket_subspace_ptr_;$/;"	m	class:basis::BaseHypersector	typeref:typename:const SubspaceType *
+l	src/lib/basis/m_scheme.h	/^      int l() const {return std::get<1>(labels());}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:int
+l	src/lib/basis/nlj_orbital.h	/^      int l() const {return std::get<1>(labels_);}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:int
+l	src/lib/basis/nlj_orbital.h	/^    int l() const {return std::get<1>(labels());}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:int
+l	src/lib/basis/nlj_orbital.h	/^    int l() const {return subspace().l();}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:int
+l	src/lib/basis/nlj_orbital.h	/^    int l;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:int
+l	src/operator_gt.c	/^struct data { int n; int l; }; $/;"	m	struct:data	typeref:typename:int	file:
+l	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
+l	src/tdho.h	/^struct wf_params { int n; int l; int ml; double b; };$/;"	m	struct:wf_params	typeref:typename:int
+l1	src/lib/basis/jjjt_scheme.h	/^    int l1() const$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+l1	src/lib/basis/jjjt_scheme.h	/^    int l1() const$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+l1	src/lib/basis/lsjt_scheme.h	/^    int l1() const {return std::get<1>(labels());}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+l1	src/lib/basis/lsjt_scheme.h	/^    int l1() const {return std::get<1>(labels());}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+l2	src/lib/basis/jjjt_scheme.h	/^    int l2() const$/;"	f	class:basis::TwoBodyStateJJJT	typeref:typename:int
+l2	src/lib/basis/jjjt_scheme.h	/^    int l2() const$/;"	f	class:basis::TwoBodyStateJJJTN	typeref:typename:int
+l2	src/lib/basis/lsjt_scheme.h	/^    int l2() const {return std::get<3>(labels());}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
+l2	src/lib/basis/lsjt_scheme.h	/^    int l2() const {return std::get<3>(labels());}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
+labels	src/lib/basis/basis.h	/^      const StateLabelsType& labels() const$/;"	f	class:basis::BaseState	typeref:typename:const StateLabelsType &
+labels	src/lib/basis/basis.h	/^    const SubspaceLabelsType& labels() const$/;"	f	class:basis::BaseSubspace	typeref:typename:const SubspaceLabelsType &
+labels_	src/lib/basis/basis.h	/^    SubspaceLabelsType labels_;$/;"	m	class:basis::BaseSubspace	typeref:typename:SubspaceLabelsType
+lc	src/lib/basis/lsjt_scheme.h	/^    int lc() const {return std::get<3>(labels());}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+lc	src/lib/basis/lsjt_scheme.h	/^    int lc() const {return std::get<3>(labels());}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+lo	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	e	enum:chiral::ChiralOrder
+lookup_	src/lib/basis/basis.h	/^      std::map<typename SectorType::KeyType,int> lookup_;$/;"	m	class:basis::BaseSectors	typeref:typename:std::map<typename SectorType::KeyType,int>
+lookup_	src/lib/basis/basis.h	/^      std::map<typename SubspaceType::SubspaceLabelsType,int> lookup_;$/;"	m	class:basis::BaseSpace	typeref:typename:std::map<typename SubspaceType::SubspaceLabelsType,int>
+lookup_	src/lib/basis/basis.h	/^      std::unordered_map<typename SectorType::KeyType,int,boost::hash<typename SectorType::KeyTy/;"	m	class:basis::BaseSectors	typeref:typename:std::unordered_map<typename SectorType::KeyType,int,boost::hash<typename SectorType::KeyType>>
+lookup_	src/lib/basis/basis.h	/^      std::unordered_map<typename SubspaceType::SubspaceLabelsType,int,boost::hash<typename Subs/;"	m	class:basis::BaseSpace	typeref:typename:std::unordered_map<typename SubspaceType::SubspaceLabelsType,int,boost::hash<typename SubspaceType::SubspaceLabelsType>>
+lookup_	src/lib/basis/basis.h	/^    std::map<StateLabelsType,int> lookup_;$/;"	m	class:basis::BaseSubspace	typeref:typename:std::map<StateLabelsType,int>
+lookup_	src/lib/basis/basis.h	/^    std::unordered_map<StateLabelsType,int,boost::hash<StateLabelsType>> lookup_;$/;"	m	class:basis::BaseSubspace	typeref:typename:std::unordered_map<StateLabelsType,int,boost::hash<StateLabelsType>>
+lookup_	src/lib/basis/hypersector.h	/^      std::map<typename HypersectorType::KeyType,int> lookup_;$/;"	m	class:basis::BaseHypersectors	typeref:typename:std::map<typename HypersectorType::KeyType,int>
+lookup_	src/lib/basis/hypersector.h	/^      std::unordered_map<typename HypersectorType::KeyType,int,boost::hash<typename HypersectorT/;"	m	class:basis::BaseHypersectors	typeref:typename:std::unordered_map<typename HypersectorType::KeyType,int,boost::hash<typename HypersectorType::KeyType>>
+lr	src/lib/basis/lsjt_scheme.h	/^    int lr() const {return std::get<1>(labels());}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
+lr	src/lib/basis/lsjt_scheme.h	/^    int lr() const {return std::get<1>(labels());}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
+m	src/lib/basis/m_scheme.h	/^      HalfInt m() const {return std::get<3>(labels());}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:HalfInt
+main	main.py	/^def main():$/;"	f
+main	src/lib/basis/degenerate_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/hypersector_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/jjjpn_operator_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/jjjpn_scheme_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/jjjt_scheme_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/lsjt_operator_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/lsjt_scheme_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/m_scheme_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/lib/basis/nlj_orbital_test.cpp	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+main	src/main.c	/^int main(int argc, char *argv[])$/;"	f	typeref:typename:int
+matrices	src/lib/basis/nlj_operator.h	/^    OperatorBlocks<double> matrices;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:OperatorBlocks<double>
+matrix_element	src/chiral.h	/^        double matrix_element;$/;"	m	class:chiral::ChiralOperator	typeref:typename:double
+mj	src/tdho.h	/^    int j; int mj; int t; int mt; };$/;"	m	struct:q_nums	typeref:typename:int
+ml	src/tdho.h	/^struct wf_params { int n; int l; int ml; double b; };$/;"	m	struct:wf_params	typeref:typename:int
+mt	src/tdho.h	/^    int j; int mj; int t; int mt; };$/;"	m	struct:q_nums	typeref:typename:int
+multiplicity_index	src/lib/basis/basis.h	/^      int multiplicity_index() const {return multiplicity_index_;}$/;"	f	class:basis::BaseSector	typeref:typename:int
+multiplicity_index	src/lib/basis/hypersector.h	/^      int multiplicity_index() const {return multiplicity_index_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:int
+multiplicity_index_	src/lib/basis/basis.h	/^      int multiplicity_index_;$/;"	m	class:basis::BaseSector	typeref:typename:int
+multiplicity_index_	src/lib/basis/hypersector.h	/^      int multiplicity_index_;$/;"	m	class:basis::BaseHypersector	typeref:typename:int
+n	src/lib/basis/lsjt_scheme.h	/^    int n() const {return (N()-L())\/2;}$/;"	f	class:basis::RelativeStateLSJT	typeref:typename:int
+n	src/lib/basis/m_scheme.h	/^      int n() const {return std::get<0>(labels());}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:int
+n	src/lib/basis/nlj_orbital.h	/^    int n() const {return std::get<0>(labels());}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:int
+n	src/lib/basis/nlj_orbital.h	/^    int n() const {return std::get<0>(labels());}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:int
+n	src/lib/basis/nlj_orbital.h	/^    int n;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:int
+n	src/operator_gt.c	/^struct data { int n; int l; }; $/;"	m	struct:data	typeref:typename:int	file:
+n	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
+n	src/tdho.h	/^struct wf_params { int n; int l; int ml; double b; };$/;"	m	struct:wf_params	typeref:typename:int
+n2lo	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	e	enum:chiral::ChiralOrder
+n3lo	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	e	enum:chiral::ChiralOrder
+n4lo	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	e	enum:chiral::ChiralOrder
+name	src/chiral.h	/^        std::string name;$/;"	m	class:chiral::ChiralOperator	typeref:typename:std::string
+name	src/lib/basis/nlj_operator.h	/^    std::string name;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:std::string
+nlo	src/chiral.h	/^    enum class ChiralOrder { lo, nlo, n2lo, n3lo, n4lo };$/;"	e	enum:chiral::ChiralOrder
+norm_nl	src/tdho.c	/^double norm_nl(const wf_params *params)$/;"	f	typeref:typename:double
+offset	src/lib/basis/degenerate.h	/^      int offset() const$/;"	f	class:basis::BaseDegenerateState	typeref:typename:int
+one_body	src/lib/basis/jjjpn_scheme.h	/^    std::array<double,2> one_body;$/;"	m	struct:basis::WeightMax	typeref:typename:std::array<double,2>
+operator <<	src/lib/basis/nlj_orbital.cpp	/^  std::ostream& operator<<(std::ostream &out, const OrbitalPNInfo& orbital_info)$/;"	f	namespace:basis	typeref:typename:std::ostream &
+operator ==	src/lib/basis/m_scheme.h	/^      friend bool operator == (const basis::SingleParticleStatePN& a1, const basis::SinglePartic/;"	f	class:basis::SingleParticleStatePN	typeref:typename:bool
+operator ==	src/lib/basis/nlj_orbital.h	/^    friend bool operator == (const basis::OrbitalStatePN& a1, const basis::OrbitalStatePN& a2)$/;"	f	class:basis::OrbitalStatePN	typeref:typename:bool
+operator ==	src/lib/basis/nlj_orbital.h	/^    inline bool operator==(const OrbitalPNInfo& rhs) const$/;"	f	struct:basis::OrbitalPNInfo	typeref:typename:bool
+operator >>	src/lib/basis/nlj_orbital.cpp	/^  std::istream& operator>>(std::istream &in, OrbitalPNInfo& orbital_info) {$/;"	f	namespace:basis	typeref:typename:std::istream &
+operator_gt	src/operator_gt.c	/^double operator_gt(char *order, q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+operator_r_sq	src/operator_r_sq.c	/^double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+operator_subspace	src/lib/basis/hypersector.h	/^      const OperatorSubspaceType& operator_subspace() const {return *operator_subspace_ptr_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:const OperatorSubspaceType &
+operator_subspace_index	src/lib/basis/hypersector.h	/^      int operator_subspace_index() const {return operator_subspace_index_;}$/;"	f	class:basis::BaseHypersector	typeref:typename:int
+operator_subspace_index_	src/lib/basis/hypersector.h	/^      int bra_subspace_index_, ket_subspace_index_, operator_subspace_index_;$/;"	m	class:basis::BaseHypersector	typeref:typename:int
+operator_subspace_ptr_	src/lib/basis/hypersector.h	/^      const OperatorSubspaceType* operator_subspace_ptr_;$/;"	m	class:basis::BaseHypersector	typeref:typename:const OperatorSubspaceType *
+operator_type	src/lib/basis/nlj_operator.h	/^    OneBodyOperatorType operator_type;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:OneBodyOperatorType
+orbital_species	src/lib/basis/m_scheme.h	/^      OrbitalSpeciesPN orbital_species() const {return std::get<0>(labels_);}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/m_scheme.h	/^      OrbitalSpeciesPN orbital_species() const {return subspace().orbital_species();}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/nlj_orbital.h	/^      OrbitalSpeciesPN orbital_species() const {return std::get<0>(labels_);}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/nlj_orbital.h	/^      OrbitalSpeciesPN orbital_species() const {return std::get<0>(labels_);}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/nlj_orbital.h	/^    OrbitalSpeciesPN orbital_species() const {return subspace().orbital_species();}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/nlj_orbital.h	/^    OrbitalSpeciesPN orbital_species() const {return subspace().orbital_species();}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:OrbitalSpeciesPN
+orbital_species	src/lib/basis/nlj_orbital.h	/^    OrbitalSpeciesPN orbital_species;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:OrbitalSpeciesPN
+orbital_subspace1	src/lib/basis/jjjpn_scheme.h	/^      const OrbitalSubspacePN& orbital_subspace1() const {return *orbital_subspace1_ptr_;}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:const OrbitalSubspacePN &
+orbital_subspace1	src/lib/basis/jjjpn_scheme.h	/^    const OrbitalSubspacePN& orbital_subspace1() const {return subspace().orbital_subspace1();}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:const OrbitalSubspacePN &
+orbital_subspace1_ptr_	src/lib/basis/jjjpn_scheme.h	/^      const OrbitalSubspacePN* orbital_subspace1_ptr_;$/;"	m	class:basis::TwoBodySubspaceJJJPN	typeref:typename:const OrbitalSubspacePN *
+orbital_subspace2	src/lib/basis/jjjpn_scheme.h	/^      const OrbitalSubspacePN& orbital_subspace2() const {return *orbital_subspace2_ptr_;}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:const OrbitalSubspacePN &
+orbital_subspace2	src/lib/basis/jjjpn_scheme.h	/^    const OrbitalSubspacePN& orbital_subspace2() const {return subspace().orbital_subspace2();}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:const OrbitalSubspacePN &
+orbital_subspace2_ptr_	src/lib/basis/jjjpn_scheme.h	/^      const OrbitalSubspacePN* orbital_subspace2_ptr_;$/;"	m	class:basis::TwoBodySubspaceJJJPN	typeref:typename:const OrbitalSubspacePN *
+plm	src/operator_r_sq.c	/^double plm(int l, int m)$/;"	f	typeref:typename:double
+print_preamble	src/utility.c	/^void print_preamble(char *my_operator, char *my_constants)$/;"	f	typeref:typename:void
+print_rme	src/main.c	/^void print_rme(char *operator, char *order, q_nums *ket,$/;"	f	typeref:typename:void
+project_name	src/lib/basis/project.mk	/^project_name := basis$/;"	m
+q_nums	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	s
+q_nums	src/tdho.h	/^typedef struct q_nums q_nums;$/;"	t	typeref:struct:q_nums
+r_sq_bare	src/operator_r_sq.c	/^double r_sq_bare(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+r_sq_lo	src/operator_r_sq.c	/^double r_sq_lo(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+r_sq_n2lo	src/operator_r_sq.c	/^double r_sq_n2lo(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
+radial_integral	src/operator_gt.c	/^double radial_integral(int n, int l)$/;"	f	typeref:typename:double
+radial_integral_bare	src/operator_r_sq.c	/^double radial_integral_bare(int ni, int li, int nf, int lf, double b)$/;"	f	typeref:typename:double
+radial_integral_lo	src/operator_r_sq.c	/^double radial_integral_lo(int ni, int li, int nf, int lf, double b)$/;"	f	typeref:typename:double
+radial_integrand	src/operator_gt.c	/^double radial_integrand(double y, void *userdata)$/;"	f	typeref:typename:double
+radial_nl	src/tdho.c	/^double radial_nl(double p, const wf_params *params)$/;"	f	typeref:typename:double
+s	src/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
+sectors	src/lib/basis/nlj_operator.h	/^    OrbitalSectorsLJPN sectors;$/;"	m	struct:basis::OneBodyOperatorLJPN	typeref:typename:OrbitalSectorsLJPN
+sectors_	src/lib/basis/basis.h	/^      std::vector<SectorType> sectors_;$/;"	m	class:basis::BaseSectors	typeref:typename:std::vector<SectorType>
+set_q_nums	src/tdho.c	/^void set_q_nums(q_nums *nums, int n, int l, int N, int L,$/;"	f	typeref:typename:void
+size	src/lib/basis/basis.h	/^      int size() const$/;"	f	class:basis::BaseSectors	typeref:typename:int
+size	src/lib/basis/basis.h	/^      int size() const$/;"	f	class:basis::BaseSpace	typeref:typename:int
+size	src/lib/basis/basis.h	/^    int size() const$/;"	f	class:basis::BaseSubspace	typeref:typename:int
+size	src/lib/basis/hypersector.h	/^      int size() const$/;"	f	class:basis::BaseHypersectors	typeref:typename:int
+spherical_integral_lo	src/operator_r_sq.c	/^double spherical_integral_lo(int li, int mli, int lf, int mlf)$/;"	f	typeref:typename:double
+state_multiplicities	src/lib/basis/degenerate.h	/^    const std::vector<int>& state_multiplicities() const$/;"	f	class:basis::BaseDegenerateSubspace	typeref:typename:const std::vector<int> &
+state_multiplicities_	src/lib/basis/degenerate.h	/^    std::vector<int> state_multiplicities_;  \/\/ given state's number of substates$/;"	m	class:basis::BaseDegenerateSubspace	typeref:typename:std::vector<int>
+state_offsets	src/lib/basis/degenerate.h	/^    const std::vector<int>& state_offsets() const$/;"	f	class:basis::BaseDegenerateSubspace	typeref:typename:const std::vector<int> &
+state_offsets_	src/lib/basis/degenerate.h	/^    std::vector<int> state_offsets_;  \/\/ offset to given state's starting substate$/;"	m	class:basis::BaseDegenerateSubspace	typeref:typename:std::vector<int>
+state_table_	src/lib/basis/basis.h	/^    std::vector<StateLabelsType> state_table_;$/;"	m	class:basis::BaseSubspace	typeref:typename:std::vector<StateLabelsType>
+subspace	src/lib/basis/basis.h	/^      const SubspaceType& subspace() const$/;"	f	class:basis::BaseState	typeref:typename:const SubspaceType &
+subspace_ptr_	src/lib/basis/basis.h	/^      const SubspaceType* subspace_ptr_;  \/\/\/< subspace in which state lies$/;"	m	class:basis::BaseState	typeref:typename:const SubspaceType *
+subspaces_	src/lib/basis/basis.h	/^      std::vector<SubspaceType> subspaces_;$/;"	m	class:basis::BaseSpace	typeref:typename:std::vector<SubspaceType>
+symmetry_phase_mode	src/lib/basis/jt_operator.h	/^    basis::SymmetryPhaseMode symmetry_phase_mode;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:basis::SymmetryPhaseMode
+t	src/tdho.h	/^    int j; int mj; int t; int mt; };$/;"	m	struct:q_nums	typeref:typename:int
+two_body	src/lib/basis/jjjpn_scheme.h	/^    std::array<double,3> two_body;$/;"	m	struct:basis::WeightMax	typeref:typename:std::array<double,3>
+two_body_species	src/lib/basis/jjjpn_scheme.h	/^      TwoBodySpeciesPN two_body_species() const {return std::get<0>(labels_);}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:TwoBodySpeciesPN
+two_body_species	src/lib/basis/jjjpn_scheme.h	/^    TwoBodySpeciesPN two_body_species() const {return subspace().two_body_species();}$/;"	f	class:basis::TwoBodyStateJJJPN	typeref:typename:TwoBodySpeciesPN
+wavefunc_nlm_imag	src/tdho.c	/^double wavefunc_nlm_imag(double p, double theta,$/;"	f	typeref:typename:double
+wavefunc_nlm_real	src/tdho.c	/^double wavefunc_nlm_real(double p, double theta,$/;"	f	typeref:typename:double
+weight	src/lib/basis/m_scheme.h	/^      double weight() const {return subspace().weights()[index()];}$/;"	f	class:basis::SingleParticleStatePN	typeref:typename:double
+weight	src/lib/basis/nlj_orbital.h	/^    double weight() const {return subspace().weights()[index()];}$/;"	f	class:basis::OrbitalStateLJPN	typeref:typename:double
+weight	src/lib/basis/nlj_orbital.h	/^    double weight() const {return subspace().weights()[index()];}$/;"	f	class:basis::OrbitalStatePN	typeref:typename:double
+weight	src/lib/basis/nlj_orbital.h	/^    double weight;$/;"	m	struct:basis::OrbitalPNInfo	typeref:typename:double
+weight_max	src/lib/basis/jjjpn_scheme.h	/^      const WeightMax& weight_max() const {return weight_max_;}$/;"	f	class:basis::TwoBodySubspaceJJJPN	typeref:typename:const WeightMax &
+weight_max	src/lib/basis/jjjpn_scheme.h	/^    const WeightMax& weight_max() const {return weight_max_;}$/;"	f	class:basis::TwoBodySpaceJJJPN	typeref:typename:const WeightMax &
+weight_max	src/lib/basis/m_scheme.h	/^      double weight_max() const {return weight_max_;}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:double
+weight_max	src/lib/basis/m_scheme.h	/^    double weight_max() const {return weight_max_;}$/;"	f	class:basis::SingleParticleSpacePN	typeref:typename:double
+weight_max	src/lib/basis/nlj_orbital.h	/^      double weight_max() const {return weight_max_;}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:double
+weight_max	src/lib/basis/nlj_orbital.h	/^      double weight_max() const {return weight_max_;}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:double
+weight_max	src/lib/basis/nlj_orbital.h	/^    double weight_max() const {return weight_max_;}$/;"	f	class:basis::OrbitalSpaceLJPN	typeref:typename:double
+weight_max	src/lib/basis/nlj_orbital.h	/^    double weight_max() const {return weight_max_;}$/;"	f	class:basis::OrbitalSpacePN	typeref:typename:double
+weight_max_	src/lib/basis/jjjpn_scheme.h	/^      WeightMax weight_max_;$/;"	m	class:basis::TwoBodySubspaceJJJPN	typeref:typename:WeightMax
+weight_max_	src/lib/basis/jjjpn_scheme.h	/^    WeightMax weight_max_;$/;"	m	class:basis::TwoBodySpaceJJJPN	typeref:typename:WeightMax
+weight_max_	src/lib/basis/m_scheme.h	/^      double weight_max_;$/;"	m	class:basis::SingleParticleSubspacePN	typeref:typename:double
+weight_max_	src/lib/basis/m_scheme.h	/^    double weight_max_;$/;"	m	class:basis::SingleParticleSpacePN	typeref:typename:double
+weight_max_	src/lib/basis/nlj_orbital.h	/^      double weight_max_;$/;"	m	class:basis::OrbitalSubspaceLJPN	typeref:typename:double
+weight_max_	src/lib/basis/nlj_orbital.h	/^      double weight_max_;$/;"	m	class:basis::OrbitalSubspacePN	typeref:typename:double
+weight_max_	src/lib/basis/nlj_orbital.h	/^    double weight_max_;$/;"	m	class:basis::OrbitalSpaceLJPN	typeref:typename:double
+weight_max_	src/lib/basis/nlj_orbital.h	/^    double weight_max_;$/;"	m	class:basis::OrbitalSpacePN	typeref:typename:double
+weights	src/lib/basis/m_scheme.h	/^      const std::vector<double>& weights() const {return weights_;}$/;"	f	class:basis::SingleParticleSubspacePN	typeref:typename:const std::vector<double> &
+weights	src/lib/basis/nlj_orbital.h	/^      const std::vector<double>& weights() const {return weights_;}$/;"	f	class:basis::OrbitalSubspaceLJPN	typeref:typename:const std::vector<double> &
+weights	src/lib/basis/nlj_orbital.h	/^      const std::vector<double>& weights() const {return weights_;}$/;"	f	class:basis::OrbitalSubspacePN	typeref:typename:const std::vector<double> &
+weights_	src/lib/basis/m_scheme.h	/^      std::vector<double> weights_;$/;"	m	class:basis::SingleParticleSubspacePN	typeref:typename:std::vector<double>
+weights_	src/lib/basis/nlj_orbital.h	/^      std::vector<double> weights_;$/;"	m	class:basis::OrbitalSubspaceLJPN	typeref:typename:std::vector<double>
+weights_	src/lib/basis/nlj_orbital.h	/^      std::vector<double> weights_;$/;"	m	class:basis::OrbitalSubspacePN	typeref:typename:std::vector<double>
+wf_params	src/tdho.h	/^struct wf_params { int n; int l; int ml; double b; };$/;"	s
+wf_params	src/tdho.h	/^typedef struct wf_params wf_params;$/;"	t	typeref:struct:wf_params
+y_lm_imag	src/tdho.c	/^double y_lm_imag(double theta, double phi, const wf_params *params)$/;"	f	typeref:typename:double
+y_lm_real	src/tdho.c	/^double y_lm_real(double theta, double phi, const wf_params *params)$/;"	f	typeref:typename:double
