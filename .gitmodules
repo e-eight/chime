@@ -1,0 +1,3 @@
+[submodule "src/lib/basis"]
+	path = src/lib/basis
+	url = git@github.com:nd-nuclear-theory/basis.git
