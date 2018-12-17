@@ -42,10 +42,10 @@ namespace chiral
         
         // Constructors
         Operator() {}
-        Operator(const Operator::Names name): _name{name} {}
+        Operator(const Operator::Names name): name{name} {}
 
         // Accessors
-        Operator::Names get_name() const { return _name; }
+        Operator::Names get_name() const { return name; }
         double get_rme() const { return rme; }
         virtual void set_rme() { rme = 1.0; }
 
@@ -53,13 +53,13 @@ namespace chiral
         virtual ~Operator() {}
 
         // Public members
-        Operator::Orders _order;
-        basis::RelativeStateLSJT _bra;
-        basis::RelativeStateLSJT _ket;
-        double osc_constant; // Oscillator constant b
+        Operator::Orders order;
+        basis::RelativeStateLSJT bra;
+        basis::RelativeStateLSJT ket;
+        double osc_b; // Oscillator constant b
 
     private:
-        Operator::Names _name;
+        Operator::Names name;
         double rme; // Reduced matrix element
     };
 }

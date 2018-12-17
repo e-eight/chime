@@ -1,10 +1,17 @@
 #include <iostream>
-#include "chiral.h"
+#include <cmath>
+
+int delta(int a, int b)
+{
+	return a == b;
+}
 
 int main()
 {
-    chiral::Operator O(chiral::Operator::Names::identity);
-    chiral::Operator::Names name = O.get_name();
-    if (name == chiral::Operator::Names::identity)
-	std::cout << "identity" << std::endl;
+	int a = 1, b = 1;
+	int d = delta(a, b);
+	double s = std::sqrt(34);
+	double ss = sqrt(34);
+	std::cout << s << std::endl;
+	std::cout << ss << std::endl;
 }
