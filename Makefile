@@ -1,32 +1,18 @@
-CC = gcc
-FFLAGS = -O3 -Wall -std=c99 -fopenmp
-LFLAGS = -lgomp -lm -lgsl -lgslcblas -lcuba
+CXX = g++
+FFLAGS = -O3 -Wall -std=c++14 -fopenmp
+LFLAGS = -lgomp -lm -lgsl -lgslcblas
 
-MKDIR_P = mkdir -p
+exe = ndrel
+src = $(wildcard **/*.cpp) 
+obj = $(src:.cpp=.o)
+lib = $(wildcard *.a)
 
-SOURCEDIR = src
-BUILDDIR = build
-LIBDIR = local/lib
+.PHONY = all clean
 
-EXECUTABLE = matelm.exe
-SOURCES = $(wildcard $(SOURCEDIR)/*.c)
-OBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES)) 
-SHAREDLIBS = $(wildcard $(LIBDIR)/*.a)
-
-.PHONY = directories all clean
-
-all: $(EXECUTABLE)
-
-directories: $(BUILDDIR)
+all: $(exe)
 
 clean:
-	rm -rf $(BUILDDIR) *.exe *.out *.dat
+	rm -rf $(obj) *.exe *.out *.dat
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(SHAREDLIBS) $(LFLAGS) -o $@
-
-$(OBJECTS): $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
-	$(CC) $(LFLAGS) $(FFLAGS) -c $< -o $@
-
-$(BUILDDIR):
-	$(MKDIR_P) $(BUILDDIR)
+$(exe): $(obj)
+	$(CXX) -o $@ S^ $(LFLAGS) $(FFLAGS) 

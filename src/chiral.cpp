@@ -1,17 +1,12 @@
 #include <iostream>
-#include <cmath>
-
-int delta(int a, int b)
-{
-	return a == b;
-}
+#include "operator_rc_sq.h"
+// #include "utility.h"
 
 int main()
 {
-	int a = 1, b = 1;
-	int d = delta(a, b);
-	double s = std::sqrt(34);
-	double ss = sqrt(34);
-	std::cout << s << std::endl;
-	std::cout << ss << std::endl;
+    for (int ml = -2; ml <= 2; ++ml)
+    {
+	std::cout << gsl_sf_coupling_3j(4, 2, 2, 2*ml, -2*ml, 0) << std::endl;
+    }
 }
+

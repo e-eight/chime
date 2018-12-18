@@ -1,7 +1,7 @@
 #ifndef CHIRAL_H
 #define CHIRAL_H
 
-#include "lib/basis/lsjt_scheme.h"
+#include "basis/lsjt_scheme.h"
 
 /* 
 
@@ -31,35 +31,47 @@ namespace chiral
     {
     public:
         // Operator names
-        enum class Names
+        enum class Name
         {
             identity,
             charge_radius,
             gamow_teller,
         };
         // Chiral order of operators
-        enum class Orders { lo, nlo, n2lo, n3lo, n4lo, full };
+        enum class Order { lo, nlo, n2lo, n3lo, n4lo, full };
         
         // Constructors
         Operator() {}
-        Operator(const Operator::Names name): name{name} {}
 
         // Accessors
-        Operator::Names get_name() const { return name; }
         double get_rme() const { return rme; }
-        virtual void set_rme() { rme = 1.0; }
-
+        void set_rme()
+        {
+            switch(name)
+            {
+            case chiral::Operator::Name::charge_radius:
+                rme = chiral::operator_rc_sq(order, bra, ket, osc_b);
+                break;
+            case chiral::Operator::Name::gamow_teller:
+                rme = chiral::operator_gt(order, bra, ket, osc_b);
+                break;
+            default:
+                rme = 1.0;
+                break;
+            }
+        }
+        
         // Destructor
-        virtual ~Operator() {}
+        ~Operator() {}
 
         // Public members
-        Operator::Orders order;
+        Operator::Name name;
+        Operator::Order order;
         basis::RelativeStateLSJT bra;
         basis::RelativeStateLSJT ket;
         double osc_b; // Oscillator constant b
 
     private:
-        Operator::Names name;
         double rme; // Reduced matrix element
     };
 }
