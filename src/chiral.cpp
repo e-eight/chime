@@ -1,12 +1,25 @@
-#include <iostream>
+#include "chiral.h"
 #include "operator_rc_sq.h"
-// #include "utility.h"
 
-int main()
+namespace chiral
 {
-    for (int ml = -2; ml <= 2; ++ml)
+    void calculate_rme(const ChiralOperator& op,
+                       const basis::RelativeStateLSJT& bra,
+                       const basis::RelativeStateLSJT& ket,
+                       const double& osc_b,
+                       double& rme)	
     {
-	std::cout << gsl_sf_coupling_3j(4, 2, 2, 2*ml, -2*ml, 0) << std::endl;
+        switch(op.name)
+        {
+        case ChiralOperator::Name::charge_radius:
+            rme = rc_sq_rme(op, bra, ket, osc_b);
+            break;
+        // case ChiralOperator::Name::gamow_teller:
+        //     rme = gt_rme(op, bra, ket, osc_b);
+        //     break;
+        default:
+            rme = 1.0;
+            break;
+        }
     }
 }
-
