@@ -14,29 +14,42 @@ Iowa State University
 
 namespace chiral
 {
-    struct ChiralOperator
+    // Operator Names
+    enum class Name
     {
-        // Operator Names
-        enum struct Name
-        {
-            identity,
-            charge_radius
-            // gamow_teller
-        };
-
-        // Chiral Orders
-        enum struct Order
-        { lo, nlo, n2lo, n3lo, n4lo, full };
-
-        ChiralOperator::Name name = ChiralOperator::Name::identity;
-        ChiralOperator::Order order = ChiralOperator::Order::full;
+        identity,
+        charge_radius,
+        gamow_teller
     };
 
-    void calculate_rme(const ChiralOperator& op,
-                       const basis::RelativeStateLSJT& bra,
-                       const basis::RelativeStateLSJT& ket,
-                       const double& osc_b,
-                       double& rme);
+    // Chiral Orders
+    enum class Order
+    { lo, nlo, n2lo, n3lo, n4lo, full };
+
+    class ChiralOperator
+    {
+    public:
+        // Constructors
+        ChiralOperator();
+        ChiralOperator(Name name);
+        ChiralOperator(Name name, Order order);
+        ChiralOperator(Name name, int J0, int T0);
+        ChiralOperator(Name name, Order order, int J0, int T0);
+        
+        // Destructor
+        virtual ~ChiralOperator() = 0;
+
+        // Methods
+        virtual void calculate_rme(const basis::RelativeStateLSJT& bra,
+                                   const basis::RelativeStateLSJT& ket,
+                                   const double& osc_b,
+                                   double& rme) = 0;
+        // Data Members 
+        Name name;
+        Order order;
+        int J0; // Tensor rank
+        int T0; // Isotensor rank
+    };
 }
 
 #endif

@@ -1,33 +1,37 @@
 #include <cmath>
 #include <algorithm>
-#include "basis/lsjt_scheme.h"
+// #include "basis/lsjt_scheme.h"
 #include "constants.h"
 #include "utility.h"
-#include "chiral.h"
+// #include "chiral.h"
 #include "operator_rc_sq.h"
 
 namespace chiral
 {
+    ChargeRadiusOperator::ChargeRadiusOperator():
+	ChiralOperator(Name::charge_radius, 0, 0) {}
 
-    double rc_sq_rme(const ChiralOperator& op,
-		     const basis::RelativeStateLSJT& bra,
-		     const basis::RelativeStateLSJT& ket,
-		     const double& osc_b)
+    ChargeRadiusOperator::~ChargeRadiusOperator() {}
+
+    void ChargeRadiusOperator::calculate_rme(const basis::RelativeStateLSJT& bra,
+					     const basis::RelativeStateLSJT& ket,
+					     const double& osc_b,
+					     double& rme)
     {
-	switch(op.order)
+	switch(order)
 	{
-	case ChiralOperator::Order::lo:
-	    return rc_sq_lo(bra, ket, osc_b);
-	case ChiralOperator::Order::nlo:
-	    return rc_sq_nlo(bra, ket, osc_b);
-	case ChiralOperator::Order::n2lo:
-	    return rc_sq_n2lo(bra, ket, osc_b);
-	case ChiralOperator::Order::n3lo:
-	    return rc_sq_n3lo(bra, ket, osc_b);
-	case ChiralOperator::Order::n4lo:
-	    return rc_sq_n4lo(bra, ket, osc_b);
+	case Order::lo:
+	    rme = rc_sq_lo(bra, ket, osc_b);
+	case Order::nlo:
+	    rme = rc_sq_nlo(bra, ket, osc_b);
+	case Order::n2lo:
+	    rme = rc_sq_n2lo(bra, ket, osc_b);
+	case Order::n3lo:
+	    rme = rc_sq_n3lo(bra, ket, osc_b);
+	case Order::n4lo:
+	    rme = rc_sq_n4lo(bra, ket, osc_b);
 	default:
-	    return rc_sq_full(bra, ket, osc_b);
+	    rme = rc_sq_full(bra, ket, osc_b);
 	}
     }
     

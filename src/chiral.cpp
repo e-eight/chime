@@ -1,25 +1,21 @@
 #include "chiral.h"
-#include "operator_rc_sq.h"
 
 namespace chiral
 {
-    void calculate_rme(const ChiralOperator& op,
-                       const basis::RelativeStateLSJT& bra,
-                       const basis::RelativeStateLSJT& ket,
-                       const double& osc_b,
-                       double& rme)	
-    {
-        switch(op.name)
-        {
-        case ChiralOperator::Name::charge_radius:
-            rme = rc_sq_rme(op, bra, ket, osc_b);
-            break;
-        // case ChiralOperator::Name::gamow_teller:
-        //     rme = gt_rme(op, bra, ket, osc_b);
-        //     break;
-        default:
-            rme = 1.0;
-            break;
-        }
-    }
+    ChiralOperator::ChiralOperator():
+        name(Name::identity), order(Order::full), J0(0), T0(0) {}
+
+    ChiralOperator::ChiralOperator(Name name):
+        name(name), order(Order::full), J0(0), T0(0) {}
+
+    ChiralOperator::ChiralOperator(Name name, Order order):
+        name(name), order(order), J0(0), T0(0) {}
+
+    ChiralOperator::ChiralOperator(Name name, int J0, int T0):
+        name(name), order(Order::full), J0(J0), T0(T0) {}
+
+    ChiralOperator::ChiralOperator(Name name, Order order, int J0, int T0):
+        name(name), order(order), J0(J0), T0(T0) {}
+
+    ChiralOperator::~ChiralOperator() {}
 }
