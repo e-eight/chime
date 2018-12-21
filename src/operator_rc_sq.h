@@ -13,35 +13,34 @@ namespace chiral
 
         ~ChargeRadiusOperator();
         
-        void calculate_rme(const basis::RelativeStateLSJT& bra,
-                           const basis::RelativeStateLSJT& ket,
-                           const double& osc_b,
-                           double& rme) override;
+        double calculate_rme(const basis::RelativeStateLSJT& bra,
+                             const basis::RelativeStateLSJT& ket,
+                             const double osc_b) override;
     };
 
     double rc_sq_lo(const basis::RelativeStateLSJT& bra,
 		    const basis::RelativeStateLSJT& ket,
-		    const double& osc_b);
+		    const double osc_b);
     
     double rc_sq_nlo(const basis::RelativeStateLSJT& bra,
                      const basis::RelativeStateLSJT& ket,
-                     const double& osc_b);
+                     const double osc_b);
     
     double rc_sq_n2lo(const basis::RelativeStateLSJT& bra,
                       const basis::RelativeStateLSJT& ket,
-                      const double& osc_b);
+                      const double osc_b);
     
     double rc_sq_n3lo(const basis::RelativeStateLSJT& bra,
                       const basis::RelativeStateLSJT& ket,
-                      const double& osc_b);
+                      const double osc_b);
     
     double rc_sq_n4lo(const basis::RelativeStateLSJT& bra,
                       const basis::RelativeStateLSJT& ket,
-                      const double& osc_b);
+                      const double osc_b);
 
     double rc_sq_full(const basis::RelativeStateLSJT& bra,
                       const basis::RelativeStateLSJT& ket,
-                      const double& osc_b);
+                      const double osc_b);
         
 }
 

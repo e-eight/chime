@@ -1,15 +1,20 @@
+#include <tuple>
+#include <string>
 #include "chiral.h"
+#include "operator_rc_sq.h"
 
-/* namespace chiral */
-/* { */
-/*     struct MatrixParameters */
-/*     { */
-/* 	ChiralOperator op; */
-/* 	int J0_min = 0, J0_max = 0; // Limits of tensorial order of operator. */
-/* 	int T0_min = 0, T0_max = 0; // Limits of isotensorial order of operator. */
-/* 	int Nmax = 0, Jmax = 0; // Cutoff parameters for element generation. */
-/* 	double hw = 0; // Oscillator energy. */
-/*     }; */
-
-/*     void read_input_to_params(MatrixParameters&, const int, const int); */
-/* } */
+namespace chiral
+{
+    struct MatrixParameters
+    {
+        std::string name;
+        std::string order;
+        ChiralOperator* op;
+        int J0_min, J0_max; // Tensor limits
+        int T0_min, T0_max; // Isotensor limits
+        int Nmax, Jmax;     // Basis cutoff
+        double hw;          // Oscillator energy
+    };
+    
+    MatrixParameters input_to_params();
+}

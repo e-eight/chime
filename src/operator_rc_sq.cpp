@@ -9,35 +9,51 @@
 namespace chiral
 {
     ChargeRadiusOperator::ChargeRadiusOperator():
-	ChiralOperator(Name::charge_radius, 0, 0) {}
+	ChiralOperator() {}
 
     ChargeRadiusOperator::~ChargeRadiusOperator() {}
 
-    void ChargeRadiusOperator::calculate_rme(const basis::RelativeStateLSJT& bra,
-					     const basis::RelativeStateLSJT& ket,
-					     const double& osc_b,
-					     double& rme)
+    double ChargeRadiusOperator::calculate_rme(const basis::RelativeStateLSJT& bra,
+					       const basis::RelativeStateLSJT& ket,
+					       const double osc_b)
     {
 	switch(order)
 	{
 	case Order::lo:
-	    rme = rc_sq_lo(bra, ket, osc_b);
+	    return rc_sq_lo(bra, ket, osc_b);
 	case Order::nlo:
-	    rme = rc_sq_nlo(bra, ket, osc_b);
+	    return rc_sq_nlo(bra, ket, osc_b);
 	case Order::n2lo:
-	    rme = rc_sq_n2lo(bra, ket, osc_b);
+	    return rc_sq_n2lo(bra, ket, osc_b);
 	case Order::n3lo:
-	    rme = rc_sq_n3lo(bra, ket, osc_b);
+	    return rc_sq_n3lo(bra, ket, osc_b);
 	case Order::n4lo:
-	    rme = rc_sq_n4lo(bra, ket, osc_b);
+	    return rc_sq_n4lo(bra, ket, osc_b);
 	default:
-	    rme = rc_sq_full(bra, ket, osc_b);
+	    return rc_sq_full(bra, ket, osc_b);
 	}
     }
-    
+/******************************************
+     Leading order contribution
+********************************************/
+    double radial_integral_lo(int ni, int li, int nf, int lf, const double osc_b)
+    {
+	if (lf == li)
+	{
+	    auto result = ((2 * ni + li + 1.5) * util::delta(nf, ni)
+			   - (std::sqrt((ni + 1) *  (ni + li + 1.5))
+			      * util::delta(nf, ni + 1))
+			   - (std::sqrt(nf + 1) * (nf + li + 1.5)
+			      * util::delta(ni, nf + 1)));
+	    return osc_b * osc_b * result;
+	}
+	else
+	    return 0;
+    }
+ 
     double rc_sq_lo(const basis::RelativeStateLSJT& bra,
 		    const basis::RelativeStateLSJT& ket,
-		    const double& osc_b)
+		    const double osc_b)
     {
 	int ni = ket.N(), nf = bra.N();
 	int li = ket.L(), lf = bra.L();
@@ -53,38 +69,28 @@ namespace chiral
 	else if (std::abs(ni - nf) > 1)
 	    return 0;
     
-	double integral_nl = osc_b * osc_b;
-	if (ni == nf)
-	{
-	    integral_nl *= 2 * ni + li + 1.5;
-	}
-	else if (std::abs(ni - nf) == 1)
-	{
-	    int n = std::min(ni, nf);
-	    integral_nl *= - std::sqrt((n + 1) * (n + li + 1.5));
-	}
-
-	double clebsch_product = 0;
+	double result = 0;
 #pragma omp parallel for
 	for (int ms = -si; ms <= si; ms++)
 	{
-	    clebsch_product += (util::clebsch(li, si, ji, mji-ms, ms, mji)
-				* util::clebsch(lf, sf, jf, mjf-ms, ms, mjf));
+	    auto cg_product = (util::clebsch(li, si, ji, mji-ms, ms, mji)
+			       * util::clebsch(lf, sf, jf, mjf-ms, ms, mjf));
+	    result += cg_product * radial_integral_lo(ni, li, nf, lf, osc_b);
 	}
 	
-	return clebsch_product * integral_nl;		    
+	return result;		    
     }
 
     double rc_sq_nlo(const basis::RelativeStateLSJT& bra,
 		     const basis::RelativeStateLSJT& ket,
-		     const double& osc_b)
+		     const double osc_b)
     {
 	return 0;
     }
 
     double rc_sq_n2lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
-		      const double& osc_b)
+		      const double osc_b)
     {
 	int ni = ket.N(), nf = bra.N();
 	int li = ket.L(), lf = bra.L();
@@ -111,21 +117,21 @@ namespace chiral
 
     double rc_sq_n3lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
-		      const double& osc_b)
+		      const double osc_b)
     {
 	return 0;
     }
 
     double rc_sq_n4lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
-		      const double& osc_b)
+		      const double osc_b)
     {
 	return 0;
     }
 
     double rc_sq_full(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
-		      const double& osc_b)
+		      const double osc_b)
     {
 	return (rc_sq_lo(bra, ket, osc_b)
 		+ rc_sq_nlo(bra, ket, osc_b)

@@ -8,7 +8,7 @@ namespace constants
     const double HBARC = 197.3269602; // (in MeV fm)
     
     // The isoscalar charge radius for the nucleon im fm^2.
-    const double R_ES_SQUARED = 0.777;
+    const double R_ES_SQUARED = 0.603729;
 }
     
 #endif

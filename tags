@@ -36,10 +36,6 @@ CanonicalizeIndicesJT	src/basis/jt_operator.h	/^    std::tuple<int,int,int,int,b
 ChargeRadiusOperator	src/operator_rc_sq.cpp	/^    ChargeRadiusOperator::ChargeRadiusOperator():$/;"	f	class:chiral::ChargeRadiusOperator
 ChargeRadiusOperator	src/operator_rc_sq.h	/^    class ChargeRadiusOperator : public ChiralOperator$/;"	c	namespace:chiral
 ChiralOperator	src/chiral.cpp	/^    ChiralOperator::ChiralOperator():$/;"	f	class:chiral::ChiralOperator
-ChiralOperator	src/chiral.cpp	/^    ChiralOperator::ChiralOperator(Name name):$/;"	f	class:chiral::ChiralOperator
-ChiralOperator	src/chiral.cpp	/^    ChiralOperator::ChiralOperator(Name name, Order order):$/;"	f	class:chiral::ChiralOperator
-ChiralOperator	src/chiral.cpp	/^    ChiralOperator::ChiralOperator(Name name, Order order, int J0, int T0):$/;"	f	class:chiral::ChiralOperator
-ChiralOperator	src/chiral.cpp	/^    ChiralOperator::ChiralOperator(Name name, int J0, int T0):$/;"	f	class:chiral::ChiralOperator
 ChiralOperator	src/chiral.h	/^    class ChiralOperator$/;"	c	namespace:chiral
 ClearOperatorJT	src/basis/jt_operator.h	/^    void ClearOperatorJT($/;"	f	namespace:basis	typeref:typename:void
 ClebschGordan	src/basis/am/wigner_gsl.h	/^    double ClebschGordan($/;"	f	namespace:am	typeref:typename:double
@@ -64,6 +60,7 @@ DebugStr	src/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJT::DebugStr
 DebugStr	src/basis/lsjt_scheme.cpp	/^  std::string TwoBodySubspaceLSJTN::DebugStr() const$/;"	f	class:basis::TwoBodySubspaceLSJTN	typeref:typename:std::string
 Dimension	src/basis/basis.h	/^      int Dimension() const$/;"	f	class:basis::BaseSpace	typeref:typename:int
 FileExistCheck	src/basis/mcutils/parsing.cpp	/^  bool FileExistCheck(const std::string& filename, bool exit_on_nonexist, bool warn_on_overwrite/;"	f	namespace:mcutils	typeref:typename:bool
+G0	src/chiral.h	/^        int G0; \/\/ Parity$/;"	m	class:chiral::ChiralOperator	typeref:typename:int
 GatherOperatorRelativeCMLSJTNToRelativeCMLSJT	src/basis/lsjt_operator.cpp	/^  void GatherOperatorRelativeCMLSJTNToRelativeCMLSJT($/;"	f	namespace:basis	typeref:typename:void
 GatherOperatorTwoBodyLSJTNToTwoBodyLSJT	src/basis/lsjt_operator.cpp	/^  void GatherOperatorTwoBodyLSJTNToTwoBodyLSJT($/;"	f	namespace:basis	typeref:typename:void
 GetLine	src/basis/mcutils/parsing.h	/^  inline std::basic_istream<CharT, Traits>& GetLine($/;"	f	namespace:mcutils	typeref:typename:std::basic_istream<CharT,Traits> &
@@ -99,8 +96,11 @@ J	src/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	cla
 J	src/basis/lsjt_scheme.h	/^    int J() const {return subspace().J();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
 J0	src/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
 J0	src/chiral.h	/^        int J0; \/\/ Tensor rank$/;"	m	class:chiral::ChiralOperator	typeref:typename:int
+J0_max	src/op_file_io.h	/^        int J0_min, J0_max; \/\/ Tensor limits$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
+J0_min	src/op_file_io.h	/^        int J0_min, J0_max; \/\/ Tensor limits$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
 Jmax	src/basis/lsjt_operator.h	/^    int Nmax, Jmax;$/;"	m	struct:basis::RelativeOperatorParametersLSJT	typeref:typename:int
 Jmax	src/basis/lsjt_scheme.h	/^    int Jmax() const {return Jmax_;}$/;"	f	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Jmax	src/op_file_io.h	/^        int Nmax, Jmax;     \/\/ Basis cutoff$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
 Jmax_	src/basis/lsjt_scheme.h	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeSpaceLSJT	typeref:typename:int
 Key	src/basis/basis.h	/^      inline KeyType Key() const$/;"	f	class:basis::BaseSector	typeref:typename:KeyType
 KeyType	src/basis/basis.h	/^      typedef std::tuple<int,int,int> KeyType;$/;"	t	class:basis::BaseSector	typeref:typename:std::tuple<int,int,int>
@@ -134,6 +134,7 @@ MAKEFILE_STANDALONE	src/basis/project.mk	/^MAKEFILE_STANDALONE = true$/;"	m
 MCUTILS_DEPRECATED_H_	src/basis/mcutils/deprecated.h	/^#define MCUTILS_DEPRECATED_H_$/;"	d
 MCUTILS_PARSING_H_	src/basis/mcutils/parsing.h	/^#define MCUTILS_PARSING_H_$/;"	d
 MatrixFile	main.py	/^class MatrixFile:$/;"	c
+MatrixParameters	src/op_file_io.h	/^    struct MatrixParameters$/;"	s	namespace:chiral
 MatrixVector	src/basis/operator.h	/^  typedef basis::OperatorBlocks<double> MatrixVector;$/;"	t	namespace:basis	typeref:typename:basis::OperatorBlocks<double>
 N	old_c/tdho.h	/^struct q_nums { int n; int l; int N; int L; int s;$/;"	m	struct:q_nums	typeref:typename:int
 N	src/basis/lsjt_scheme.h	/^      int N() const {return std::get<5>(labels_);}  \/\/ (MODIFICATION for subspacing by N)$/;"	f	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
@@ -165,7 +166,6 @@ N2max_	src/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoB
 N2max_	src/basis/lsjt_scheme.h	/^    int N1max_, N2max_;$/;"	m	class:basis::TwoBodySpaceLSJTN	typeref:typename:int
 N_	src/basis/lsjt_scheme.h	/^      int N_;  \/\/ (MODIFICATION for subspacing by N)$/;"	m	class:basis::RelativeCMSubspaceLSJTN	typeref:typename:int
 N_	src/basis/lsjt_scheme.h	/^      int N_;  \/\/ (MODIFICATION for subspacing by N)$/;"	m	class:basis::TwoBodySubspaceLSJTN	typeref:typename:int
-Name	src/chiral.h	/^    enum class Name$/;"	g	namespace:chiral
 Nc	src/basis/lsjt_scheme.h	/^    int Nc() const {return std::get<2>(labels());}$/;"	f	class:basis::RelativeCMStateLSJT	typeref:typename:int
 Nc	src/basis/lsjt_scheme.h	/^    int Nc() const {return std::get<2>(labels());}$/;"	f	class:basis::RelativeCMStateLSJTN	typeref:typename:int
 Nmax	src/basis/lsjt_operator.h	/^    int Nmax, Jmax;$/;"	m	struct:basis::RelativeOperatorParametersLSJT	typeref:typename:int
@@ -175,6 +175,7 @@ Nmax	src/basis/lsjt_scheme.h	/^      int Nmax() const {return Nmax_;}$/;"	f	clas
 Nmax	src/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeCMSpaceLSJT	typeref:typename:int
 Nmax	src/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeCMSpaceLSJTN	typeref:typename:int
 Nmax	src/basis/lsjt_scheme.h	/^    int Nmax() const {return Nmax_;}$/;"	f	class:basis::RelativeSpaceLSJT	typeref:typename:int
+Nmax	src/op_file_io.h	/^        int Nmax, Jmax;     \/\/ Basis cutoff$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
 Nmax_	src/basis/lsjt_scheme.h	/^      int Nmax_;$/;"	m	class:basis::RelativeCMSubspaceLSJT	typeref:typename:int
 Nmax_	src/basis/lsjt_scheme.h	/^      int Nmax_;$/;"	m	class:basis::RelativeSubspaceLSJT	typeref:typename:int
 Nmax_	src/basis/lsjt_scheme.h	/^    int Nmax_, Jmax_;$/;"	m	class:basis::RelativeSpaceLSJT	typeref:typename:int
@@ -208,7 +209,7 @@ RED_NUCLEON_MASS	old_c/constants.c	/^const double RED_NUCLEON_MASS = 469.4593340
 RED_NUCLEON_MASS	src/constants.h	/^    const double RED_NUCLEON_MASS = 469.4593340; \/\/ (in MeV\/c^2)$/;"	v	namespace:constants	typeref:typename:const double
 RME_H_	src/basis/am/rme.h	/^#define RME_H_$/;"	d
 R_ES_SQUARED	old_c/constants.c	/^const double R_ES_SQUARED = 0.777; $/;"	v	typeref:typename:const double
-R_ES_SQUARED	src/constants.h	/^    const double R_ES_SQUARED = 0.777;$/;"	v	namespace:constants	typeref:typename:const double
+R_ES_SQUARED	src/constants.h	/^    const double R_ES_SQUARED = 0.603729;$/;"	v	namespace:constants	typeref:typename:const double
 RacahReductionFactor12DotRose	src/basis/am/racah_reduction.h	/^  double RacahReductionFactor12DotRose($/;"	f	namespace:am	typeref:typename:double
 RacahReductionFactor12Rose	src/basis/am/racah_reduction.h	/^  double RacahReductionFactor12Rose($/;"	f	namespace:am	typeref:typename:double
 RacahReductionFactor1Rose	src/basis/am/racah_reduction.h	/^  double RacahReductionFactor1Rose($/;"	f	namespace:am	typeref:typename:double
@@ -310,7 +311,9 @@ T	src/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	cla
 T	src/basis/lsjt_scheme.h	/^    int T() const {return subspace().T();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
 T0	src/chiral.h	/^        int T0; \/\/ Isotensor rank$/;"	m	class:chiral::ChiralOperator	typeref:typename:int
 T0_max	src/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+T0_max	src/op_file_io.h	/^        int T0_min, T0_max; \/\/ Isotensor limits$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
 T0_min	src/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
+T0_min	src/op_file_io.h	/^        int T0_min, T0_max; \/\/ Isotensor limits$/;"	m	struct:chiral::MatrixParameters	typeref:typename:int
 TwiceValue	src/basis/am/halfint.h	/^  int TwiceValue() const$/;"	f	class:HalfInt	typeref:typename:int
 TwiceValue	src/basis/am/halfint.h	/^inline int TwiceValue(const HalfInt& h)$/;"	f	typeref:typename:int
 TwoBodyCutoffs	src/basis/many_body.cpp	/^  std::tuple<int,int> TwoBodyCutoffs(basis::Rank truncation_rank, int truncation_cutoff)$/;"	f	namespace:basis	typeref:typename:std::tuple<int,int>
@@ -396,16 +399,18 @@ bra_subspace	src/basis/basis.h	/^      const SubspaceType& bra_subspace() const 
 bra_subspace_index	src/basis/basis.h	/^      int bra_subspace_index() const {return bra_subspace_index_;}$/;"	f	class:basis::BaseSector	typeref:typename:int
 bra_subspace_index_	src/basis/basis.h	/^      int bra_subspace_index_, ket_subspace_index_;$/;"	m	class:basis::BaseSector	typeref:typename:int
 bra_subspace_ptr_	src/basis/basis.h	/^      const SubspaceType* bra_subspace_ptr_;$/;"	m	class:basis::BaseSector	typeref:typename:const SubspaceType *
-calculate_rme	src/operator_rc_sq.cpp	/^    void ChargeRadiusOperator::calculate_rme(const basis::RelativeStateLSJT& bra,$/;"	f	class:chiral::ChargeRadiusOperator	typeref:typename:void
-charge_radius	src/chiral.h	/^        charge_radius,$/;"	e	enum:chiral::Name
+calculate_rme	src/operator_rc_sq.cpp	/^    double ChargeRadiusOperator::calculate_rme(const basis::RelativeStateLSJT& bra,$/;"	f	class:chiral::ChargeRadiusOperator	typeref:typename:double
 chiral	src/chiral.cpp	/^namespace chiral$/;"	n	file:
 chiral	src/chiral.h	/^namespace chiral$/;"	n
+chiral	src/op_file_io.cpp	/^namespace chiral$/;"	n	file:
+chiral	src/op_file_io.h	/^namespace chiral$/;"	n
 chiral	src/operator_rc_sq.cpp	/^namespace chiral$/;"	n	file:
 chiral	src/operator_rc_sq.h	/^namespace chiral$/;"	n
 clean	Makefile	/^clean:$/;"	t
 clebsch	src/utility.h	/^    inline double clebsch(int ja, int jb, int j, int mja, int mjb, int mj)$/;"	f	namespace:util	typeref:typename:double
 constants	src/constants.h	/^namespace constants$/;"	n
 create_file	main.py	/^        def create_file():$/;"	f	member:MatrixFile.generate_files	file:
+create_operator	src/chiral.cpp	/^    ChiralOperator* ChiralOperator::create_operator(std::string name)$/;"	f	class:chiral::ChiralOperator	typeref:typename:ChiralOperator *
 data	old_c/operator_gt.c	/^struct data { int n; int l; }; $/;"	s	file:
 delta	src/utility.h	/^    inline int delta(int a, int b) { return a == b; };$/;"	f	namespace:util	typeref:typename:int
 dim	src/basis/am/am.h	/^    double dim(int j)$/;"	f	namespace:am	typeref:typename:double
@@ -428,15 +433,15 @@ g	src/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	cla
 g	src/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateLSJT	typeref:typename:int
 g	src/basis/lsjt_scheme.h	/^    int g() const {return subspace().g();}$/;"	f	class:basis::TwoBodyStateLSJTN	typeref:typename:int
 g0	src/basis/jt_operator.h	/^    int J0, g0, T0_min, T0_max;$/;"	m	struct:basis::OperatorLabelsJT	typeref:typename:int
-gamow_teller	src/chiral.h	/^        gamow_teller$/;"	e	enum:chiral::Name
 gamow_teller_bare	old_c/operator_gt.c	/^double gamow_teller_bare(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
 gamow_teller_n2lo	old_c/operator_gt.c	/^double gamow_teller_n2lo(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
 gamow_teller_n2lo_d_term	old_c/operator_gt.c	/^double gamow_teller_n2lo_d_term(q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
 generate_files	main.py	/^    def generate_files(self):$/;"	m	class:MatrixFile
 hash_value	src/basis/am/halfint.h	/^std::size_t hash_value(const HalfInt& h)$/;"	f	typeref:typename:std::size_t
-identity	src/chiral.h	/^        identity,$/;"	e	enum:chiral::Name
+hw	src/op_file_io.h	/^        double hw;          \/\/ Oscillator energy$/;"	m	struct:chiral::MatrixParameters	typeref:typename:double
 index	src/basis/basis.h	/^      int index() const$/;"	f	class:basis::BaseState	typeref:typename:int
 index_	src/basis/basis.h	/^      int index_;   \/\/\/< 0-based index within space$/;"	m	class:basis::BaseState	typeref:typename:int
+input_to_params	src/op_file_io.cpp	/^    MatrixParameters input_to_params()$/;"	f	namespace:chiral	typeref:typename:MatrixParameters
 isequal_q_nums	old_c/tdho.c	/^bool isequal_q_nums(q_nums *ket, q_nums *bra)$/;"	f	typeref:typename:bool
 isequal_wf_params	old_c/tdho.c	/^bool isequal_wf_params(wf_params *ket, wf_params *bra)$/;"	f	typeref:typename:bool
 j	old_c/tdho.h	/^    int j; int mj; int t; int mt; };$/;"	m	struct:q_nums	typeref:typename:int
@@ -498,10 +503,11 @@ n	src/basis/lsjt_scheme.h	/^    int n() const {return (N()-L())\/2;}$/;"	f	class
 n2lo	src/chiral.h	/^    { lo, nlo, n2lo, n3lo, n4lo, full };$/;"	e	enum:chiral::Order
 n3lo	src/chiral.h	/^    { lo, nlo, n2lo, n3lo, n4lo, full };$/;"	e	enum:chiral::Order
 n4lo	src/chiral.h	/^    { lo, nlo, n2lo, n3lo, n4lo, full };$/;"	e	enum:chiral::Order
-name	src/chiral.h	/^        Name name;$/;"	m	class:chiral::ChiralOperator	typeref:typename:Name
+name	src/op_file_io.h	/^        std::string name;$/;"	m	struct:chiral::MatrixParameters	typeref:typename:std::string
 nlo	src/chiral.h	/^    { lo, nlo, n2lo, n3lo, n4lo, full };$/;"	e	enum:chiral::Order
 norm_nl	old_c/tdho.c	/^double norm_nl(const wf_params *params)$/;"	f	typeref:typename:double
 obj	Makefile	/^obj = $(src:.cpp=.o)$/;"	m
+op	src/op_file_io.h	/^        ChiralOperator* op;$/;"	m	struct:chiral::MatrixParameters	typeref:typename:ChiralOperator *
 operator !=	src/basis/am/halfint.h	/^inline bool operator != (const HalfInt& h1, const HalfInt& h2)$/;"	f	typeref:typename:bool
 operator *	src/basis/am/halfint.h	/^inline HalfInt operator * (const HalfInt& a, const int& b)$/;"	f	typeref:typename:HalfInt
 operator *	src/basis/am/halfint.h	/^inline HalfInt operator * (const int& a, const HalfInt& b)$/;"	f	typeref:typename:HalfInt
@@ -526,6 +532,7 @@ operator >=	src/basis/am/halfint.h	/^inline bool operator >= (const HalfInt& h1,
 operator_gt	old_c/operator_gt.c	/^double operator_gt(char *order, q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
 operator_r_sq	old_c/operator_r_sq.c	/^double operator_r_sq(char *order, q_nums *ket, q_nums *bra, double *b)$/;"	f	typeref:typename:double
 order	src/chiral.h	/^        Order order;$/;"	m	class:chiral::ChiralOperator	typeref:typename:Order
+order	src/op_file_io.h	/^        std::string order;$/;"	m	struct:chiral::MatrixParameters	typeref:typename:std::string
 pair	src/basis/am/halfint.h	/^  typedef std::pair<HalfInt,HalfInt> pair;  \/\/ used by am$/;"	t	class:HalfInt	typeref:typename:std::pair<HalfInt,HalfInt>
 plm	old_c/operator_r_sq.c	/^double plm(int l, int m)$/;"	f	typeref:typename:double
 print_rme	old_c/main.c	/^void print_rme(char *operator, char *order, q_nums *ket,$/;"	f	typeref:typename:void
@@ -540,6 +547,7 @@ r_sq_n2lo	old_c/operator_r_sq.c	/^double r_sq_n2lo(q_nums *ket, q_nums *bra, dou
 radial_integral	old_c/operator_gt.c	/^double radial_integral(int n, int l)$/;"	f	typeref:typename:double
 radial_integral_bare	old_c/operator_r_sq.c	/^double radial_integral_bare(int ni, int li, int nf, int lf, double b)$/;"	f	typeref:typename:double
 radial_integral_lo	old_c/operator_r_sq.c	/^double radial_integral_lo(int ni, int li, int nf, int lf, double b)$/;"	f	typeref:typename:double
+radial_integral_lo	src/operator_rc_sq.cpp	/^    double radial_integral_lo(int ni, int li, int nf, int lf, const double osc_b)$/;"	f	namespace:chiral	typeref:typename:double
 radial_integrand	old_c/operator_gt.c	/^double radial_integrand(double y, void *userdata)$/;"	f	typeref:typename:double
 radial_nl	old_c/tdho.c	/^double radial_nl(double p, const wf_params *params)$/;"	f	typeref:typename:double
 rc_sq_full	src/operator_rc_sq.cpp	/^    double rc_sq_full(const basis::RelativeStateLSJT& bra,$/;"	f	namespace:chiral	typeref:typename:double
