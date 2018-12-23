@@ -9,7 +9,7 @@ namespace chiral
     {
         std::string name;
         std::string order;
-        ChiralOperator* op;
+        ChiralOperator::operator_ptr op;
         int J0_min, J0_max; // Tensor limits
         int T0_min, T0_max; // Isotensor limits
         int Nmax, Jmax;     // Basis cutoff

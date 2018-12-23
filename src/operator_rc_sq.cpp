@@ -1,10 +1,10 @@
 #include <cmath>
-#include <algorithm>
-// #include "basis/lsjt_scheme.h"
+#include "basis/lsjt_scheme.h"
 #include "constants.h"
 #include "utility.h"
-// #include "chiral.h"
+#include "chiral.h"
 #include "operator_rc_sq.h"
+#include "wavefunction.h"
 
 namespace chiral
 {
@@ -33,9 +33,10 @@ namespace chiral
 	    return rc_sq_full(bra, ket, osc_b);
 	}
     }
-/******************************************
-     Leading order contribution
-********************************************/
+    
+/*******************************************************************************
+                         Leading order contribution
+*******************************************************************************/
     double radial_integral_lo(int ni, int li, int nf, int lf, const double osc_b)
     {
 	if (lf == li)
@@ -81,12 +82,20 @@ namespace chiral
 	return result;		    
     }
 
+/********************************************************************************
+                        Next-to-leading order contribution
+********************************************************************************/
+    
     double rc_sq_nlo(const basis::RelativeStateLSJT& bra,
 		     const basis::RelativeStateLSJT& ket,
 		     const double osc_b)
     {
 	return 0;
     }
+
+/********************************************************************************
+                   Next-to-next-to-leading order contribution
+********************************************************************************/
 
     double rc_sq_n2lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
@@ -104,21 +113,37 @@ namespace chiral
 	if (!kronecker)
 	    return 0;
 
-	double clebsch_product = 0;
+	double cg_product = 0;
 #pragma omp parallel for
 	for (int ms = -si; ms <= si; ms++)
 	{
-	    clebsch_product += (util::clebsch(li, si, ji, mji-ms, ms, mji)
-				* util::clebsch(lf, sf, jf, mjf-ms, ms, mjf));
+	    cg_product += (util::clebsch(li, si, ji, mji-ms, ms, mji)
+			   * util::clebsch(lf, sf, jf, mjf-ms, ms, mjf));
 	}
 
-	return constants::R_ES_SQUARED * clebsch_product;
+	return constants::R_ES_SQUARED * cg_product;
     }
+
+/********************************************************************************
+              Next-to-next-to-next-to-leading order contribution
+********************************************************************************/
 
     double rc_sq_n3lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
 		      const double osc_b)
     {
+	int ni = ket.N(), nf = bra.N();
+	int li = ket.L(), lf = bra.L();
+	int si = ket.S(), sf = bra.S();
+	int ji = ket.J(), jf = bra.J();
+	int ti = ket.T(), tf = bra.T();
+	int mji = 0, mjf = 0, mti = 0, mtf = 0;
+
+	bool kronecker = (sf == si && jf == ji && tf == ti
+			  && mjf == mji && mtf == mti);
+	if (!kronecker)
+	    return 0;
+	
 	return 0;
     }
 

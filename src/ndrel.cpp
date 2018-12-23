@@ -12,22 +12,24 @@ int main()
     // From input to parameters for matrix generation.
     auto params = chiral::input_to_params();
     auto name = params.name, order = params.order;
-    auto op = params.op;
+    auto op = std::move(params.op);
     auto J0_min = params.J0_min, J0_max = params.J0_max;
     auto T0_min = params.T0_min, T0_max = params.T0_max;
     auto Nmax = params.Nmax, Jmax = params.Jmax;
     auto hw = params.hw;
     
-    // Oscillator constant
+    // Oscillator constant and hw string
     const double osc_b = std::sqrt(constants::HBARC * constants::HBARC
                                    / constants::RED_NUCLEON_MASS / hw);
+    std::ostringstream hw_str;
+    hw_str << hw;
 
     // Print header
     std::cout << "\n";
     std::cout << "Now generating operator: " << name << "\n";
 
     // Set up zero operator for relative format
-    std::cout << "Beginning RelativeLSJT operator basis setup" << "\n";
+    std::cout << "Beginning RelativeLSJT operator basis setup..." << "\n";
     basis::RelativeSpaceLSJT space(Nmax, Jmax);
     basis::OperatorLabelsJT
         operator_labels(op->J0,
@@ -45,16 +47,16 @@ int main()
                                              sectors,
                                              matrices);
     // Operator diagonostics
-    std::cout << "Truncation: "
+    std::cout << " Truncation: "
               << " Nmax " << Nmax
               << " Jmax " << Jmax
               << " T0_max " << T0_max
               << "\n";
-    std::cout << "Matrix elements: ";
+    std::cout << " Matrix elements: ";
     for (auto T0 = T0_min; T0 <= T0_max; ++T0)
         std::cout <<  basis::UpperTriangularEntries(sectors[T0]);
     std::cout << "\n";
-    std::cout << "Allocated: ";
+    std::cout << " Allocated: ";
     for (auto T0 = T0_min; T0 <= T0_max; ++T0)
         std::cout << basis::AllocatedEntries(matrices[T0]);
     std::cout << "\n";
@@ -97,7 +99,7 @@ int main()
     // Construct output filename
     std::string filename =
         name + "_tbrel_" + order + "_N" + std::to_string(Nmax)
-        + "_J" + std::to_string(Jmax) + "_hw" + std::to_string(hw) + ".dat";
+        + "_J" + std::to_string(Jmax) + "_hw" + hw_str.str() + ".dat";
 
     // Write to output file
     basis::WriteRelativeOperatorLSJT(filename,
