@@ -203,7 +203,9 @@ namespace chiral
 	result *= (-0.75 * tau_dot_product(ti, tf)
 		   * std::pow(constants::G_A / constants::F_PION, 2)
 		   / (2 * constants::RED_NUCLEON_MASS));
-	
+
+	if (std::isnan(result))
+	    result = 0;
 	return result;
     }
 
