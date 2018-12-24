@@ -25,6 +25,8 @@ namespace chiral
     public:
         // Constructors
         ChiralOperator();
+        ChiralOperator(int J0, int T0);
+        ChiralOperator(int G0, int J0, int T0);
         
         // Destructor
         virtual ~ChiralOperator() = 0;
@@ -37,8 +39,8 @@ namespace chiral
                                      const double osc_b) = 0;
         // Data Members
         Order order;
-        int J0; // Tensor rank
         int G0; // Parity
+        int J0; // Tensor rank
         int T0; // Isotensor rank
     };
 }

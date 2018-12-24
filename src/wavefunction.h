@@ -7,7 +7,7 @@ namespace tdho
     public:
 	WaveFunction();
 	WaveFunction(double);
-	WaveFunction(double, int, int, int);
+	WaveFunction(int, int, int, double);
 
 	~WaveFunction();
 	

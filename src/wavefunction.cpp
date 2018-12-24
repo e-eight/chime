@@ -8,27 +8,27 @@
 namespace tdho
 {
     WaveFunction::WaveFunction():
-	osc_b(0), n(0), l(0), m(0) {}
+	n(0), l(0), m(0), osc_b(0) {}
     WaveFunction::WaveFunction(double osc_b):
-	osc_b(osc_b), n(0), l(0), m(0) {}
-    WaveFunction::WaveFunction(double osc_b, int n, int l, int m):
-	osc_b(osc_b), n(n), l(l), m(m) {}
+	n(0), l(0), m(0), osc_b(osc_b) {}
+    WaveFunction::WaveFunction(int n, int l, int m, double osc_b):
+	n(n), l(l), m(m), osc_b(osc_b) {}
 
     WaveFunction::~WaveFunction() {}
 
     double WaveFunction::norm_nl()
     {
-	auto result = 0.5 * (std::log(2) + 3 * std::log(3)
+	auto result = 0.5 * (std::log(2) - 3 * std::log(osc_b)
 			     + boost::math::lgamma(n + 1)
 			     - boost::math::lgamma(n + l + 1.5));
-	return std::pow(-1, n) * std::exp(result);
+	return std::exp(result);
     }
 
-    double WaveFunction::radial_nl(double p)
+    double WaveFunction::radial_nl(double r)
     {
-	auto bp = osc_b * p;
-	return (std::exp(- bp * bp / 2) * std::pow(bp, l)
-		* gsl_sf_laguerre_n(n, l + 0.5, bp * bp));
+	auto rb = r / osc_b;
+	return (std::exp(- rb * rb / 2) * std::pow(rb, l)
+		* gsl_sf_laguerre_n(n, l + 0.5, rb * rb));
     }
 
     double WaveFunction::theta_lm(double theta)
