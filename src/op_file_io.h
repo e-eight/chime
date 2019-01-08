@@ -1,4 +1,3 @@
-#include <tuple>
 #include <string>
 #include "chiral.h"
 #include "operator_rc_sq.h"

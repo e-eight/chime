@@ -36,10 +36,11 @@ namespace chiral
 	    return rc_sq_full(bra, ket, osc_b);
 	}
     }
-    
+
 /********************************************************************************
                                  LO contribution
 ********************************************************************************/
+
     double radial_integral_lo(int ni, int li, int nf, int lf, const double osc_b)
     {
 	if (lf == li)
@@ -54,7 +55,7 @@ namespace chiral
 	else
 	    return 0;
     }
- 
+
     double rc_sq_lo(const basis::RelativeStateLSJT& bra,
 		    const basis::RelativeStateLSJT& ket,
 		    const double osc_b)
@@ -72,7 +73,7 @@ namespace chiral
 	    return 0;
 	else if (std::abs(ni - nf) > 1)
 	    return 0;
-    
+
 	double result = 0;
 #pragma omp parallel for
 	for (int ms = -si; ms <= si; ms++)
@@ -81,14 +82,14 @@ namespace chiral
 			       * util::clebsch(lf, sf, jf, mjf-ms, ms, mjf));
 	    result += cg_product * radial_integral_lo(ni, li, nf, lf, osc_b);
 	}
-	
-	return result;		    
+
+	return result;
     }
 
 /********************************************************************************
                                 NLO contribution
 ********************************************************************************/
-    
+
     double rc_sq_nlo(const basis::RelativeStateLSJT& bra,
 		     const basis::RelativeStateLSJT& ket,
 		     const double osc_b)
@@ -110,7 +111,7 @@ namespace chiral
 	int ji = ket.J(), jf = bra.J();
 	int ti = ket.T(), tf = bra.T();
 	int mji = 0, mjf = 0, mti = 0, mtf = 0;
-    
+
 	bool kronecker = (ni == nf && li == lf && sf == si && jf == ji
 			  && tf == ti && mjf == mji && mtf == mti);
 	if (!kronecker)
@@ -157,13 +158,13 @@ namespace chiral
     {
 	if (wf1.l != wf2.l)
 	    return 0;
-	
+
 	auto norm1 = wf1.norm_nl(), norm2 = wf2.norm_nl();
 	auto radial1 = wf1.radial_nl(r), radial2 = wf2.radial_nl(r);
 	return (norm1 * norm2 * radial1 * radial2
 		* std::exp(-constants::PION_MASS * r) * r);
     }
-    
+
     double rc_sq_n3lo(const basis::RelativeStateLSJT& bra,
 		      const basis::RelativeStateLSJT& ket,
 		      const double osc_b)
@@ -226,5 +227,5 @@ namespace chiral
 		+ rc_sq_n3lo(bra, ket, osc_b)
 		+ rc_sq_n4lo(bra, ket, osc_b));
     }
-    
+
 }

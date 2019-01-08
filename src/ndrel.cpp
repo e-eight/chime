@@ -108,4 +108,5 @@ int main()
                                      sectors,
                                      matrices,
                                      true);
+    op.reset();
 }
