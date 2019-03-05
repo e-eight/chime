@@ -1,3 +1,6 @@
-[submodule "src/deps/basis"]
-	path = src/deps/basis
-	url = git@github.com:nd-nuclear-theory/basis.git
+[submodule "src/basis"]
+	path = src/basis
+	url = https://github.com/e-eight/basis.git
+[submodule "src/CLI11"]
+	path = src/CLI11
+	url = https://github.com/CLIUtils/CLI11.git
