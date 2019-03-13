@@ -56,7 +56,6 @@ dkms.conf
 *.txt
 
 # Basis directory
-src/basis/
 src/hep-mc/
 __pycache__/
 old_c/

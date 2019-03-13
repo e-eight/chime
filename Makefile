@@ -2,7 +2,7 @@ CXX = g++
 FFLAGS = -O3 -Wall -std=c++14 -fopenmp
 LFLAGS = -lgomp -lm -lgsl -lgslcblas
 
-exe = ndrel.exe
+exe = chime.exe
 src = $(wildcard src/*.cpp) \
 	$(wildcard src/basis/*.cpp) \
 	$(wildcard src/basis/am/*.cpp) \
@@ -18,4 +18,4 @@ clean:
 	rm -rf $(obj) $(exe) *.out *.dat
 
 $(exe): $(obj)
-	$(CXX) -o $@ $^ $(LFLAGS) $(FFLAGS) 
+	$(CXX) -o $@ $^ $(LFLAGS) $(FFLAGS)

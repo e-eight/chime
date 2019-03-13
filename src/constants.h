@@ -1,17 +1,28 @@
-#ifndef __CONSTANTS_H__
-#define __CONSTANTS_H__
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+#include <gsl/gsl_math.h>
 
 namespace constants
 {
-    const double PI = 3.14159265358979323846;
-    const double PION_MASS = 134.9770; // (in MeV/c^2)
-    const double RED_NUCLEON_MASS = 469.4593340; // (in MeV/c^2)
-    const double HBARC = 197.3269602; // (in MeV fm)
+  constexpr double pi = M_PI;
 
-    // The isoscalar charge radius for the nucleon im fm^2.
-    const double R_ES_SQUARED = 0.603729;
-    const double G_A = 1.25; // Axial coupling constant.
-    const double F_PION = 92.4; // Pion decay constant in MeV.
+  // Conversion Factor
+  constexpr double hbarc = 197.3269602; // (in MeV fm)
+
+  // Masses
+  constexpr double pion_mass_MeV = 134.9770;
+  constexpr double pion_mass_fm = pion_mass_MeV / hbarc; // (in fm^{-1})
+  constexpr double reduced_nucleon_mass_MeV = 469.4593340;
+  constexpr double reduced_nucleon_mass_fm = reduced_nucleon_mass_MeV / hbarc;
+  constexpr double nucleon_mass_MeV = reduced_nucleon_mass_MeV * 2;
+  constexpr double nucleon_mass_fm = reduced_nucleon_mass_fm * 2;
+
+  // Low energy constants
+  constexpr double isoscalar_nucleon_charge_radius_sq_fm = 0.603729; // (in fm^2)
+  constexpr double gA = 1.25;
+  constexpr double pion_decay_constant_MeV = 92.4;
+  constexpr double pion_decay_constant_fm = pion_decay_constant_MeV / hbarc; // (in fm^{-1})
 }
-    
+
 #endif
