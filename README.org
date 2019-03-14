@@ -73,3 +73,8 @@ at LO, NLO, and N2LO, and also a fourth file containing the total matrix element
     + Adaptive Simpson
   - Precompute and store integrals for faster evaluation.
   - Add support for other compilers.
+  
+** License
+ChiME is licensed under the MIT license (see =LICENSE= for details). The libraries
+that ChiME depends on may have different licenses. Please check those project for
+further details about their licenses.
