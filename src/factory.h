@@ -28,7 +28,7 @@ namespace factory
 
       static bool registerT()
       {
-        const auto name = T::name();
+        const auto name = T::Name();
         Factory::data()[name] = [](Args... args) -> std::unique_ptr<Base>
           {
            return std::make_unique<T>(std::forward<Args>(args)...);

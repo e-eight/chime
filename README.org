@@ -1,26 +1,75 @@
-* Two body matrix elements of chiral eft operators
+* ChiME
 
-χNME computes the two body (reduced) matrix elements of operators
-developed using heavy baryon chiral effective field theory, in the three
-dimensional harmonic oscillator basis.
+This is a framework for computing the two body matrix elements, reduced in total
+angular momentum and isospin spaces, of electroweak operators in the 3D harmonic
+oscillator basis. At present ChiME is capable of only producing relative matrix
+elements, i.e. matrix elements of operators without center of mass contribution.
 
 ** Requirements
-   - GNU Scientific Library
-   - GCC
-   - libgomp
+ChiME depends on several libraries as follows:
+  - [[https://github.com/CLIUtils/CLI11.git][CLI11]]
+  - libgomp
+  - GNU Scientific Library (GSL)
+  - [[https://github.com/e-eight/basis.git][basis]] (This in turn depends on boost and Eigen.)
+  - [[https://github.com/e-eight/am.git][am]]
+  - [[https://github.com/e-eight/am.git][mcutils]]
 
-** Installation and Usage
-   #+BEGIN_SRC 
-     git clone https://github.com/e-eight/chiral-nme.git
-     cd chiral-nme
-     python main.py
-   #+END_SRC
+** Installation
+To use this make sure that GSL, boost,libgomp and Eigen are present in your
+system. Then clone this repository as shown below.
 
-** Implemented
-   - Rms charge radius (upto N2LO)
+#+BEGIN_SRC bash
+  git clone https://github.com/e-eight/chime.git
+  cd chime
+  git submodule update --init --recursive
+  make
+#+END_SRC
+
+The provided makefile assumes that =g++= is being used as the compiler, and GSL,
+boost and Eigen are installed at their system locations. If that is not true for
+you, then modify the makefile accordingly.
+
+** Usage
+To add your own operators use the =charge_radius.h= and =charge_radius.cpp=
+files as templates. Once you have created the header and source files for your
+operator, include the header file in =operators.h=.
+
+At present only the matrix elements upto N4LO are calculated. If higher orders
+are required then first add them to the enum class =Order= and to the class
+=Operator= in =chiral.h=, and to the method =ReducedMatrixElement= in
+=chiral.cpp=.
+
+ChiME accepts the following inputs:
+  - (string) name :: Name of the operator
+  - (string) order :: lo, nlo, n2lo, n3lo, n4lo
+  - (double) hw :: Oscillator energy
+  - (int) Nmax :: Maximum number of 3DHO quanta of basis
+  - (int) Jmax :: Maximum total angular momentum of basis
+  - (int) T0_min, T0_max :: Range of isospin components of operator
+
+The recommended way to enter this inputs is via a configuration file. See the
+provided =rsq_input.ini= for the format. Once you have the config you can run it
+as
+#+BEGIN_SRC bash
+  ./chime.exe -c name.ini
+#+END_SRC
+where =name.ini= is your config file.
+
+These inputs can also be given as flags as shown below.
+#+BEGIN_SRC bash
+  ./chime.exe -n rsq -o n2lo -N 200
+#+END_SRC
+Use =chime.exe -h= to get the full list of flags.
+
+ChiME will produce a set of timestamped files. For example if the given order is
+=n2lo=, then ChiME will produced files that contain the individual contributions
+at LO, NLO, and N2LO, and also a fourth file containing the total matrix elements.
 
 ** To Do
-   - Gamow-Teller 
-   - M1 
-   - E2
-   - Documentation
+  - Add support for operators with center of mass contribution. :: urgent
+  - Add support for multivariate integration procedures.
+    + Monte Carlo
+    + Bicubic Spline
+    + Adaptive Simpson
+  - Precompute and store integrals for faster evaluation.
+  - Add support for other compilers.

@@ -6,7 +6,7 @@
 #include "chiral.h"
 #include "constants.h"
 #include "CLI11.hpp"
-#include "charge_radius.h"
+#include "operators.h"
 
 int main(int argc, char** argv)
 {
@@ -17,21 +17,21 @@ int main(int argc, char** argv)
   CLI::App app("Generates CEFT reduced matrix elements in HO basis.");
 
   // flags
-  std::string name = "identity";
+  std::string name = "rsq";
   std::string order = "lo";
-  double hw = 0;
-  int Nmax = 0;
-  int Jmax = 0;
-  int Tmin = 0;
-  int Tmax = 0;
+  double hw = 10;
+  int Nmax = 200;
+  int Jmax = 1;
+  int T0_min = 0;
+  int T0_max = 0;
 
   app.add_option("-n,--name", name, "Name of operator.");
   app.add_option("-o,--order", order, "Chiral order of operator.");
   app.add_option("-E,--hw", hw, "Oscillator energy of basis.");
   app.add_option("-N,--Nmax", Nmax, "Nmax truncation of basis.");
   app.add_option("-J,--Jmax", Jmax, "Jmax truncation of basis.");
-  app.add_option("-t,--Tmin", Tmin, "Minimum isospin of basis.");
-  app.add_option("-T,--Tmax", Tmax, "Maximum isospin of basis.");
+  app.add_option("-t,--T0_min", T0_min, "Minimum isospin component of operator.");
+  app.add_option("-T,--T0_max", T0_max, "Maximum isospin component of operator.");
   app.set_config("-c,--config");
 
   // Parse input
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
   std::cout << "Beginning RelativeLSJT operator basis setup..." << "\n";
 
   // Set operator and file header parameters
-  basis::OperatorLabelsJT op_labels(op->J0(), op->G0(), Tmin, Tmax,
+  basis::OperatorLabelsJT op_labels(op->J0(), op->G0(), T0_min, T0_max,
                                     basis::SymmetryPhaseMode::kHermitian);
   basis::RelativeOperatorParametersLSJT op_params(op_labels, Nmax, Jmax);
 
