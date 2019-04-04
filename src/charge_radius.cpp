@@ -31,16 +31,16 @@ namespace chiral
     if (!diagonal)
       return 0;
 
-    auto term1 = (2 * ni + li + 1.5) * KroneckerDelta(ni, nf);
-    auto term2 = std::sqrt((ni + 1) * (ni + li + 1.5)) * KroneckerDelta(ni + 1, nf);
-    auto term3 = std::sqrt((nf + 1) * (nf + lf + 1.5)) * KroneckerDelta(nf + 1, ni);
+    auto term1 = (2 * ni + li + 1.5) * util::KroneckerDelta(ni, nf);
+    auto term2 = std::sqrt((ni + 1) * (ni + li + 1.5)) * util::KroneckerDelta(ni + 1, nf);
+    auto term3 = std::sqrt((nf + 1) * (nf + lf + 1.5)) * util::KroneckerDelta(nf + 1, ni);
     auto radial_integral = osc_b * osc_b * (term1 - term2 - term3);
 
     double clebsch_product = 0;
     for (int ms = -si; ms <= si; ++ms)
         clebsch_product += std::pow(am::ClebschGordan(li, -ms, si, ms, ji, 0), 2);
 
-    auto wigner_factor = Hat(ji) * Hat(ti);
+    auto wigner_factor = 1.0;
 
     auto result = wigner_factor * clebsch_product * radial_integral;
     return result;
@@ -53,17 +53,6 @@ namespace chiral
   double ChargeRadiusOperator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                 const basis::RelativeStateLSJT& ket,
                                                 const double& osc_b)
-  {
-    return 0;
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////
-  /////////////////////////// N2LO Matrix Element ///////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
-
-  double ChargeRadiusOperator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
-                                                 const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -79,14 +68,26 @@ namespace chiral
     for (int ms = -si; ms <= si; ++ms)
         clebsch_product += std::pow(am::ClebschGordan(li, -ms, si, ms, ji, 0), 2);
 
-    auto wigner_factor = Hat(ji) * Hat(ti);
+    auto wigner_factor = 1.0;
 
     auto result = (wigner_factor * clebsch_product
                    * constants::isoscalar_nucleon_charge_radius_sq_fm);
     return result;
   }
 
+
   ///////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// N2LO Matrix Element //////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
+
+  double ChargeRadiusOperator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
+                                                 const basis::RelativeStateLSJT& ket,
+                                                 const double& osc_b)
+  {
+    return 0;
+  }
+
+    ///////////////////////////////////////////////////////////////////////////////
   ////////////////////////// N3LO Matrix Element ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
@@ -124,8 +125,8 @@ namespace chiral
     norm_product *= (osc_b * osc_b);
 
     // Spin-Isospin matrix element
-    auto spin_element = PauliDotProduct(si);
-    auto isospin_element = PauliDotProduct(ti);
+    auto spin_element = util::PauliDotProduct(si);
+    auto isospin_element = util::PauliDotProduct(ti);
 
     // Clebsch product
     double clebsch_product = 0;
@@ -133,7 +134,7 @@ namespace chiral
       clebsch_product += std::pow(am::ClebschGordan(li, -ms, si, ms, ji, 0), 2);
 
     // Wigner factor
-    auto wigner_factor = Hat(ji) * Hat(ti);
+    auto wigner_factor = 1.0;
 
     // LEC prefactor
     auto prefactor = -std::pow(constants::gA / constants::pion_decay_constant_fm, 2);

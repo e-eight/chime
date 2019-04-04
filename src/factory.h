@@ -8,7 +8,7 @@
 
 #include <string>
 #include <unordered_map>
-#include <memory>
+#include "utility.h"
 
 namespace factory
 {
@@ -31,7 +31,7 @@ namespace factory
         const auto name = T::Name();
         Factory::data()[name] = [](Args... args) -> std::unique_ptr<Base>
           {
-           return std::make_unique<T>(std::forward<Args>(args)...);
+           return util::make_unique<T>(std::forward<Args>(args)...);
           };
         return true;
       }
@@ -53,7 +53,8 @@ namespace factory
     using FuncType = std::unique_ptr<Base> (*)(Args...);
     Factory() = default;
 
-    static auto &data()
+    using FuncMap = std::unordered_map<std::string, FuncType>;
+    static FuncMap &data()
     {
       static std::unordered_map<std::string, FuncType> s;
       return s;
