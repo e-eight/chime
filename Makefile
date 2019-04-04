@@ -1,6 +1,6 @@
 CXX = g++
-FFLAGS = -O3 -Wall -std=c++14 -fopenmp
-LFLAGS = -lgomp -lm -lgsl -lgslcblas
+CXXFLAGS = -O3 -Wno-c++0x-compat -std=c++11 -fopenmp
+LDLIBS = -lgomp -lm -lgsl -lgslcblas
 
 exe = chime.exe
 src = $(wildcard src/*.cpp) \
@@ -18,4 +18,4 @@ clean:
 	rm -rf $(obj) $(exe) *.out *.dat
 
 $(exe): $(obj)
-	$(CXX) -o $@ $^ $(LFLAGS) $(FFLAGS)
+	$(CXX) -o $@ $^ $(LDLIBS) $(CXXFLAGS) 
