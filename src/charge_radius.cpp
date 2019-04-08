@@ -27,13 +27,17 @@ namespace chiral
     int ji = ket.J(), jf = bra.J();
     int ti = ket.T(), tf = bra.T();
 
+    // Radial quanta.
+    auto nri = (ni - li) / 2;
+    auto nrf = (nf - lf) / 2;
+
     bool diagonal = (li == lf && si == sf && ji == jf && ti == tf);
     if (!diagonal)
       return 0;
 
-    auto term1 = (2 * ni + li + 1.5) * util::KroneckerDelta(ni, nf);
-    auto term2 = std::sqrt((ni + 1) * (ni + li + 1.5)) * util::KroneckerDelta(ni + 1, nf);
-    auto term3 = std::sqrt((nf + 1) * (nf + lf + 1.5)) * util::KroneckerDelta(nf + 1, ni);
+    auto term1 = (2 * nri + li + 1.5) * util::KroneckerDelta(nri, nrf);
+    auto term2 = std::sqrt((nri + 1) * (nri + li + 1.5)) * util::KroneckerDelta(nri + 1, nrf);
+    auto term3 = std::sqrt((nrf + 1) * (nrf + lf + 1.5)) * util::KroneckerDelta(nrf + 1, nri);
     auto radial_integral = osc_b * osc_b * (term1 - term2 - term3);
 
     double clebsch_product = 0;
@@ -60,7 +64,11 @@ namespace chiral
     int ji = ket.J(), jf = bra.J();
     int ti = ket.T(), tf = bra.T();
 
-    bool diagonal = (ni == nf && li == lf && si == sf && ji == jf && ti == tf);
+    // Radial quanta.
+    auto nri = (ni - li) / 2;
+    auto nrf = (nf - lf) / 2;
+
+    bool diagonal = (nri == nrf && li == lf && si == sf && ji == jf && ti == tf);
     if (!diagonal)
       return 0;
 
@@ -101,27 +109,31 @@ namespace chiral
     int ji = ket.J(), jf = bra.J();
     int ti = ket.T(), tf = bra.T();
 
+    // Radial quanta.
+    auto nri = (ni - li) / 2;
+    auto nrf = (nf - lf) / 2;
+
     bool diagonal = (li == lf && si == sf && ji == jf && ti == tf);
     if (!diagonal)
       return 0;
 
     // Radial integral
-    struct params { int ni_; int nf_; int li_; int lf_; double mb_; };
+    struct params { int nri_; int nrf_; int li_; int lf_; double mb_; };
     auto mpi_b = constants::pion_mass_fm * osc_b;
-    params p = { ni, nf, li, lf, mpi_b };
+    params p = { nri, nrf, li, lf, mpi_b };
     auto integrand =
       [&p](double y) { return (std::exp(-p.mb_ * std::sqrt(y))
-                               * gsl_sf_laguerre_n(p.ni_, p.li_ + 0.5, y)
-                               * gsl_sf_laguerre_n(p.nf_, p.lf_ + 0.5, y)); };
+                               * gsl_sf_laguerre_n(p.nri_, p.li_ + 0.5, y)
+                               * gsl_sf_laguerre_n(p.nrf_, p.lf_ + 0.5, y)); };
     double a = 0;
     double b = 1;
     double alpha = li;
-    int nodes = (ni + nf) / 2 + 1;
+    int nodes = (nri + nrf) / 2 + 1;
     auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
 
     // Radial normalization
-    auto norm_product = (threedho::CoordinateSpaceNorm(ni, li, osc_b)
-                           * threedho::CoordinateSpaceNorm(nf, lf, osc_b));
+    auto norm_product = (threedho::CoordinateSpaceNorm(nri, li, osc_b)
+                           * threedho::CoordinateSpaceNorm(nrf, lf, osc_b));
     norm_product *= (osc_b * osc_b);
 
     // Spin-Isospin matrix element
