@@ -13,7 +13,8 @@ ChiME depends on several libraries as follows:
   - [[https://github.com/e-eight/basis.git][basis]] (This in turn depends on boost and Eigen.)
   - [[https://github.com/e-eight/am.git][am]]
   - [[https://github.com/e-eight/am.git][mcutils]]
-
+The code is written in C++14. You will need a compiler that supports that.
+    
 ** Installation
 To use this make sure that GSL, boost,libgomp and Eigen are present in your
 system. Then clone this repository as shown below.
@@ -25,9 +26,9 @@ system. Then clone this repository as shown below.
   make
 #+END_SRC
 
-The provided makefile assumes that =g++= is being used as the compiler, and GSL,
-boost and Eigen are installed at their system locations. If that is not true for
-you, then modify the makefile accordingly.
+The provided makefile assumes that =g++= (6.1 or higher) is being used as the 
+compiler, and GSL, boost and Eigen are installed at their system locations. If 
+that is not true for you, then modify the makefile accordingly.
 
 ** Usage
 To add your own operators use the =charge_radius.h= and =charge_radius.cpp=
@@ -74,6 +75,11 @@ at LO, NLO, and N2LO, and also a fourth file containing the total matrix element
   - Precompute and store integrals for faster evaluation.
   - Add support for other compilers.
   
+** Contributors
+  - Soham Pal (Developed the original C version. Theory and lead code developer.)
+  - Robert Basili (Ported the original C version to C++. Tester.)
+  - Shiplu Sarker (Theory developer.)
+
 ** License
 ChiME is licensed under the MIT license (see =LICENSE= for details). The libraries
 that ChiME depends on may have different licenses. Please check those project for
