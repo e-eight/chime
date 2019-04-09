@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -Wno-c++0x-compat -std=c++11 -fopenmp
+CXXFLAGS = -O3 -Wno-c++0x-compat -std=c++14 -fopenmp
 LDLIBS = -lgomp -lm -lgsl -lgslcblas
 
 exe = chime.exe
@@ -10,12 +10,18 @@ src = $(wildcard src/*.cpp) \
 obj = $(src:.cpp=.o)
 lib = $(wildcard *.a)
 
-.PHONY = all clean
+.PHONY = all tidy cleanobj cleandata
 
 all: $(exe)
 
-clean:
-	rm -rf $(obj) $(exe) *.out *.dat
+tidy:
+	$(RM) $(obj) $(exe) *.out *.dat *.txt
+
+cleanobj:
+	$(RM) $(obj) $(exe)
+
+cleandata:
+	$(RM) *.dat *.txt
 
 $(exe): $(obj)
-	$(CXX) -o $@ $^ $(LDLIBS) $(CXXFLAGS) 
+	$(CXX) $(LDLIBS) $(CXXFLAGS) -o $@ $^

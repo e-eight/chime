@@ -1,34 +1,13 @@
 #ifndef CHIRAL_H
 #define CHIRAL_H
 
-#include <map>
-#include <string>
 #include "basis/lsjt_scheme.h"
 #include "factory.h"
-
-/*
-
-@file chiral.h
-
-Author(s): Soham Pal
-Iowa State University
-
-*/
 
 namespace chiral
 {
   // Chiral Orders
-  enum struct Order
-    { lo, nlo, n2lo, n3lo, n4lo };
-
-  static std::map<std::string, Order> order_map =
-    {
-     { "lo", Order::lo },
-     { "nlo", Order::nlo },
-     { "n2lo", Order::n2lo },
-     { "n3lo", Order::n3lo },
-     { "n4lo", Order::n4lo }
-    };
+  enum struct Order { lo, nlo, n2lo, n3lo, n4lo };
 
   // Chiral Operator
   struct Operator : factory::Factory<Operator>

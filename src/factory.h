@@ -53,8 +53,8 @@ namespace factory
     using FuncType = std::unique_ptr<Base> (*)(Args...);
     Factory() = default;
 
-    using FuncMap = std::unordered_map<std::string, FuncType>;
-    static FuncMap &data()
+    //using FuncMap = std::unordered_map<std::string, FuncType>;
+    static auto &data()
     {
       static std::unordered_map<std::string, FuncType> s;
       return s;

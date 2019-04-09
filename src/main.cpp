@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <chrono>
 #include <cmath>
+#include <unordered_map>
+#include <vector>
+#include <string>
 #include "basis/lsjt_operator.h"
 #include "chiral.h"
 #include "constants.h"
@@ -10,6 +13,24 @@
 
 int main(int argc, char** argv)
 {
+  //////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// String to Order map ////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
+  std::vector<std::string> order_name;
+  std::unordered_map<std::string, chiral::Order> order_map;
+
+  order_map["lo"] = chiral::Order::lo;
+  order_name.push_back("lo");
+  order_map["nlo"] = chiral::Order::nlo;
+  order_name.push_back("nlo");
+  order_map["n2lo"] = chiral::Order::n2lo;
+  order_name.push_back("n2lo");
+  order_map["n3lo"] = chiral::Order::n3lo;
+  order_name.push_back("n3lo");
+  order_map["n4lo"] = chiral::Order::n4lo;
+  order_name.push_back("n4lo");
+
   //////////////////////////////////////////////////////////////////////////////
   /////////////// Application description and input parameters /////////////////
   //////////////////////////////////////////////////////////////////////////////
@@ -115,7 +136,7 @@ int main(int argc, char** argv)
   std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;
 
   // Iterate over chiral orders
-  for (auto it = chiral::order_map.begin(); it != chiral::order_map.end(); ++it)
+  for (auto current_order : order_name)
     {
       // Iterate over isospin
       for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
@@ -140,13 +161,13 @@ int main(int argc, char** argv)
                       const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
 
                       // Calculate matrix element
-                      auto order_e = it->second;
+                      auto order_enum = order_map[current_order];
 
                       temp_matrices[T0][sector_index](bra_index, ket_index) =
-                        op->ReducedMatrixElement(order_e, bra_state, ket_state, osc_b);
+                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b);
 
                       matrices[T0][sector_index](bra_index, ket_index) +=
-                        op->ReducedMatrixElement(order_e, bra_state, ket_state, osc_b);
+                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b);
                     }
                 }
             }
@@ -154,14 +175,14 @@ int main(int argc, char** argv)
         }
       // Write the contributions at each order
       std::string order_file =
-        name + "_2b_rel_" + it->first + "_N" + std::to_string(op_params.Nmax)
-        + "_J" + std::to_string(op_params.Jmax) + "_hw" + hw_str
-        + "_" + time_str + ".txt";
+        name + "_2b_rel_" + current_order + "_N" + std::to_string(op_params.Nmax)
+          + "_J" + std::to_string(op_params.Jmax) + "_hw" + hw_str
+        + "_" + time_str + ".dat";
       basis::WriteRelativeOperatorLSJT(order_file, space, op_labels,
                                        sectors, temp_matrices, true);
 
       // Break if required order has been reached
-      if (it == chiral::order_map.find(order))
+      if (current_order == order)
         break;
     }
 
@@ -170,7 +191,7 @@ int main(int argc, char** argv)
     name + "_2b_rel_" + order + "_cumulative"
     + "_N" + std::to_string(op_params.Nmax)
     + "_J" + std::to_string(op_params.Jmax)
-    + "_hw" + hw_str + "_" + time_str + ".txt";
+    + "_hw" + hw_str + "_" + time_str + ".dat";
   basis::WriteRelativeOperatorLSJT(cumulative_file, space, op_labels,
                                    sectors, matrices, true);
 }
