@@ -2,18 +2,28 @@
 #define UTILITY_H
 
 #include <memory>
+#include <cmath>
+#include "basis/am/halfint.h"
+#include "basis/am/wigner_gsl.h"
 
 namespace util
 {
   inline int KroneckerDelta(int a, int b) { return a == b; };
 
-  inline double PauliDotProduct(int s)
+  inline double PauliDotProduct(int si, int sf)
   {
-    // Returns the matrix element of \sigma_1 \dot \sigma_2.
-    if (s == 0)
-      return -3.0;
-    if (s == 1)
-      return 1.0;
+    // Returns the reduced matrix element of \sigma_1 \cdot \sigma_2.
+
+    return (-3 * (si == 0) + (si == 1)) * (si == sf);
+  }
+
+  inline double TotalSpin(int li, int si, int ji, int lf, int sf, int jf)
+  {
+    // Returns the reduced matrix element of S = \sigma_1 + \sigma_2 in the
+    // |lsj> basis.
+    if (si == 1 && sf == 1)
+      return (std::sqrt(6) * std::pow(-1, jf + li) * Hat(ji)
+              * am::Wigner6J(1, jf, li, ji, 1, 1) * (li == lf));
     return 0;
   }
 

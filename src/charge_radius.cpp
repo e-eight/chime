@@ -137,8 +137,8 @@ namespace chiral
     norm_product *= (osc_b * osc_b);
 
     // Spin-Isospin matrix element
-    auto spin_element = util::PauliDotProduct(si);
-    auto isospin_element = util::PauliDotProduct(ti);
+    auto spin_element = util::PauliDotProduct(si, sf);
+    auto isospin_element = util::PauliDotProduct(ti, tf);
 
     // Clebsch product
     double clebsch_product = 0;
