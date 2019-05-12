@@ -2,37 +2,41 @@
 #define UTILITY_H
 
 #include <memory>
-#include <cmath>
-#include "basis/am/halfint.h"
-#include "basis/am/wigner_gsl.h"
+#include <map>
+#include <tuple>
 
 namespace util
 {
   inline int KroneckerDelta(int a, int b) { return a == b; };
 
-  inline double PauliDotProduct(int si, int sf)
-  {
-    // Returns the reduced matrix element of \sigma_1 \cdot \sigma_2.
-
-    return (-3 * (si == 0) + (si == 1)) * (si == sf);
-  }
-
-  inline double TotalSpin(int li, int si, int ji, int lf, int sf, int jf)
-  {
-    // Returns the reduced matrix element of S = \sigma_1 + \sigma_2 in the
-    // |lsj> basis.
-    if (si == 1 && sf == 1)
-      return (std::sqrt(6) * std::pow(-1, jf + li) * Hat(ji)
-              * am::Wigner6J(1, jf, li, ji, 1, 1) * (li == lf));
-    return 0;
-  }
-
   // make_unique, because C++11 does not have one.
   // https://herbsutter.com/gotw/_102/ for details.
-  template <class T, class ...Args>
+  template <class T, class... Args>
   std::unique_ptr<T> make_unique(Args&&... args)
   {
     return std::unique_ptr<T>( new T( std::forward<Args>(args)... ));
+  }
+
+  // General memoizer.
+  // https://stackoverflow.com/a/17807129, and
+  // http://slackito.com/2011/03/17/automatic-memoization-in-cplusplus0x/
+  // for details.
+  template <class T, class... Args>
+  auto memoize(T (*fn)(Args...))
+  {
+    std::map<std::tuple<Args...>, T> table;
+    return [fn, table](Args... args) mutable -> T
+           {
+             auto index = std::make_tuple(args...);
+             auto found = table.find(index);
+             if (found == table.end())
+               {
+                 auto result = fn(args...);
+                 table[index] = fn(args...);
+                 return result;
+               }
+             return found->second;
+           };
   }
 }
 #endif

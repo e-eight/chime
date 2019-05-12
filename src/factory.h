@@ -16,7 +16,7 @@ namespace factory
   class Factory
   {
   public:
-    template <class ... T>
+    template <class... T>
     static std::unique_ptr<Base> make(const std::string &s, T&&... args)
     {
       return data().at(s)(std::forward<T>(args)...);
@@ -31,7 +31,10 @@ namespace factory
         const auto name = T::Name();
         Factory::data()[name] = [](Args... args) -> std::unique_ptr<Base>
           {
-           return util::make_unique<T>(std::forward<Args>(args)...);
+           // Use the util version of make_unique if using a compiler that does
+           // not support C++14.
+           // return util::make_unique<T>(std::forward<Args>(args)...);
+           return std::make_unique<T>(std::forward<Args>(args)...);
           };
         return true;
       }

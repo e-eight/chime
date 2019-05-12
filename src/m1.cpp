@@ -1,8 +1,8 @@
 #include <cmath>
+#include <unordered_map>
 #include <gsl/gsl_sf_laguerre.h>
 #include "basis/lsjt_scheme.h"
-#include "basis/am/halfint.h"
-#include "basis/am/wigner_gsl.h"
+#include "rme_extended.h"
 #include "constants.h"
 #include "utility.h"
 #include "chiral.h"
@@ -10,7 +10,6 @@
 #include "threedho.h"
 #include "m1.h"
 
-using namespace constants;
 namespace chiral
 {
   ///////////////////////////////////////////////////////////////////////////////
@@ -28,9 +27,55 @@ namespace chiral
   //////////////////////////// NLO Matrix Element ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
+  double NLO1Body(const basis::RelativeStateLSJT& bra,
+                  const basis::RelativeStateLSJT& ket,
+                  const double& osc_b);
+  double NLO2Body(const basis::RelativeStateLSJT& bra,
+                  const basis::RelativeStateLSJT& ket,
+                  const double& osc_b);
+
   double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
                                       const double& osc_b)
+  {
+    return NLO1Body(bra, ket, osc_b) + NLO2Body(bra, ket, osc_b);
+  }
+
+  double NLO1Body(const basis::RelativeStateLSJT& bra,
+                  const basis::RelativeStateLSJT& ket,
+                  const double& osc_b)
+  {
+    int ni = ket.N(), nf = bra.N();
+    int li = ket.L(), lf = bra.L();
+    int si = ket.S(), sf = bra.S();
+    int ji = ket.J(), jf = bra.J();
+    int ti = ket.T(), tf = bra.T();
+
+    // Radial quanta.
+    auto nri = (ni - li) / 2;
+    auto nrf = (nf - lf) / 2;
+
+    bool kronecker = (nri == nrf && li == lf && si == sf && ti == tf);
+    if (!kronecker)
+      return 0;
+
+    auto term1 = ((std::sqrt(li * (li + 1.0) * (2 * li + 1.0)) / 2)
+                  * std::pow(-1, ji + si + li + 1)
+                  * am::Wigner6J(li, jf, si, ji, li, 1));
+
+    auto term2 = (std::sqrt(6)
+                  * constants::isoscalar_nucleon_magnetic_moment
+                  * std::pow(-1, li + jf)
+                  * am::Wigner6J(1, jf, li, ji, 1, 1)
+                  * (si == 1 && sf == 1));
+
+    auto result = Hat(ji) * (term1 + term2);
+    return  result;
+  }
+
+  double NLO2Body(const basis::RelativeStateLSJT& bra,
+                  const basis::RelativeStateLSJT& ket,
+                  const double& osc_b)
   {
     return 0;
   }
@@ -50,10 +95,9 @@ namespace chiral
   /////////////////////////// N3LO Matrix Element ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  double IntegralA(int ni, int li, int nf, int lf);
-  double IntegralB(int ni, int li, int nf, int lf);
-  double SpaceSpinDotRME(int li, int si, int ji, int lf, int sf, int jf);
-  double Chi(int n, double result);
+  double IntegralA(int np, int lp, int n, int l);
+  double IntegralB(int np, int lp, int n, int l);
+  double Chi(int n);
 
   double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
@@ -73,34 +117,48 @@ namespace chiral
     if (!kronecker)
       return 0;
 
+    auto prefactor = 2 * constants::nucleon_mass_fm / std::pow(osc_b, 3);
+
     auto mpi_b = constants::pion_mass_fm * osc_b;
-    auto term1 = (IntegralA(ni, li, nf, lf)
-                  * util::TotalSpin(li, si, ji, lf, sf, jf));
-    auto term2 = (IntegralB(ni, li, nf, lf)
-                  * SpaceSpinDotRME(li, si, ji, lf, sf, jf));
+    auto term1 = (IntegralA(nrf, lf, nri, li)
+                  * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji));
+    auto term2 = (IntegralB(nrf, lf, nri, li)
+                  * am::LSCoupledSDotRhatRhatRME(lf, sf, jf, li, si, ji));
     auto term3 = term1 - term2;
-    term3 *= (util::PauliDotProduct(ti, tf)
+    term3 *= (am::PauliDotProductRME(ti, tf)
               * std::pow(mpi_b, 3) / (4 * constants::pi));
     auto term3_prefactor = (-4 * constants::gA * constants::d9_fm
                             / std::pow(constants::pion_decay_constant_fm, 2));
     term3 *= term3_prefactor;
 
-    auto term4 = (2 * constants::L2_fm * constants::sqrt2
-                  / constants::pi / constants::sqrtpi);
-    term4 *= (li == 0 && lf == 0 && ji == 1 && jf == 1);
-    term4 *= Chi(nf, 1) * Chi(ni, 1);
+    auto result = prefactor * term3;
 
-    auto prefactor = 2 * constants::nucleon_mass_fm / std::pow(osc_b, 3);
+    bool term4_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
+    if (term4_kronecker)
+      {
+        auto term4 = (2 * constants::L2_fm * constants::sqrt2
+                      / constants::pi / constants::sqrtpi);
+        term4 *= Chi(nrf) * Chi(nri);
 
-    auto result = prefactor * (term3 + term4);
+        result += prefactor * term4;
+      }
+
     return result;
   }
 
-  double Chi(int n, double result)
+  double Chi(int n)
   {
-    if (n == 1)
-      return result;
-    return Chi(n - 1, std::sqrt((2 * n + 1.0) / n) * result);
+    return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
+  }
+
+  double IntegralA(int np, int lp, int n, int l)
+  {
+    return 0;
+  }
+
+  double IntegralB(int np, int lp, int n, int l)
+  {
+    return 0;
   }
 
   ///////////////////////////////////////////////////////////////////////////////

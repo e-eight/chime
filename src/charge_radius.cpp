@@ -1,8 +1,7 @@
 #include <cmath>
 #include <gsl/gsl_sf_laguerre.h>
 #include "basis/lsjt_scheme.h"
-#include "basis/am/halfint.h"
-#include "basis/am/wigner_gsl.h"
+#include "rme_extended.h"
 #include "constants.h"
 #include "utility.h"
 #include "chiral.h"
@@ -10,7 +9,6 @@
 #include "threedho.h"
 #include "charge_radius.h"
 
-using namespace constants;
 namespace chiral
 {
   ///////////////////////////////////////////////////////////////////////////////
@@ -137,8 +135,8 @@ namespace chiral
     norm_product *= (osc_b * osc_b);
 
     // Spin-Isospin matrix element
-    auto spin_element = util::PauliDotProduct(si, sf);
-    auto isospin_element = util::PauliDotProduct(ti, tf);
+    auto spin_element = am::PauliDotProductRME(si, sf);
+    auto isospin_element = am::PauliDotProductRME(ti, tf);
 
     // Clebsch product
     double clebsch_product = 0;
