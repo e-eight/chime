@@ -40,7 +40,7 @@ namespace am
   inline double LSCoupledTotalSpinRME(const int& lp, const int& sp, const int& jp,
                                       const int& l, const int& s, const int& j)
   {
-    bool kronecker = lp == l && sp == 1 && s == 1;
+    bool kronecker = (lp == l && sp == 1 && s == 1);
     if (!kronecker)
       return 0;
     auto result = std::sqrt(6) * std::pow(-1, jp + l) * Hat(j);
@@ -64,7 +64,7 @@ namespace am
   inline double LSCoupledSDotRhatRhatRME(const int& lp, const int& sp, const int& jp,
                                          const int& l, const int& s, const int& j)
   {
-    bool kronecker = sp == 1 && s == 1 && am::AllowedTriangle(j, jp, 1);
+    bool kronecker = (sp == 1 && s == 1 && am::AllowedTriangle(j, jp, 1));
     if (!kronecker)
       return 0;
     double result = 0;
