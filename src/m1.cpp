@@ -134,22 +134,23 @@ namespace chiral
                                         / std::pow(constants::pion_decay_constant_fm, 2));
     one_pion_exchange_term *= one_pion_exchange_prefactor;
 
-    auto result = overall_prefactor * one_pion_exchange_term;
+    auto result = one_pion_exchange_term;
 
     // Contact term with d9 and L2.
-    bool contact_term_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
-    if (contact_term_kronecker)
-      {
-        auto d9_contact_term = ((one_pion_exchange_prefactor / 3)
-                                * am::PauliDotProductRME(ti, tf));
-        auto L2_contact_term = (2 * constants::L2_fm * constants::sqrt2
-                                / constants::pi / constants::sqrtpi);
-        auto contact_term = ((d9_contact_term + L2_contact_term)
-                             * Chi(nrf) * Chi(nri));
+    // bool contact_term_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
+    // if (contact_term_kronecker)
+    //   {
+    //     auto d9_contact_term = ((one_pion_exchange_prefactor / 3)
+    //                             * am::PauliDotProductRME(ti, tf));
+    //     auto L2_contact_term = (2 * constants::L2_fm * constants::sqrt2
+    //                             / constants::pi / constants::sqrtpi);
+    //     auto contact_term = ((d9_contact_term + L2_contact_term)
+    //                          * Chi(nrf) * Chi(nri));
 
-        result += overall_prefactor * contact_term;
-      }
+    //     result += contact_term;
+    //   }
 
+    result *= overall_prefactor;
     return result;
   }
 
@@ -158,8 +159,15 @@ namespace chiral
     return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
   }
 
+  double LenpicSemiLocalRegulator(double r, double R)
+  {
+    return std::pow(1 - std::exp(-r * r / R / R), 6);
+  }
+
   double IntegralA(int np, int lp, int n, int l, double scale)
   {
+    double regulator_R = 1.0; // (in fm)
+
     if (lp != l)
       return 0;
 
@@ -168,16 +176,21 @@ namespace chiral
     auto integrand =
       [&p](double y)
       {
-        return ((p.lp_ == 0 && p.l_ == 0)
-                ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                   * gsl_sf_laguerre_n(p.np_, 0.5, y)
-                   * gsl_sf_laguerre_n(p.n_, 0.5, y)
-                   * (1 - std::exp(-p.scale_ * std::sqrt(y))
-                      + p.scale_ * std::sqrt(y)))
-                : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                   * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-                   * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-                   * (1 + p.scale_ * std::sqrt(y))));
+        // return ((p.lp_ == 0 && p.l_ == 0)
+        //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+        //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
+        //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
+        //            * (1 - std::exp(-p.scale_ * std::sqrt(y))
+        //               + p.scale_ * std::sqrt(y))) //
+        //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+        //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+        //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+        //            * (1 + p.scale_ * std::sqrt(y))));
+        return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+                * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+                * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+                * (1 + p.scale_ * std::sqrt(y))
+                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9 * constants::pion_mass_fm / p.scale_));
       };
 
     double a = 0;
@@ -201,18 +214,23 @@ namespace chiral
     auto integrand =
       [&p](double y)
       {
-        return ((p.lp_ == 0 && p.l_ == 0)
-                ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                   * gsl_sf_laguerre_n(p.np_, 0.5, y)
-                   * gsl_sf_laguerre_n(p.n_, 0.5, y)
-                   * (3 - 3 * std::exp(-p.scale_ * std::sqrt(y))
-                      + 3 * p.scale_ * std::sqrt(y)
-                      + p.scale_ * p.scale_ * y))
-                : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                   * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-                   * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-                   * (3 + 3 * p.scale_ * std::sqrt(y)
-                      + p.scale_ * p.scale_ * y)));
+        // return ((p.lp_ == 0 && p.l_ == 0)
+        //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+        //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
+        //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
+        //            * (3 - 3 * std::exp(-p.scale_ * std::sqrt(y))
+        //               + 3 * p.scale_ * std::sqrt(y)
+        //               + p.scale_ * p.scale_ * y))
+        //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+        //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+        //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+        //            * (3 + 3 * p.scale_ * std::sqrt(y)
+        //               + p.scale_ * p.scale_ * y)));
+        return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+                * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+                * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+                * (3 + 3 * p.scale_ * std::sqrt(y) + p.scale_ * p.scale_ * y)
+                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9 * constants::pion_mass_fm / p.scale_));
       };
 
     double a = 0;
