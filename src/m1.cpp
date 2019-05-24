@@ -230,7 +230,8 @@ namespace chiral
                 * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
                 * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
                 * (3 + 3 * p.scale_ * std::sqrt(y) + p.scale_ * p.scale_ * y)
-                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9 * constants::pion_mass_fm / p.scale_));
+                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9
+                                           * constants::pion_mass_fm / p.scale_));
       };
 
     double a = 0;
