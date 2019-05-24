@@ -17,7 +17,9 @@ namespace chiral
 
   double ChargeRadiusOperator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                const basis::RelativeStateLSJT& ket,
-                                               const double& osc_b)
+                                               const double& osc_b,
+                                               const bool& regularize,
+                                               const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -54,7 +56,9 @@ namespace chiral
 
   double ChargeRadiusOperator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                 const basis::RelativeStateLSJT& ket,
-                                                const double& osc_b)
+                                                const double& osc_b,
+                                                const bool& regularize,
+                                                const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -88,7 +92,9 @@ namespace chiral
 
   double ChargeRadiusOperator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const bool& regularize,
+                                                 const double& regulator)
   {
     return 0;
   }
@@ -99,7 +105,9 @@ namespace chiral
 
   double ChargeRadiusOperator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const bool& regularize,
+                                                 const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -161,7 +169,9 @@ namespace chiral
 
   double ChargeRadiusOperator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const bool& regularize,
+                                                 const double& regulator)
   {
     return 0;
   }

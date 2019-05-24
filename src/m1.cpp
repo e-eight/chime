@@ -18,7 +18,9 @@ namespace chiral
 
   double M1Operator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const double& osc_b)
+                                     const double& osc_b,
+                                     const bool& regularize,
+                                     const double& regulator)
   {
     return 0;
   }
@@ -29,21 +31,30 @@ namespace chiral
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
-                  const double& osc_b);
+                  const double& osc_b,
+                  const bool& regularize,
+                  const double& regulator);
   double NLO2Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
-                  const double& osc_b);
+                  const double& osc_b,
+                  const bool& regularize,
+                  const double& regulator);
 
   double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
-                                      const double& osc_b)
+                                      const double& osc_b,
+                                      const bool& regularize,
+                                      const double& regulator)
   {
-    return NLO1Body(bra, ket, osc_b) + NLO2Body(bra, ket, osc_b);
+    return (NLO1Body(bra, ket, osc_b, regularize, regulator)
+            + NLO2Body(bra, ket, osc_b, regularize, regulator));
   }
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
-                  const double& osc_b)
+                  const double& osc_b,
+                  const bool& regularize,
+                  const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -75,7 +86,9 @@ namespace chiral
 
   double NLO2Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
-                  const double& osc_b)
+                  const double& osc_b,
+                  const bool& regularize,
+                  const double& regulator)
   {
     return 0;
   }
@@ -86,7 +99,9 @@ namespace chiral
 
   double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b)
+                                       const double& osc_b,
+                                       const bool& regularize,
+                                       const double& regulator)
   {
     return 0;
   }
@@ -95,13 +110,17 @@ namespace chiral
   /////////////////////////// N3LO Matrix Element ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  double IntegralA(int np, int lp, int n, int l, double scale);
-  double IntegralB(int np, int lp, int n, int l, double scale);
-  double Chi(int n);
+  struct gsl_params { int nrf; int nri; int lf; int li; double osc_b; };
+  double IntegralA(const gsl_params& p, const bool& regularize, const double& regulator);
+  double IntegralB(const gsl_params& p, const bool& regularize, const double& regulator);
+  double IntegralM(const gsl_params& p, const bool& regularize, const double& regulator);
+  double Chi(const int n);
 
   double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b)
+                                       const double& osc_b,
+                                       const bool& regularize,
+                                       const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -118,14 +137,14 @@ namespace chiral
     if (!kronecker)
       return 0;
 
-    auto overall_prefactor = (2 * constants::nucleon_mass_fm
-                              / std::pow(osc_b, 3));
+    auto overall_prefactor = (2 * constants::nucleon_mass_fm / std::pow(osc_b, 3));
 
     // One pion exchange term, with d9.
-    auto mpi_b = constants::pion_mass_fm * osc_b;
-    auto term1 = (IntegralA(nrf, lf, nri, li, mpi_b)
+    gsl_params p {nf, ni, lf, li, osc_b};
+
+    auto term1 = (IntegralA(p, regularize, regulator)
                   * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji));
-    auto term2 = (IntegralB(nrf, lf, nri, li, mpi_b)
+    auto term2 = (IntegralB(p, regularize, regulator)
                   * am::LSCoupledSDotRhatRhatRME(lf, sf, jf, li, si, ji));
     auto one_pion_exchange_term = term1 - term2;
     one_pion_exchange_term *= (am::PauliDotProductRME(ti, tf)
@@ -137,18 +156,18 @@ namespace chiral
     auto result = one_pion_exchange_term;
 
     // Contact term with d9 and L2.
-    // bool contact_term_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
-    // if (contact_term_kronecker)
-    //   {
-    //     auto d9_contact_term = ((one_pion_exchange_prefactor / 3)
-    //                             * am::PauliDotProductRME(ti, tf));
-    //     auto L2_contact_term = (2 * constants::L2_fm * constants::sqrt2
-    //                             / constants::pi / constants::sqrtpi);
-    //     auto contact_term = ((d9_contact_term + L2_contact_term)
-    //                          * Chi(nrf) * Chi(nri));
+    bool contact_term_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
+    if (contact_term_kronecker)
+      {
+        auto d9_contact_term = ((one_pion_exchange_prefactor / 3)
+                                * am::PauliDotProductRME(ti, tf));
+        auto L2_contact_term = (2 * constants::L2_fm * constants::sqrt2
+                                / std::pow(constants::sqrtpi, 3));
+        auto contact_term = ((d9_contact_term + L2_contact_term)
+                             * IntegralM(p, regularize, regulator));
 
-    //     result += contact_term;
-    //   }
+        result += contact_term;
+      }
 
     result *= overall_prefactor;
     return result;
@@ -159,22 +178,25 @@ namespace chiral
     return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
   }
 
-  double LenpicSemiLocalRegulator(double r, double R)
+  double LenpicLocalRegulator(const bool& regularize,
+                              const double& r,
+                              const double& R)
   {
-    return std::pow(1 - std::exp(-r * r / R / R), 6);
+    return regularize ? std::pow(1 - std::exp(-r * r / R / R), 6) : 1;
   }
 
-  double IntegralA(int np, int lp, int n, int l, double scale)
+  double IntegralA(const gsl_params& p,
+                   const bool& regularize,
+                   const double& regulator)
   {
-    double regulator_R = 1.0; // (in fm)
-
     if (lp != l)
       return 0;
 
-    struct params { int np_; int n_; int lp_; int l_; double scale_; };
-    params p = { np, n, lp, l, scale };
+    double scaled_R = regulator / p.osc_b;
+    auto mpi_b = constants::pion_mass_fm * p.osc_b;
+
     auto integrand =
-      [&p](double y)
+      [&p, &regularize, &scaled_R, &mpi_b](double y)
       {
         // return ((p.lp_ == 0 && p.l_ == 0)
         //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
@@ -186,11 +208,11 @@ namespace chiral
         //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
         //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
         //            * (1 + p.scale_ * std::sqrt(y))));
-        return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-                * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-                * (1 + p.scale_ * std::sqrt(y))
-                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9 * constants::pion_mass_fm / p.scale_));
+        return ((std::exp(-mpi_b * std::sqrt(y)) / y)
+                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
+                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
+                * (1 + mpi_b * std::sqrt(y))
+                * LenpicSemiLocalRegulator(regularize, std::sqrt(y), scaled_R));
       };
 
     double a = 0;
@@ -254,7 +276,9 @@ namespace chiral
 
   double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b)
+                                       const double& osc_b,
+                                       const bool& regularize,
+                                       const double& regulator)
   {
     return 0;
   }
