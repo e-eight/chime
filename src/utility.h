@@ -1,20 +1,36 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <cmath>
 #include <memory>
 #include <map>
 #include <tuple>
 
 namespace util
 {
-  inline int KroneckerDelta(int a, int b) { return a == b; };
-
   // make_unique, because C++11 does not have one.
   // https://herbsutter.com/gotw/_102/ for details.
   template <class T, class... Args>
   std::unique_ptr<T> make_unique(Args&&... args)
   {
     return std::unique_ptr<T>( new T( std::forward<Args>(args)... ));
+  }
+
+  // Lenpic coordinate space semi local regulator.
+  static inline double LenpicSemiLocalRegulator(const double r, const double R)
+  {
+    return std::pow(1 - std::exp(-r * r / R / R), 6);
+  }
+
+  // T_\pi and Z_\pi appearing in multiple operator matrix elements.
+  static inline double ZPi(const double y, const double scale)
+  {
+    double inv_scaled_y = 1.0 / (scale * std::sqrt(y));
+    return (inv_scaled_y * (inv_scaled_y + 1.0));
+  }
+  static inline double TPi(const double y, const double scale)
+  {
+    return (1 + 3 * ZPi(y, scale));
   }
 
   // General memoizer.

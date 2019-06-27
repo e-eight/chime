@@ -8,6 +8,7 @@
 #define RME_EXTENDED_H
 
 #include "basis/am/rme.h"
+#include "constants.h"
 
 namespace am
 {
@@ -25,8 +26,8 @@ namespace am
     return result;
   }
 
-  // Calculates reduced matrix element of the total spin operator of a two
-  // nucleon system in the LS-coupling scheme.
+  // Calculates reduced matrix element of the total spin operator \vec{S} of a
+  // two nucleon system in the LS-coupling scheme.
   //
   // Arguments:
   //   lp(int): Final orbital angular momentum
@@ -48,9 +49,7 @@ namespace am
     return result;
   }
 
-  // Calculates reduced matrix element of \vec{S}.\hat{r}\hat{r}, where \hat{r}
-  // is the unit vector in the radial direction, and \vec{S} is the total spin of
-  // the two nucleon system, in the LS-coupling scheme.
+  // Calculates reduced matrix element of [\vec{S} ⊗ Y_0(\hat{r})]_1.
   //
   // Arguments:
   //   lp(int): Final orbital angular momentum
@@ -61,23 +60,35 @@ namespace am
   //   j(int) : Initial total angular momentum
   // Returns:
   //   reduced matrix element in coupled LS basis (double), Rose convention
-  inline double LSCoupledSDotRhatRhatRME(const int& lp, const int& sp, const int& jp,
-                                         const int& l, const int& s, const int& j)
+  inline double LSCoupledTotalSpinY0Rank1RME(const int& lp, const int& sp, const int& jp,
+                                             const int& l, const int& s, const int& j)
   {
-    bool kronecker = (sp == 1 && s == 1 && am::AllowedTriangle(j, jp, 1));
+    bool kronecker = (lp == l && sp == 1 && s == 1);
     if (!kronecker)
       return 0;
-    double result = 0;
-    for (int k = std::abs(l - 1); k <= l + 1; ++k)
-      {
-        auto product6j = (am::Wigner6J(lp, 1, jp, 1, k, 1)
-                          * am::Wigner6J(1, k, jp, 1, j, l));
-        auto product3j = (am::Wigner3J(lp, 1, k, 0, 0, 0)
-                          * am::Wigner3J(k, 1, l, 0, 0, 0));
-        result += Hat(k) * Hat(k) * product6j * product3j;
-      }
-    result *= Hat(j) * Hat(lp) * Hat(l);
-    result *= std::sqrt(6) * std::pow(-1, jp + j);
+    auto result = Hat(j) * std::pow(-1, l + jp) * am::Wigner6J(1, j, l, jp, 1, 1);
+    result *= std::sqrt(3.0 / (2.0 * constants::pi));
+    return result;
+  }
+
+  // Calculates reduced matrix element of [\vec{S} ⊗ Y_2(\hat{r})]_1.
+  //
+  // Arguments:
+  //   lp(int): Final orbital angular momentum
+  //   sp(int): Final spin
+  //   jp(int): Final total angular momentum
+  //   l(int) : Initial orbital angular momentum
+  //   s(int) : Initial spin
+  //   j(int) : Initial total angular momentum
+  // Returns:
+  //   reduced matrix element in coupled LS basis (double), Rose convention
+  inline double LSCoupledTotalSpinY2Rank1RME(const int& lp, const int& sp, const int& jp,
+                                             const int& l, const int& s, const int& j)
+  {
+    auto result = Hat(j) * Hat(l) * Hat(lp) * std::pow(-1, l);
+    result *= am::Wigner9J(l, j, 1, lp, jp, 1, 2, 1, 1);
+    result *= am::Wigner3J(l, 2, lp, 0, 0, 0);
+    result *= 3 * std::sqrt(5 / (2 * constants::pi));
     return result;
   }
 }

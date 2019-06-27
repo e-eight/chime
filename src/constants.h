@@ -20,6 +20,8 @@ namespace constants
   constexpr double reduced_nucleon_mass_fm = reduced_nucleon_mass_MeV / hbarc;
   constexpr double nucleon_mass_MeV = reduced_nucleon_mass_MeV * 2;
   constexpr double nucleon_mass_fm = reduced_nucleon_mass_fm * 2;
+  constexpr double nuclear_magneton_MeV = 1.0 / (nucleon_mass_MeV * 2); // (e = 1)
+  constexpr double nuclear_magneton_fm = 1.0 / (nucleon_mass_fm * 2); // (e = 1)
 
   // Low energy constants
   constexpr double isoscalar_nucleon_charge_radius_sq_fm = 0.603729; // (in fm^2)

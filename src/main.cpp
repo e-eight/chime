@@ -45,7 +45,6 @@ int main(int argc, char** argv)
   int Jmax = 1;
   int T0_min = 0;
   int T0_max = 0;
-  bool regularize = false;
   double regulator = 0.9; // (LENPIC regulator in fm)
 
   app.add_option("-n,--name", name, "Name of operator.");
@@ -55,7 +54,6 @@ int main(int argc, char** argv)
   app.add_option("-J,--Jmax", Jmax, "Jmax truncation of basis.");
   app.add_option("-t,--T0_min", T0_min, "Minimum isospin component of operator.");
   app.add_option("-T,--T0_max", T0_max, "Maximum isospin component of operator.");
-  app.add_option("-r,--regularize", regularize, "Include LENPIC regulator? yes/[no]");
   app.add_option("-R,--regulator", regulator, "Value of LENPIC regulator, in fermi.");
 
   app.set_config("-c,--config");
@@ -169,10 +167,10 @@ int main(int argc, char** argv)
                       auto order_enum = order_map[current_order];
 
                       temp_matrices[T0][sector_index](bra_index, ket_index) =
-                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regularize, regulator);
+                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regulator);
 
                       matrices[T0][sector_index](bra_index, ket_index) +=
-                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regularize, regulator);
+                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regulator);
                     }
                 }
             }

@@ -19,7 +19,6 @@ namespace chiral
   double M1Operator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
-                                     const bool& regularize,
                                      const double& regulator)
   {
     return 0;
@@ -32,28 +31,24 @@ namespace chiral
   double NLO1Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
                   const double& osc_b,
-                  const bool& regularize,
                   const double& regulator);
   double NLO2Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
                   const double& osc_b,
-                  const bool& regularize,
                   const double& regulator);
 
   double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
                                       const double& osc_b,
-                                      const bool& regularize,
                                       const double& regulator)
   {
-    return (NLO1Body(bra, ket, osc_b, regularize, regulator)
-            + NLO2Body(bra, ket, osc_b, regularize, regulator));
+    return (NLO1Body(bra, ket, osc_b, regulator)
+            + NLO2Body(bra, ket, osc_b, regulator));
   }
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
                   const double& osc_b,
-                  const bool& regularize,
                   const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
@@ -87,7 +82,6 @@ namespace chiral
   double NLO2Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
                   const double& osc_b,
-                  const bool& regularize,
                   const double& regulator)
   {
     return 0;
@@ -100,7 +94,6 @@ namespace chiral
   double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const double& osc_b,
-                                       const bool& regularize,
                                        const double& regulator)
   {
     return 0;
@@ -110,16 +103,14 @@ namespace chiral
   /////////////////////////// N3LO Matrix Element ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  struct gsl_params { int nrf; int nri; int lf; int li; double osc_b; };
-  double IntegralA(const gsl_params& p, const bool& regularize, const double& regulator);
-  double IntegralB(const gsl_params& p, const bool& regularize, const double& regulator);
-  double IntegralM(const gsl_params& p, const bool& regularize, const double& regulator);
-  double Chi(const int n);
+  struct gsl_params { int nrf; int nri; int lf; int li; double scale; double regulator; };
+  double IntegralA(const gsl_params& p);
+  double IntegralB(const gsl_params& p);
+  double IntegralC(const gsl_params& p);
 
   double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const double& osc_b,
-                                       const bool& regularize,
                                        const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
@@ -137,138 +128,162 @@ namespace chiral
     if (!kronecker)
       return 0;
 
-    auto overall_prefactor = (2 * constants::nucleon_mass_fm / std::pow(osc_b, 3));
+    auto mpi_b = constants::pion_mass_fm * osc_b;
+    auto regulator_b = regulator / osc_b;
+    auto d9_factor = ((4 * constants::d9_fm * constants::gA
+                       / std::pow(constants::pion_decay_constant_fm, 2))
+                      * am::PauliDotProductRME(tf, ti));
+    gsl_params p {nrf, nri, lf, li, mpi_b, regulator_b};
 
-    // One pion exchange term, with d9.
-    gsl_params p {nf, ni, lf, li, osc_b};
-
-    auto term1 = (IntegralA(p, regularize, regulator)
-                  * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji));
-    auto term2 = (IntegralB(p, regularize, regulator)
-                  * am::LSCoupledSDotRhatRhatRME(lf, sf, jf, li, si, ji));
-    auto one_pion_exchange_term = term1 - term2;
-    one_pion_exchange_term *= (am::PauliDotProductRME(ti, tf)
-                               * std::pow(mpi_b, 3) / (4 * constants::pi));
-    auto one_pion_exchange_prefactor = (-4 * constants::gA * constants::d9_fm
-                                        / std::pow(constants::pion_decay_constant_fm, 2));
-    one_pion_exchange_term *= one_pion_exchange_prefactor;
-
-    auto result = one_pion_exchange_term;
+    // One pion exchange term with d9.
+    auto term1 = ((std::sqrt(1.0 / 3.0)
+                   * am::LSCoupledTotalSpinY0Rank1RME(lf, sf, jf, li, si, ji))
+                  - (std::sqrt(2.0 / 3.0)
+                     * am::LSCoupledTotalSpinY2Rank1RME(lf, sf, jf, li, si, ji)));
+    term1 *= (IntegralA(p) * std::sqrt(4.0 * constants::pi / 3.0));
+    auto term2 = IntegralB(p) * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji);
+    auto one_pion_exchange_term = d9_factor * (term1 - term2);
+    one_pion_exchange_term *= (std::pow(constants::pion_mass_fm, 3)
+                               / (4 * constants::pi));
 
     // Contact term with d9 and L2.
-    bool contact_term_kronecker = (li == 0 && lf == 0 && ji == 1 && jf == 1);
-    if (contact_term_kronecker)
+    double contact_term = 0;
+    if (li == 0 && lf == 0)
       {
-        auto d9_contact_term = ((one_pion_exchange_prefactor / 3)
-                                * am::PauliDotProductRME(ti, tf));
-        auto L2_contact_term = (2 * constants::L2_fm * constants::sqrt2
-                                / std::pow(constants::sqrtpi, 3));
-        auto contact_term = ((d9_contact_term + L2_contact_term)
-                             * IntegralM(p, regularize, regulator));
-
-        result += contact_term;
+        auto L2_d9_factor = (2 * constants::L2_fm - (d9_factor / 3));
+        auto scaled_IntegralC = IntegralC(p);
+        scaled_IntegralC /= (4 * std::pow(constants::pi, 1.5)
+                             * regulator * osc_b * osc_b);
+        contact_term = (L2_d9_factor * scaled_IntegralC
+                        * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji));
       }
 
-    result *= overall_prefactor;
+    // Total value in terms of nuclear magneton.
+    auto result = one_pion_exchange_term + contact_term;
+    result /= constants::nuclear_magneton_fm;
     return result;
   }
 
-  double Chi(int n)
+  // double Chi(int n)
+  // {
+  //   return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
+  // }
+
+  double IntegralA(const gsl_params& p)
   {
-    return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
-  }
-
-  double LenpicLocalRegulator(const bool& regularize,
-                              const double& r,
-                              const double& R)
-  {
-    return regularize ? std::pow(1 - std::exp(-r * r / R / R), 6) : 1;
-  }
-
-  double IntegralA(const gsl_params& p,
-                   const bool& regularize,
-                   const double& regulator)
-  {
-    if (lp != l)
-      return 0;
-
-    double scaled_R = regulator / p.osc_b;
-    auto mpi_b = constants::pion_mass_fm * p.osc_b;
-
-    auto integrand =
-      [&p, &regularize, &scaled_R, &mpi_b](double y)
-      {
-        // return ((p.lp_ == 0 && p.l_ == 0)
-        //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-        //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
-        //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
-        //            * (1 - std::exp(-p.scale_ * std::sqrt(y))
-        //               + p.scale_ * std::sqrt(y))) //
-        //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-        //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-        //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-        //            * (1 + p.scale_ * std::sqrt(y))));
-        return ((std::exp(-mpi_b * std::sqrt(y)) / y)
-                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
-                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
-                * (1 + mpi_b * std::sqrt(y))
-                * LenpicSemiLocalRegulator(regularize, std::sqrt(y), scaled_R));
-      };
-
-    double a = 0;
-    double b = 1;
-    double alpha = (lp + l) / 2.0;
-    int nodes = (np + n) / 2 + 1;
-    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
-
-    auto norm_product = (threedho::CoordinateSpaceNorm(n, l, 1)
-                         * threedho::CoordinateSpaceNorm(np, lp, 1));
-    norm_product /= (2 * std::pow(scale, 3));
-
-    auto result = norm_product * integral;
-    return integral;
-  }
-
-  double IntegralB(int np, int lp, int n, int l, double scale)
-  {
-    struct params { int np_; int n_; int lp_; int l_; double scale_; };
-    params p = { np, n, lp, l, scale };
     auto integrand =
       [&p](double y)
       {
-        // return ((p.lp_ == 0 && p.l_ == 0)
-        //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-        //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
-        //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
-        //            * (3 - 3 * std::exp(-p.scale_ * std::sqrt(y))
-        //               + 3 * p.scale_ * std::sqrt(y)
-        //               + p.scale_ * p.scale_ * y))
-        //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-        //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-        //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-        //            * (3 + 3 * p.scale_ * std::sqrt(y)
-        //               + p.scale_ * p.scale_ * y)));
-        return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-                * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-                * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-                * (3 + 3 * p.scale_ * std::sqrt(y) + p.scale_ * p.scale_ * y)
-                * LenpicSemiLocalRegulator(std::sqrt(y), 0.9
-                                           * constants::pion_mass_fm / p.scale_));
+        return (std::exp(-p.scale * std::sqrt(y))
+                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
+                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
+                * util::TPi(y, p.scale)
+                * util::LenpicSemiLocalRegulator(std::sqrt(y), p.regulator));
       };
 
     double a = 0;
     double b = 1;
-    double alpha = (lp + l) / 2.0;
-    int nodes = (np + n) / 2 + 1;
+    double alpha = (p.lf + p.li) / 2.0;
+    int nodes = (p.nrf + p.nri) / 2 + 1;
     auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
 
-    auto norm_product = (threedho::CoordinateSpaceNorm(n, l, 1)
-                         * threedho::CoordinateSpaceNorm(np, lp, 1));
-    norm_product /= (2 * std::pow(scale, 3));
+    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
+                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
+    norm_product /= (2 * p.scale);
 
     auto result = norm_product * integral;
     return integral;
   }
+
+  double IntegralB(const gsl_params& p)
+  {
+    auto integrand =
+      [&p](double y)
+      {
+        return (std::exp(-p.scale * std::sqrt(y))
+                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
+                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
+                * util::ZPi(y, p.scale)
+                * util::LenpicSemiLocalRegulator(std::sqrt(y), p.regulator));
+      };
+
+    double a = 0;
+    double b = 1;
+    double alpha = (p.lf + p.li) / 2.0;
+    int nodes = (p.nrf + p.nri) / 2 + 1;
+    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
+
+    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
+                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
+    norm_product /= (2 * p.scale);
+
+    auto result = norm_product * integral;
+    return integral;
+  }
+
+  double IntegralC(const gsl_params& p)
+  {
+    auto integrand =
+      [&p](double y)
+      {
+        return (std::exp(-y / std::pow(p.regulator, 2))
+                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
+                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y));
+      };
+
+    double a = 0;
+    double b = 1;
+    double alpha = (p.lf + p.li - 1) / 2.0;
+    int nodes = (p.nrf + p.nri) / 2 + 1;
+    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
+
+    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
+                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
+
+    auto result = norm_product * integral;
+    return integral;
+  }
+
+  // double IntegralB(int np, int lp, int n, int l, double scale)
+  // {
+  //   struct params { int np_; int n_; int lp_; int l_; double scale_; };
+  //   params p = { np, n, lp, l, scale };
+  //   auto integrand =
+  //     [&p](double y)
+  //     {
+  //       // return ((p.lp_ == 0 && p.l_ == 0)
+  //       //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+  //       //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
+  //       //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
+  //       //            * (3 - 3 * std::exp(-p.scale_ * std::sqrt(y))
+  //       //               + 3 * p.scale_ * std::sqrt(y)
+  //       //               + p.scale_ * p.scale_ * y))
+  //       //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+  //       //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+  //       //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+  //       //            * (3 + 3 * p.scale_ * std::sqrt(y)
+  //       //               + p.scale_ * p.scale_ * y)));
+  //       return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
+  //               * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
+  //               * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
+  //               * (3 + 3 * p.scale_ * std::sqrt(y) + p.scale_ * p.scale_ * y)
+  //               * LenpicSemiLocalRegulator(std::sqrt(y), 0.9
+  //                                          * constants::pion_mass_fm / p.scale_));
+  //     };
+
+  //   double a = 0;
+  //   double b = 1;
+  //   double alpha = (lp + l) / 2.0;
+  //   int nodes = (np + n) / 2 + 1;
+  //   auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
+
+  //   auto norm_product = (threedho::CoordinateSpaceNorm(n, l, 1)
+  //                        * threedho::CoordinateSpaceNorm(np, lp, 1));
+  //   norm_product /= (2 * std::pow(scale, 3));
+
+  //   auto result = norm_product * integral;
+  //   return integral;
+  // }
 
   ///////////////////////////////////////////////////////////////////////////////
   /////////////////////////// N4LO Matrix Element ///////////////////////////////
@@ -277,7 +292,6 @@ namespace chiral
   double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const double& osc_b,
-                                       const bool& regularize,
                                        const double& regulator)
   {
     return 0;

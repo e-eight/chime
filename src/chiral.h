@@ -25,38 +25,32 @@ namespace chiral
     virtual double LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                    const basis::RelativeStateLSJT& ket,
                                    const double& osc_b,
-                                   const bool& regularize,
                                    const double& regulator) = 0;
 
     virtual double NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                     const basis::RelativeStateLSJT& ket,
                                     const double& osc_b,
-                                    const bool& regularize,
                                     const double& regulator) = 0;
 
     virtual double N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
-                                     const bool& regularize,
                                      const double& regulator) = 0;
 
     virtual double N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
-                                     const bool& regularize,
                                      const double& regulator) = 0;
 
     virtual double N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
-                                     const bool& regularize,
                                      const double& regulator) = 0;
 
     double ReducedMatrixElement(const Order order,
                                 const basis::RelativeStateLSJT& bra,
                                 const basis::RelativeStateLSJT& ket,
                                 const double& osc_b,
-                                const bool& regularize,
                                 const double& regulator);
   };
 }
