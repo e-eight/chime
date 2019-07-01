@@ -1,26 +1,26 @@
-#ifndef CHARGE_RADIUS_H
-#define CHARGE_RADIUS_H
+#ifndef M1_H
+#define M1_H
 
 #include "chiral.h"
 
 using namespace factory;
 namespace chiral
 {
-  struct ChargeRadiusOperator : public Operator::Registrar<ChargeRadiusOperator>
+  struct M1Operator : public Operator::Registrar<M1Operator>
     {
-      ChargeRadiusOperator() {}
+      M1Operator() {}
 
-      ~ChargeRadiusOperator() {}
+      ~M1Operator() {}
 
       // You must include a Name function in your operator, and the name
       // returned by that function must match the name given as input to ChiME.
-      static std::string Name() { return "rsq"; }
+      static std::string Name() { return "m1"; }
 
       int G0() override { return 0; } // Parity of the operator
 
-      int J0() override { return 0; } // Angular momentum of the operator
+      int J0() override { return 1; } // Angular momentum of the operator
 
-      int T0() override { return 0; } // Isospin of the operator
+      int T0() override { return 1; } // Isospin of the operator
 
       double LOMatrixElement(const basis::RelativeStateLSJT& bra,
                              const basis::RelativeStateLSJT& ket,

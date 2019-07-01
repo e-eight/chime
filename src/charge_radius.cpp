@@ -1,8 +1,7 @@
 #include <cmath>
 #include <gsl/gsl_sf_laguerre.h>
 #include "basis/lsjt_scheme.h"
-#include "basis/am/halfint.h"
-#include "basis/am/wigner_gsl.h"
+#include "rme_extended.h"
 #include "constants.h"
 #include "utility.h"
 #include "chiral.h"
@@ -10,7 +9,6 @@
 #include "threedho.h"
 #include "charge_radius.h"
 
-using namespace constants;
 namespace chiral
 {
   ///////////////////////////////////////////////////////////////////////////////
@@ -19,7 +17,8 @@ namespace chiral
 
   double ChargeRadiusOperator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                const basis::RelativeStateLSJT& ket,
-                                               const double& osc_b)
+                                               const double& osc_b,
+                                               const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -35,9 +34,9 @@ namespace chiral
     if (!diagonal)
       return 0;
 
-    auto term1 = (2 * nri + li + 1.5) * util::KroneckerDelta(nri, nrf);
-    auto term2 = std::sqrt((nri + 1) * (nri + li + 1.5)) * util::KroneckerDelta(nri + 1, nrf);
-    auto term3 = std::sqrt((nrf + 1) * (nrf + lf + 1.5)) * util::KroneckerDelta(nrf + 1, nri);
+    auto term1 = (2 * nri + li + 1.5) * (nri == nrf);
+    auto term2 = std::sqrt((nri + 1) * (nri + li + 1.5)) * (nri + 1 == nrf);
+    auto term3 = std::sqrt((nrf + 1) * (nrf + lf + 1.5)) * (nrf + 1 == nri);
     auto radial_integral = osc_b * osc_b * (term1 - term2 - term3);
 
     double clebsch_product = 0;
@@ -56,7 +55,8 @@ namespace chiral
 
   double ChargeRadiusOperator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                 const basis::RelativeStateLSJT& ket,
-                                                const double& osc_b)
+                                                const double& osc_b,
+                                                const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -90,7 +90,8 @@ namespace chiral
 
   double ChargeRadiusOperator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const double& regulator)
   {
     return 0;
   }
@@ -101,7 +102,8 @@ namespace chiral
 
   double ChargeRadiusOperator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const double& regulator)
   {
     int ni = ket.N(), nf = bra.N();
     int li = ket.L(), lf = bra.L();
@@ -137,8 +139,8 @@ namespace chiral
     norm_product *= (osc_b * osc_b);
 
     // Spin-Isospin matrix element
-    auto spin_element = util::PauliDotProduct(si);
-    auto isospin_element = util::PauliDotProduct(ti);
+    auto spin_element = am::PauliDotProductRME(si, sf);
+    auto isospin_element = am::PauliDotProductRME(ti, tf);
 
     // Clebsch product
     double clebsch_product = 0;
@@ -163,7 +165,8 @@ namespace chiral
 
   double ChargeRadiusOperator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                                  const basis::RelativeStateLSJT& ket,
-                                                 const double& osc_b)
+                                                 const double& osc_b,
+                                                 const double& regulator)
   {
     return 0;
   }
