@@ -8,7 +8,7 @@
 #include "basis/lsjt_operator.h"
 #include "chiral.h"
 #include "constants.h"
-#include "CLI11.hpp"
+#include "cli.h"
 #include "operators.h"
 
 int main(int argc, char** argv)
