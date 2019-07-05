@@ -1,3 +1,11 @@
 [submodule "src/basis"]
 	path = src/basis
 	url = https://github.com/e-eight/basis.git
+
+[submodule "src/basis/am"]
+    path = src/basis/am
+    url = https://github.com/e-eight/am.git
+
+[submodule "src/basi/mcutils"]
+    path = src/basis/mcutils
+    url = https://github.com/e-eight/mcutils.git
