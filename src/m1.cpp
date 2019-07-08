@@ -61,22 +61,32 @@ namespace chiral
     auto nri = (ni - li) / 2;
     auto nrf = (nf - lf) / 2;
 
-    bool kronecker = (nri == nrf && li == lf && si == sf && ti == tf);
+    bool kronecker = (nri == nrf && li == lf);
     if (!kronecker)
       return 0;
 
-    auto term1 = ((std::sqrt(li * (li + 1.0) * (2 * li + 1.0)) / 2)
-                  * std::pow(-1, ji + si + li + 1)
-                  * am::Wigner6J(li, jf, si, ji, li, 1));
+    auto symm_term_angular = ((1 + 0.5 * std::sqrt(ti * (ti + 1)))
+                                  * std::pow(-1, 1 + li + si + ji)
+                                  * Hat(li) * std::sqrt(li * (li + 1))
+                                  * am::Wigner6J(li, ji, si, jf, li, 1));
 
-    auto term2 = (std::sqrt(6)
-                  * constants::isoscalar_nucleon_magnetic_moment
-                  * std::pow(-1, li + jf)
-                  * am::Wigner6J(1, jf, li, ji, 1, 1)
-                  * (si == 1 && sf == 1));
+    auto symm_term_spin = ((constants::isoscalar_nucleon_magnetic_moment
+                                + (std::sqrt(ti * (ti + 1))
+                                   * constants::isovector_nucleon_magnetic_moment))
+                               * std::pow(-1, li + jf)
+                               * Hat(si) * std::sqrt(si * (si + 1))
+                               * am::Wigner6J(1, ji, li, jf, 1, 1));
 
-    auto result = Hat(ji) * (term1 + term2);
-    return  result;
+    auto symm_term = (symm_term_angular + symm_term_spin) * (tf == ti) * (sf == si);
+
+    auto asymm_term = (0.75 * (ParitySign(ti) - ParitySign(tf))
+                       * (ParitySign(si) - ParitySign(sf))
+                       * ParitySign(li + si + jf + 1) * Hat(sf)
+                       * am::Wigner6J(si, ji, li, jf, sf, 1)
+                       * (tf != ti) * (sf != si));
+
+    auto result = Hat(ji) * (symm_term + asymm_term);
+    return result;
   }
 
   double NLO2Body(const basis::RelativeStateLSJT& bra,
