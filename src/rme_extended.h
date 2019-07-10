@@ -7,7 +7,7 @@
 #ifndef RME_EXTENDED_H
 #define RME_EXTENDED_H
 
-#include "basis/am/rme.h"
+#include "am/rme.h"
 #include "constants.h"
 
 namespace am

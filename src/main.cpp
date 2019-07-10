@@ -1,10 +1,13 @@
-#include <iostream>
 #include <iomanip>
-#include <chrono>
+// #include <chrono>
 #include <cmath>
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include "fmt/format.h"
+#include "fmt/time.h"
+#include "fmt/chrono.h"
+#include "fmt/ostream.h"
 #include "basis/lsjt_operator.h"
 #include "chiral.h"
 #include "constants.h"
@@ -75,15 +78,13 @@ int main(int argc, char** argv)
   auto op = chiral::Operator::make(name);
 
   // Print Header
-  std::cout << "\n";
-  std::cout << "Generating " << name << " matrix elements..." << "\n";
-
+  fmt::print("Generating {} matrix elements...\n", name);
 
   //////////////////////////////////////////////////////////////////////////////
   ///////////////////////// Create relative basis //////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  std::cout << "Beginning RelativeLSJT operator basis setup..." << "\n";
+  fmt::print("Beginning RelativeLSJT operator basis setup...\n");
 
   // Set operator and file header parameters
   basis::OperatorLabelsJT op_labels(op->J0(), op->G0(), T0_min, T0_max,
@@ -107,18 +108,15 @@ int main(int argc, char** argv)
   //////////////////////////////////////////////////////////////////////////////
 
   // Operator diagnostics
-  std::cout << "Truncation:" << " Nmax " << op_params.Nmax
-            << " Jmax " << op_params.Jmax
-            << " T0_max " << op_params.T0_max << "\n";
+  fmt::print("Truncation: Nmax {0} Jmax {1} T0_max {2}\n",
+             op_params.Nmax, op_params.Jmax, op_params.T0_max);
 
-  std::cout << "Matrix elements:";
+  fmt::print("Matrix elements:");
   for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
-    std::cout << " " << basis::UpperTriangularEntries(sectors[T0]);
-  std::cout << "\n";
-  std::cout << "Allocated:";
+    fmt::print(" {}\n", basis::UpperTriangularEntries(sectors[T0]));
+  fmt::print("Allocated:");
   for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
-    std::cout << " " << basis::AllocatedEntries(matrices[T0]);
-  std::cout << "\n";
+    fmt::print(" {}\n", basis::AllocatedEntries(matrices[T0]));
 
   // Populate matrix elements
 
@@ -126,14 +124,12 @@ int main(int argc, char** argv)
   const auto hbarc2 = constants::hbarc * constants::hbarc;
   const auto osc_b = std::sqrt(hbarc2 / constants::reduced_nucleon_mass_MeV / hw);
   // Oscillator energy string for filename
-  std::ostringstream hw_ostr;
-  hw_ostr << hw;
-  auto hw_str = hw_ostr.str();
+  std::string hw_str = fmt::format("{:.1f}", hw);
 
   // Get time for output filename
   auto now = std::chrono::system_clock::now();
   auto time = std::chrono::system_clock::to_time_t(now);
-  std::string time_str = std::to_string(time);
+  auto time_str = std::to_string(time);
 
   // Temporary matrices for storing matrix elements of each order
   std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;
