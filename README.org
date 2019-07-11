@@ -8,32 +8,33 @@ elements, i.e. matrix elements of operators without center of mass contribution.
 ** Requirements
 ChiME depends on several libraries as follows:
   - [[https://github.com/CLIUtils/CLI11.git][CLI11]]
-  - libgomp
   - GNU Scientific Library (GSL)
   - [[https://github.com/e-eight/basis.git][basis]] (This in turn depends on boost and Eigen.)
   - [[https://github.com/e-eight/am.git][am]]
   - [[https://github.com/e-eight/am.git][mcutils]]
+  - [[https://github.com/fmtlib/fmt][fmt]]
 The code is written in C++14. You will need a compiler that supports that.
-    
-** Installation
-To use this make sure that GSL, boost,libgomp and Eigen are present in your
-system. Then clone this repository as shown below.
 
+** Usage
+To use this make sure that =GSL=, =boost=, =Eigen= are present in your
+system. =CMake= build generation files are provided to help with building ChiME.
+To use these proceed as follows (make sure that you at least have =cmake= 3.1
+and =make= on your system):
 #+BEGIN_SRC bash
   git clone https://github.com/e-eight/chime.git
   cd chime
-  git submodule update --init --recursive
+  mkdir build
+  cd build
+  cmake ..
   make
 #+END_SRC
 
-The provided makefile assumes that =g++= (6.1 or higher) is being used as the 
-compiler, and GSL, boost and Eigen are installed at their system locations. If 
-that is not true for you, then modify the makefile accordingly.
-
-** Usage
-To add your own operators use the =charge_radius.h= and =charge_radius.cpp=
-files as templates. Once you have created the header and source files for your
-operator, include the header file in =operators.h=.
+Alternatively you can write your own build files, for your favorite build
+generator. To add your own operators use the =charge_radius.h= and
+=charge_radius.cpp= files as templates. Once you have created the header and
+source files for your operator, include the header file in =operators.h=. If you
+use the provided =CMakeLists.txt= to build the software, then add the new source
+and header files to the =CMakeLists.txt= in =src=.
 
 At present only the matrix elements upto N4LO are calculated. If higher orders
 are required then first add them to the enum class =Order= and to the class
@@ -49,17 +50,18 @@ ChiME accepts the following inputs:
   - (int) T0_min, T0_max :: Range of isospin components of operator
 
 The recommended way to enter this inputs is via a configuration file. See the
-provided =rsq_input.ini= for the format. Once you have the config you can run it
-as
+provided =rsq_input.ini= in =input= for the format. Once you have the created
+the configuration file you can run it as follows. Assuming you are in =build=,
 #+BEGIN_SRC bash
-  ./chime.exe -c name.ini
+  ./chime.exe -c <path-to-config>/name.ini
 #+END_SRC
-where =name.ini= is your config file.
+where =name.ini= is your configuration file.
 
 These inputs can also be given as flags as shown below.
 #+BEGIN_SRC bash
   ./chime.exe -n rsq -o n2lo -N 200
 #+END_SRC
+
 Use =chime.exe -h= to get the full list of flags.
 
 ChiME will produce a set of timestamped files. For example if the given order is
@@ -74,7 +76,7 @@ at LO, NLO, and N2LO, and also a fourth file containing the total matrix element
     + Adaptive Simpson
   - Precompute and store integrals for faster evaluation.
   - Add support for other compilers.
-  
+
 ** Contributors
   - Soham Pal (Developed the original C version. Theory and lead code developer.)
   - Robert Basili (Ported the original C version to C++. Tester.)
