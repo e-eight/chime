@@ -18,10 +18,11 @@ The code is written in C++14. You will need a compiler that supports that.
 ** Usage
 To use this make sure that =GSL=, =boost=, =Eigen= are present in your
 system. =CMake= build generation files are provided to help with building ChiME.
-To use these proceed as follows (make sure that you at least have =cmake= 3.1
-and =make= on your system):
+Alternatively you can write your own build files for your favorite build system.
+To use the provided =CMake= files proceed as follows (make sure that you at least
+have =cmake= 3.1 and =make= on your system):
 #+BEGIN_SRC bash
-  git clone https://github.com/e-eight/chime.git
+  git clone git@github.com:e-eight/chime.git
   cd chime
   mkdir build
   cd build
@@ -29,12 +30,16 @@ and =make= on your system):
   make
 #+END_SRC
 
-Alternatively you can write your own build files, for your favorite build
-generator. To add your own operators use the =charge_radius.h= and
-=charge_radius.cpp= files as templates. Once you have created the header and
-source files for your operator, include the header file in =operators.h=. If you
-use the provided =CMakeLists.txt= to build the software, then add the new source
-and header files to the =CMakeLists.txt= in =src=.
+The instructions above assumes that you are cloning with =SSH=. However if that
+is not the case, and you are using =HTTPS=, then the cloning command will be
+=git clone https://github.com/e-eight/chime.git=. You will also have to update the
+=.gitmodules= file accordingly to use =HTTPS= instead of =SSH=.
+
+To add your own operators use the =charge_radius.h= and =charge_radius.cpp= files
+as templates. Once you have created the header and source files for your
+operator, include the header file in =operators.h=. If you use the provided
+=CMakeLists.txt= to build the software, then add the new source and header
+files to the =CMakeLists.txt= in =src=.
 
 At present only the matrix elements upto N4LO are calculated. If higher orders
 are required then first add them to the enum class =Order= and to the class
