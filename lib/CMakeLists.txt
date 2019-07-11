@@ -6,7 +6,7 @@ endif()
 
 project(libs LANGUAGES CXX)
 
+add_subdirectory(fmt)
 add_subdirectory(am)
 add_subdirectory(mcutils)
 add_subdirectory(basis)
-add_subdirectory(fmt)

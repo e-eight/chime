@@ -9,12 +9,9 @@ set (HEADERS cli.h constants.h rme_extended.h utility.h chiral.h factory.h
 
 add_executable(${TARGET} ${SOURCES} ${HEADERS})
 
-target_link_libraries(${TARGET} PUBLIC m basis am mcutils)
+target_link_libraries(${TARGET} PUBLIC m basis am mcutils fmt::fmt)
 
 find_package(GSL REQUIRED)
 target_link_libraries(${TARGET} PUBLIC GSL::gsl GSL::gslcblas)
-
-find_package(fmt REQUIRED)
-target_link_libraries(${TARGET} PUBLIC fmt::fmt)
 
 target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
