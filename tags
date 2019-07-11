@@ -434,6 +434,27 @@ CLI11_VERSION	src/cli.h	72;"	d
 CLI11_VERSION_MAJOR	src/cli.h	69;"	d
 CLI11_VERSION_MINOR	src/cli.h	70;"	d
 CLI11_VERSION_PATCH	src/cli.h	71;"	d
+CMAKE_BINARY_DIR	build/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/lib/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/lib/am/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/lib/basis/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/lib/fmt/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/lib/mcutils/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_BINARY_DIR	build/src/Makefile	/^CMAKE_BINARY_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime\/build$/;"	m
+CMAKE_COMMAND	build/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/lib/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/lib/am/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/lib/basis/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/lib/fmt/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/lib/mcutils/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_COMMAND	build/src/Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_SOURCE_DIR	build/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/lib/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/lib/am/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/lib/basis/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/lib/fmt/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/lib/mcutils/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
+CMAKE_SOURCE_DIR	build/src/Makefile	/^CMAKE_SOURCE_DIR = \/home\/soham\/Documents\/research\/nucleartransitions\/chime$/;"	m
 COLOR_DEFAULT	lib/fmt/test/gmock-gtest-all.cc	/^enum GTestColor { COLOR_DEFAULT, COLOR_RED, COLOR_GREEN, COLOR_YELLOW };$/;"	e	enum:testing::internal::GTestColor	file:
 COLOR_GREEN	lib/fmt/test/gmock-gtest-all.cc	/^enum GTestColor { COLOR_DEFAULT, COLOR_RED, COLOR_GREEN, COLOR_YELLOW };$/;"	e	enum:testing::internal::GTestColor	file:
 COLOR_RED	lib/fmt/test/gmock-gtest-all.cc	/^enum GTestColor { COLOR_DEFAULT, COLOR_RED, COLOR_GREEN, COLOR_YELLOW };$/;"	e	enum:testing::internal::GTestColor	file:
@@ -966,6 +987,13 @@ EMPTY	lib/fmt/test/format-test.cc	/^  enum result { NONE, EMPTY, INDEX, NAME, ER
 EMPTY	lib/fmt/test/util.h	/^  static const Char EMPTY[];$/;"	m	class:BasicTestString
 EMPTY	lib/fmt/test/util.h	/^template <typename Char> const Char BasicTestString<Char>::EMPTY[] = {0};$/;"	m	class:BasicTestString
 EMULATE_EINTR	lib/fmt/test/posix-mock-test.cc	58;"	d	file:
+EQUALS	build/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/lib/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/lib/am/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/lib/basis/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/lib/fmt/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/lib/mcutils/Makefile	/^EQUALS = =$/;"	m
+EQUALS	build/src/Makefile	/^EQUALS = =$/;"	m
 ERROR	lib/fmt/test/format-test.cc	/^  enum Result { NONE, PLUS, MINUS, SPACE, HASH, ZERO, ERROR };$/;"	e	enum:test_format_specs_handler::Result	file:
 ERROR	lib/fmt/test/format-test.cc	/^  enum result { NONE, EMPTY, INDEX, NAME, ERROR };$/;"	e	enum:test_arg_id_handler::result	file:
 ERROR	lib/fmt/test/format-test.cc	30;"	d	file:
@@ -3351,6 +3379,13 @@ RE	lib/fmt/test/gtest/gtest.h	/^class GTEST_API_ RE {$/;"	c	namespace:std::tr1
 REGISTER_TYPED_TEST_CASE_P	lib/fmt/test/gtest/gtest.h	17463;"	d
 RETURNED	lib/fmt/test/gmock-gtest-all.cc	/^enum DeathTestOutcome { IN_PROGRESS, DIED, LIVED, RETURNED, THREW };$/;"	e	enum:testing::internal::DeathTestOutcome	file:
 RHatProductRME	src/rme_extras.h	/^  inline double RHatProductRME(const int& lp, const int& l, const int& k)$/;"	f	class:am::Nucleon
+RM	build/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/lib/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/lib/am/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/lib/basis/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/lib/fmt/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/lib/mcutils/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+RM	build/src/Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
 RME_EXTENDED_H	src/rme_extended.h	8;"	d
 RME_EXTRAS_H	src/rme_extras.h	7;"	d
 RME_H_	lib/am/rme.h	21;"	d
@@ -3581,6 +3616,13 @@ S	lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	cla
 S	lib/basis/lsjt_scheme.h	/^    int S() const {return subspace().S();}$/;"	f	class:basis::TwoBodyStateLSJTN
 S	lib/fmt/test/std-format-test.cc	/^struct S {$/;"	s	file:
 SCOPED_TRACE	lib/fmt/test/gtest/gtest.h	19944;"	d
+SHELL	build/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/lib/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/lib/am/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/lib/basis/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/lib/fmt/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/lib/mcutils/Makefile	/^SHELL = \/bin\/sh$/;"	m
+SHELL	build/src/Makefile	/^SHELL = \/bin\/sh$/;"	m
 SIMULATE_ID	build/CMakeFiles/3.14.5/CompilerIdCXX/CMakeCXXCompilerId.cpp	205;"	d	file:
 SIMULATE_ID	build/CMakeFiles/3.14.5/CompilerIdCXX/CMakeCXXCompilerId.cpp	21;"	d	file:
 SIMULATE_ID	build/CMakeFiles/3.14.5/CompilerIdCXX/CMakeCXXCompilerId.cpp	220;"	d	file:
@@ -3598,6 +3640,13 @@ STRING	lib/fmt/test/format-test.cc	/^  enum { INT, STRING } type;$/;"	e	enum:var
 STRINGIFY	build/CMakeFiles/3.14.5/CompilerIdCXX/CMakeCXXCompilerId.cpp	329;"	d	file:
 STRINGIFY_HELPER	build/CMakeFiles/3.14.5/CompilerIdCXX/CMakeCXXCompilerId.cpp	328;"	d	file:
 SUCCEED	lib/fmt/test/gtest/gtest.h	19303;"	d
+SUFFIXES	build/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/lib/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/lib/am/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/lib/basis/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/lib/fmt/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/lib/mcutils/Makefile	/^SUFFIXES =$/;"	m
+SUFFIXES	build/src/Makefile	/^SUFFIXES =$/;"	m
 SUPPRESS_ASSERT	lib/fmt/test/gtest-extra.h	136;"	d
 SUPPRESS_ASSERT	lib/fmt/test/gtest-extra.h	142;"	d
 S_IRUSR	lib/fmt/src/posix.cc	32;"	d	file:
