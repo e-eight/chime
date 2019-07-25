@@ -16,6 +16,14 @@ namespace util
     return std::unique_ptr<T>( new T( std::forward<Args>(args)... ));
   }
 
+  // Returns an array of type T, and length size.
+  template <class T, std::size_t size>
+  static inline std::array<T, size> GetArray()
+  {
+    std::array<T, size> a;
+    return a;
+  }
+
   // Lenpic coordinate space semi local regulator.
   static inline double LenpicSemiLocalRegulator(const double r, const double R)
   {

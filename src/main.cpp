@@ -95,27 +95,32 @@ int main(int argc, char** argv)
   // Set operator and file header parameters
   basis::OperatorLabelsJT op_labels(op->J0(), op->G0(), T0_min, T0_max,
                                     basis::SymmetryPhaseMode::kHermitian);
-  basis::RelativeOperatorParametersLSJT op_params(op_labels, Nmax, Jmax);
+  //basis::RelativeOperatorParametersLSJT op_params(op_labels, Nmax, Jmax);
+  io::LSJTParameters params;
+  io::SetLSJTParameters(params, op_labels, Nmax, Jmax, has_cm);
 
   // Set up relative space
-  basis::RelativeSpaceLSJT space(op_params.Nmax, op_params.Jmax);
+  //basis::RelativeSpaceLSJT space(op_params.Nmax, op_params.Jmax);
+  io::LSJTSpace space;
+  io::SetLSJTSpace(space, Nmax, Jmax, has_cm);
 
   // Set up operator containers
   // These are arrays to store T0 = 0/1/2 components.
-  std::array<basis::RelativeSectorsLSJT, 3> sectors;
+  //std::array<basis::RelativeSectorsLSJT, 3> sectors;
+  io::LSJTSectors sectors;
+  io::SetLSJTSectors(sectors, has_cm);
   std::array<basis::OperatorBlocks<double>, 3> matrices;
 
   // Populate operator containers
-  basis::ConstructZeroOperatorRelativeLSJT(op_params, space, sectors, matrices);
+  if(!has_cm)
+    basis::ConstructZeroOperatorRelativeLSJT(op_params, space, sectors, matrices);
 
-
-  //////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////
   /////////////////////// Generate matrix elements /////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
   // Operator diagnostics
-  fmt::print("Truncation: Nmax {0} Jmax {1} T0_max {2}\n",
-             op_params.Nmax, op_params.Jmax, op_params.T0_max);
+  io::PrintTruncationInfo(params);
 
   fmt::print("Matrix elements:");
   for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
@@ -133,9 +138,9 @@ int main(int argc, char** argv)
   std::string hw_str = fmt::format("{:.1f}", hw);
 
   // Get time for output filename
-  auto now = std::chrono::system_clock::now();
-  auto time = std::chrono::system_clock::to_time_t(now);
-  auto time_str = std::to_string(time);
+  // auto now = std::chrono::system_clock::now();
+  // auto time = std::chrono::system_clock::to_time_t(now);
+  auto time_str = io::GetTimeInfo();
 
   // Temporary matrices for storing matrix elements of each order
   std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;

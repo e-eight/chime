@@ -10,16 +10,16 @@ namespace chiral
   {
     switch(order)
       {
-      case Order::lo:
+      case Order::LO:
         return LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::nlo:
+      case Order::NLO:
         return NLOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n2lo:
+      case Order::N2LO:
         return N2LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n3lo:
+      case Order::N3LO:
         return N3LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n4lo:
-        return N4LOMatrixElement(bra, ket, osc_b, regulator);
+      case Order::N4LO:
+        return N4LOMatrixElement(bra, ket, osc_b, regulator);b
       }
   }
 
@@ -31,15 +31,15 @@ namespace chiral
   {
     switch(order)
       {
-      case Order::lo:
+      case Order::LO:
         return LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::nlo:
+      case Order::NLO:
         return NLOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n2lo:
+      case Order::N2LO:
         return N2LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n3lo:
+      case Order::N3LO:
         return N3LOMatrixElement(bra, ket, osc_b, regulator);
-      case Order::n4lo:
+      case Order::N4LO:
         return N4LOMatrixElement(bra, ket, osc_b, regulator);
       }
   }
