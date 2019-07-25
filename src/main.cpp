@@ -7,9 +7,10 @@
 #include "fmt/format.h"
 #include "fmt/ostream.h"
 #include "basis/lsjt_operator.h"
+#include "io.h"
+#include "cli.h"
 #include "chiral.h"
 #include "constants.h"
-#include "cli.h"
 #include "operators.h"
 
 int main(int argc, char** argv)
@@ -41,21 +42,27 @@ int main(int argc, char** argv)
   // flags
   std::string name = "rsq";
   std::string order = "lo";
+  bool has_cm = false;
   double hw = 10;
   int Nmax = 200;
   int Jmax = 1;
   int T0_min = 0;
   int T0_max = 0;
+  bool regularize = false;
   double regulator = 0.9; // (LENPIC regulator in fm)
+
 
   app.add_option("-n,--name", name, "Name of operator.");
   app.add_option("-o,--order", order, "Chiral order of operator.");
+  app.add_flag("-C,--has_cm", has_cm, "Does the operator depend on the CM?");
   app.add_option("-E,--hw", hw, "Oscillator energy of basis.");
   app.add_option("-N,--Nmax", Nmax, "Nmax truncation of basis.");
   app.add_option("-J,--Jmax", Jmax, "Jmax truncation of basis.");
   app.add_option("-t,--T0_min", T0_min, "Minimum isospin component of operator.");
   app.add_option("-T,--T0_max", T0_max, "Maximum isospin component of operator.");
+  app.add_flag("-r,--regularize", regularize, "Do you want the regulated results?");
   app.add_option("-R,--regulator", regulator, "Value of LENPIC regulator, in fermi.");
+
 
   app.set_config("-c,--config");
 
@@ -73,10 +80,11 @@ int main(int argc, char** argv)
   /////////////////// Create chiral operator from input ////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  auto op = chiral::Operator::make(name);
-
   // Print Header
   fmt::print("Generating {} matrix elements...\n", name);
+
+  auto op = chiral::Operator::make(name);
+
 
   //////////////////////////////////////////////////////////////////////////////
   ///////////////////////// Create relative basis //////////////////////////////
@@ -139,7 +147,7 @@ int main(int argc, char** argv)
       for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
         {
           // Iterate over sectors
-          for (int sector_index = 0; sector_index < sectors[T0].size(); ++sector_index)
+          for (std::size_t sector_index = 0; sector_index < sectors[T0].size(); ++sector_index)
             {
               // Get bra and ket subspaces
               const basis::RelativeSectorsLSJT::SectorType& sector =
@@ -150,21 +158,18 @@ int main(int argc, char** argv)
                 sector.ket_subspace();
 
               // Get states
-              for (int bra_index = 0; bra_index < bra_subspace.size(); ++bra_index)
+              for (std::size_t bra_index = 0; bra_index < bra_subspace.size(); ++bra_index)
                 {
                   const basis::RelativeStateLSJT bra_state(bra_subspace, bra_index);
-                  for (int ket_index = 0; ket_index < ket_subspace.size(); ++ket_index)
+                  for (std::size_t ket_index = 0; ket_index < ket_subspace.size(); ++ket_index)
                     {
                       const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
 
                       // Calculate matrix element
                       auto order_enum = order_map[current_order];
-
-                      temp_matrices[T0][sector_index](bra_index, ket_index) =
-                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regulator);
-
-                      matrices[T0][sector_index](bra_index, ket_index) +=
-                        op->ReducedMatrixElement(order_enum, bra_state, ket_state, osc_b, regulator);
+                      auto rme = op->RelativeRME(order_enum, bra_state, ket_state, osc_b, regulator);
+                      temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
+                      matrices[T0][sector_index](bra_index, ket_index) += rme;
                     }
                 }
             }

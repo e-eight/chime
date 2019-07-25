@@ -26,9 +26,17 @@ namespace chiral
                                    const basis::RelativeStateLSJT& ket,
                                    const double& osc_b,
                                    const double& regulator) = 0;
+    virtual double LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                   const basis::RelativeCMStateLSJT& ket,
+                                   const double& osc_b,
+                                   const double& regulator) = 0;
 
     virtual double NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                     const basis::RelativeStateLSJT& ket,
+                                    const double& osc_b,
+                                    const double& regulator) = 0;
+    virtual double NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                    const basis::RelativeCMStateLSJT& ket,
                                     const double& osc_b,
                                     const double& regulator) = 0;
 
@@ -36,9 +44,17 @@ namespace chiral
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
                                      const double& regulator) = 0;
+    virtual double N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                     const basis::RelativeCMStateLSJT& ket,
+                                     const double& osc_b,
+                                     const double& regulator) = 0;
 
     virtual double N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
+                                     const double& osc_b,
+                                     const double& regulator) = 0;
+    virtual double N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                     const basis::RelativeCMStateLSJT& ket,
                                      const double& osc_b,
                                      const double& regulator) = 0;
 
@@ -46,13 +62,24 @@ namespace chiral
                                      const basis::RelativeStateLSJT& ket,
                                      const double& osc_b,
                                      const double& regulator) = 0;
+    virtual double N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                     const basis::RelativeCMStateLSJT& ket,
+                                     const double& osc_b,
+                                     const double& regulator) = 0;
 
-    double ReducedMatrixElement(const Order order,
-                                const basis::RelativeStateLSJT& bra,
-                                const basis::RelativeStateLSJT& ket,
-                                const double& osc_b,
-                                const double& regulator);
+    double RelativeRME(const Order& order,
+                       const basis::RelativeStateLSJT& bra,
+                       const basis::RelativeStateLSJT& ket,
+                       const double& osc_b,
+                       const double& regulator);
+
+    double RelativeCMRME(const Order& order,
+                         const basis::RelativeCMStateLSJT& bra,
+                         const basis::RelativeCMStateLSJT& ket,
+                         const double& osc_b,
+                         const double& regulator);
   };
+
 }
 
 #endif

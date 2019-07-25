@@ -48,8 +48,8 @@ namespace  am
                                   const int& j,
                                   const Nucleon& i)
   {
-    // Calculate reduced matrix element of  in a
-    // two-body coupled (iso)spin basis.
+    // Calculate reduced matrix element of Pauli matrix in a LS-coupled spin
+    // basis.
     //
     // Arguments:
     //  lp (int): bra orbital angular momentum
@@ -63,10 +63,10 @@ namespace  am
     //  reduced matrix element (double), Rose convention
     if (lp != l)
       return 0;
-    double hat_product = Hat(j) * Hat(k) * Hat(lp) * Hat(sp);
-    double wigner_9j = Wigner9J(l, s, j, 0, 1, 1, lp, sp, jp);
+    double hat_product = Hat(j) * Hat(sp);
+    double wigner_6j = ParitySign(s+l+jp+1) * Wigner6J(s, j, l, jp, sp, 1);
     double rme_product = ssCoupledPauliRME(sp, s, i);
-    double result = hat_product * wigner_9j * rme_product;
+    double result = hat_product * wigner_6j * rme_product;
 
     return result;
   }
@@ -116,10 +116,10 @@ namespace  am
     //  reduced matrix element (double), Rose convention
     if (lp != l)
       return 0;
-    double hat_product = Hat(j) * Hat(k) * Hat(lp) * Hat(sp);
-    double wigner_9j = Wigner9J(l, s, j, 0, k, k, lp, sp, jp);
+    double hat_product = Hat(j) * Hat(sp);
+    double wigner_6j = ParitySign(s+l+jp+1) * Wigner6J(s, j, l, jp, sp, k);
     double rme_product = ssCoupledPauliProductRME(sp, s, k);
-    double result = hat_product * wigner_9j * rme_product;
+    double result = hat_product * wigner_6j * rme_product;
 
     return result;
   }
@@ -220,4 +220,7 @@ namespace  am
     double result = hat_product * wigner_9j * rme_product;
 
     return result;
+  }
 }
+
+#endif

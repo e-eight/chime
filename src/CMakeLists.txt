@@ -4,7 +4,7 @@ set (TARGET chime.exe)
 
 set (SOURCES main.cpp chiral.cpp m1.cpp charge_radius.cpp)
 
-set (HEADERS cli.h constants.h rme_extended.h utility.h chiral.h factory.h
+set (HEADERS cli.h constants.h rme_extended.h utility.h io.h chiral.h factory.h
              operators.h threedho.h quadrature.h m1.h charge_radius.h)
 
 add_executable(${TARGET} ${SOURCES} ${HEADERS})
