@@ -1,13 +1,11 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <gsl/gsl_math.h>
-
 namespace constants
 {
-  constexpr double pi = M_PI;
-  constexpr double sqrtpi = M_SQRTPI;
-  constexpr double sqrt2 = M_SQRT2;
+  constexpr double pi = 3.1415926535897932384626433832795028841971693993751;
+  constexpr double sqrtpi = 1.7724538509055160272981674833411451827975494561224;
+  constexpr double sqrt2 = 1.4142135623730950488016887242096980785696718753769;
 
   // Conversion Factor
   constexpr double hbarc = 197.3269602; // (in MeV fm)
@@ -32,6 +30,8 @@ namespace constants
   constexpr double pion_decay_constant_fm = pion_decay_constant_MeV / hbarc; // (in fm^{-1})
   constexpr double d9_GeV = -0.011; // (in GeV^{-2})
   constexpr double d9_fm = d9_GeV * hbarc_GeV * hbarc_GeV; // (in fm^2)
+  constexpr double d18_Gev = -10.14; // (in GeV^{-2})
+  constexpr double d18_fm = d18_Gev * hbarc_GeV * hbarc_GeV; // (in fm^2)
   constexpr double L2_GeV = 0.188; // (in GeV^{-4})
   constexpr double L2_fm = L2_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV; // (in fm^4)
 }

@@ -3,24 +3,44 @@
 
 #include <cmath>
 #include <vector>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_sf_gamma.h>
+#include "constants.h"
 
-namespace threedho
+namespace ho
 {
-  inline double CoordinateSpaceNorm(const int& n, const int& l, const double& b)
+  //  Recursion relation for normalization constant of the 3DHO basis.
+  inline double NormRecursion(const std::size_t n,
+                              const std::size_t l,
+                              const double result)
   {
-    double numerator = M_LN2 + gsl_sf_lngamma(n + 1);
-    double denominator = 3 * std::log(b) + gsl_sf_lngamma(n + l + 1.5);
-    return std::exp(0.5 * (numerator - denominator));
+    if (n == 0 && l == 0)
+      return result;
+    else if (n == 0)
+      return NormRecursion(n, l - 1, std::sqrt(1 / (l + 0.5)) * result);
+    else if (l == 0)
+      return NormRecursion(n - 1, l, std::sqrt(n / (n + 0.5)) * result);
+    else
+      return NormRecursion(n - 1, l - 1,
+                           std::sqrt(n / ((n + l + 0.5) * (n - l - 0.5))) * result);
   }
 
-  inline double MomentumSpaceNorm(const int& n, const int& l, const double& b)
+  // Coordinate space normalization constant.
+  inline double CoordinateSpaceNorm(const std::size_t n,
+                                    const std::size_t l,
+                                    const double b)
   {
-    double numerator = M_LN2 + gsl_sf_lngamma(n + 1) + 3 * std::log(b);
-    double denominator = gsl_sf_lngamma(n + l + 1.5);
-    return std::exp(0.5 * (numerator - denominator));
+    auto base_result = (2 / std::sqrt(b * b * b * constants::sqrtpi));
+    return NormRecursion(n, l, base_result);
   }
+
+  // Momentum space normalization constant.
+  inline double MomentumSpaceNorm(const std::size_t n,
+                                  const std::size_t l,
+                                  const double b)
+  {
+    auto base_result = (2 * std::sqrt(b * b * b / constants::sqrtpi));
+    return NormRecursion(n, l, base_result);
+  }
+
 
   // 3DHO wave function using recursion.
   //

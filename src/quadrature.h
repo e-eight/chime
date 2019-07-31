@@ -7,7 +7,7 @@
 namespace quadrature
 {
   template <class F>
-  double GaussLaguerre(F func, double a, double b, double alpha, int nodes)
+  double GaussLaguerre(F func, double a, double b, double alpha, std::size_t nodes)
   {
     gsl_function f;
     f.function = [](double x, void* p) { return (*static_cast<F*>(p))(x); };
@@ -27,7 +27,7 @@ namespace quadrature
   }
 
   template <class F>
-  double GaussLegendre(F func, double a, double b, double alpha, double beta, int nodes)
+  double GaussLegendre(F func, double a, double b, double alpha, double beta, std::size_t nodes)
   {
     gsl_function f;
     f.function = [](double x, void* p) { return (*static_cast<F*>(p))(x); };
