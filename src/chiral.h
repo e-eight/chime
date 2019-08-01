@@ -9,7 +9,7 @@
 namespace chiral
 {
   // Chiral orders
-  BETTER_ENUM(Order, int, LO=1, NLO, N2LO, N3LO, N4LO);
+  BETTER_ENUM(Order, int, lo=1, nlo, n2lo, n3lo, n4lo);
 
   // Chiral operator interface
   struct Operator : factory::Factory<Operator>
@@ -84,36 +84,23 @@ namespace chiral
                               const StateType& bra,
                               const StateType& ket,
                               const util::OscillatorParameter& b,
-                              const double& regulator,
-                              const bool& regularize)
+                              const bool& regularize,
+                              const double& regulator)
     {
     switch(ord)
       {
-      case Order::LO:
-        return LOMatrixElement(bra, ket, b, regulator, regularize);
-      case Order::NLO:
-        return NLOMatrixElement(bra, ket, b, regulator, regularize);
-      case Order::N2LO:
-        return N2LOMatrixElement(bra, ket, b, regulator, regularize);
-      case Order::N3LO:
-        return N3LOMatrixElement(bra, ket, b, regulator, regularize);
-      case Order::N4LO:
-        return N4LOMatrixElement(bra, ket, b, regulator, regularize);
+      case Order::lo:
+        return LOMatrixElement(bra, ket, b, regularize, regulator);
+      case Order::nlo:
+        return NLOMatrixElement(bra, ket, b, regularize, regulator);
+      case Order::n2lo:
+        return N2LOMatrixElement(bra, ket, b, regularize, regulator);
+      case Order::n3lo:
+        return N3LOMatrixElement(bra, ket, b, regularize, regulator);
+      case Order::n4lo:
+        return N4LOMatrixElement(bra, ket, b, regularize, regulator);
       }
-  }
-
-
-    /* double RelativeRME(const Order& order, */
-    /*                    const basis::RelativeStateLSJT& bra, */
-    /*                    const basis::RelativeStateLSJT& ket, */
-    /*                    const double& osc_b, */
-    /*                    const double& regulator); */
-
-    /* double RelativeCMRME(const Order& order, */
-    /*                      const basis::RelativeCMStateLSJT& bra, */
-    /*                      const basis::RelativeCMStateLSJT& ket, */
-    /*                      const double& osc_b, */
-    /*                      const double& regulator); */
+    }
   };
 
 }

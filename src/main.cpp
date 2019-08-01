@@ -1,38 +1,9 @@
 #include <iomanip>
-#include <chrono>
-#include <cmath>
-#include <unordered_map>
-#include <vector>
-#include <string>
-#include "fmt/format.h"
-#include "fmt/ostream.h"
-#include "basis/lsjt_operator.h"
 #include "io.h"
 #include "cli.h"
-#include "chiral.h"
-#include "constants.h"
-#include "operators.h"
 
 int main(int argc, char** argv)
 {
-  //////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////// String to Order map ////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-  std::vector<std::string> order_name;
-  std::unordered_map<std::string, chiral::Order> order_map;
-
-  order_map["lo"] = chiral::Order::lo;
-  order_name.push_back("lo");
-  order_map["nlo"] = chiral::Order::nlo;
-  order_name.push_back("nlo");
-  order_map["n2lo"] = chiral::Order::n2lo;
-  order_name.push_back("n2lo");
-  order_map["n3lo"] = chiral::Order::n3lo;
-  order_name.push_back("n3lo");
-  order_map["n4lo"] = chiral::Order::n4lo;
-  order_name.push_back("n4lo");
-
   //////////////////////////////////////////////////////////////////////////////
   /////////////// Application description and input parameters /////////////////
   //////////////////////////////////////////////////////////////////////////////
@@ -40,7 +11,7 @@ int main(int argc, char** argv)
   CLI::App app("Generates CEFT reduced matrix elements in HO basis.");
 
   // flags
-  std::string name = "rsq";
+  std::string name = "m1";
   std::string order = "lo";
   bool has_cm = false;
   double hw = 10;
@@ -63,7 +34,6 @@ int main(int argc, char** argv)
   app.add_flag("-r,--regularize", regularize, "Do you want the regulated results?");
   app.add_option("-R,--regulator", regulator, "Value of LENPIC regulator, in fermi.");
 
-
   app.set_config("-c,--config");
 
   // Parse input
@@ -77,127 +47,11 @@ int main(int argc, char** argv)
     }
 
   //////////////////////////////////////////////////////////////////////////////
-  /////////////////// Create chiral operator from input ////////////////////////
+  //////////////////////////// Write RMEs to file //////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  // Print Header
-  fmt::print("Generating {} matrix elements...\n", name);
-
-  auto op = chiral::Operator::make(name);
-
-
-  //////////////////////////////////////////////////////////////////////////////
-  ///////////////////////// Create relative basis //////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-  fmt::print("Beginning RelativeLSJT operator basis setup...\n");
-
-  // Set operator and file header parameters
-  basis::OperatorLabelsJT op_labels(op->J0(), op->G0(), T0_min, T0_max,
-                                    basis::SymmetryPhaseMode::kHermitian);
-  //basis::RelativeOperatorParametersLSJT op_params(op_labels, Nmax, Jmax);
-  io::LSJTParameters params;
-  io::SetLSJTParameters(params, op_labels, Nmax, Jmax, has_cm);
-
-  // Set up relative space
-  //basis::RelativeSpaceLSJT space(op_params.Nmax, op_params.Jmax);
-  io::LSJTSpace space;
-  io::SetLSJTSpace(space, Nmax, Jmax, has_cm);
-
-  // Set up operator containers
-  // These are arrays to store T0 = 0/1/2 components.
-  //std::array<basis::RelativeSectorsLSJT, 3> sectors;
-  io::LSJTSectors sectors;
-  io::SetLSJTSectors(sectors, has_cm);
-  std::array<basis::OperatorBlocks<double>, 3> matrices;
-
-  // Populate operator containers
-  if(!has_cm)
-    basis::ConstructZeroOperatorRelativeLSJT(op_params, space, sectors, matrices);
-
- //////////////////////////////////////////////////////////////////////////////
-  /////////////////////// Generate matrix elements /////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-  // Operator diagnostics
-  io::PrintTruncationInfo(params);
-
-  fmt::print("Matrix elements:");
-  for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
-    fmt::print(" {}\n", basis::UpperTriangularEntries(sectors[T0]));
-  fmt::print("Allocated:");
-  for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
-    fmt::print(" {}\n", basis::AllocatedEntries(matrices[T0]));
-
-  // Populate matrix elements
-
-  // Oscillator length scale
-  const auto hbarc2 = constants::hbarc * constants::hbarc;
-  const auto osc_b = std::sqrt(hbarc2 / constants::reduced_nucleon_mass_MeV / hw);
-  // Oscillator energy string for filename
-  std::string hw_str = fmt::format("{:.1f}", hw);
-
-  // Get time for output filename
-  // auto now = std::chrono::system_clock::now();
-  // auto time = std::chrono::system_clock::to_time_t(now);
-  auto time_str = io::GetTimeInfo();
-
-  // Temporary matrices for storing matrix elements of each order
-  std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;
-
-  // Iterate over chiral orders
-  for (auto current_order : order_name)
-    {
-      // Iterate over isospin
-      for (auto T0 = op_params.T0_min; T0 <= op_params.T0_max; ++T0)
-        {
-          // Iterate over sectors
-          for (std::size_t sector_index = 0; sector_index < sectors[T0].size(); ++sector_index)
-            {
-              // Get bra and ket subspaces
-              const basis::RelativeSectorsLSJT::SectorType& sector =
-                sectors[T0].GetSector(sector_index);
-              const basis::RelativeSectorsLSJT::SubspaceType& bra_subspace =
-                sector.bra_subspace();
-              const basis::RelativeSectorsLSJT::SubspaceType& ket_subspace =
-                sector.ket_subspace();
-
-              // Get states
-              for (std::size_t bra_index = 0; bra_index < bra_subspace.size(); ++bra_index)
-                {
-                  const basis::RelativeStateLSJT bra_state(bra_subspace, bra_index);
-                  for (std::size_t ket_index = 0; ket_index < ket_subspace.size(); ++ket_index)
-                    {
-                      const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
-
-                      // Calculate matrix element
-                      auto order_enum = order_map[current_order];
-                      auto rme = op->RelativeRME(order_enum, bra_state, ket_state, osc_b, regulator);
-                      temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
-                      matrices[T0][sector_index](bra_index, ket_index) += rme;
-                    }
-                }
-            }
-        }
-      // Write the contributions at each order
-      std::string order_file =
-        name + "_2b_rel_" + current_order + "_N" + std::to_string(op_params.Nmax)
-          + "_J" + std::to_string(op_params.Jmax) + "_hw" + hw_str
-        + "_" + time_str + ".dat";
-      basis::WriteRelativeOperatorLSJT(order_file, space, op_labels,
-                                       sectors, temp_matrices, true);
-
-      // Break if required order has been reached
-      if (current_order == order)
-        break;
-    }
-
-  // Write cumulative contribution
-  std::string cumulative_file =
-    name + "_2b_rel_" + order + "_cumulative"
-    + "_N" + std::to_string(op_params.Nmax)
-    + "_J" + std::to_string(op_params.Jmax)
-    + "_hw" + hw_str + "_" + time_str + ".dat";
-  basis::WriteRelativeOperatorLSJT(cumulative_file, space, op_labels,
-                                   sectors, matrices, true);
+  if (has_cm)
+    io::WriteRelativeCMFiles(name, order, hw, Nmax, T0_min, T0_max, regularize, regulator);
+  else
+    io::WriteRelativeFiles(name, order, hw, Nmax, Jmax, T0_min, T0_max, regularize, regulator);
 }

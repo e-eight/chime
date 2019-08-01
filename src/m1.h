@@ -24,27 +24,57 @@ namespace chiral
 
       double LOMatrixElement(const basis::RelativeStateLSJT& bra,
                              const basis::RelativeStateLSJT& ket,
-                             const double& osc_b,
+                             const util::OscillatorParameter& b,
+                             const bool& regularize,
+                             const double& regulator) override;
+      double LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                             const basis::RelativeCMStateLSJT& ket,
+                             const util::OscillatorParameter& b,
+                             const bool& regularize,
                              const double& regulator) override;
 
       double NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                               const basis::RelativeStateLSJT& ket,
-                              const double& osc_b,
+                              const util::OscillatorParameter& b,
+                              const bool& regularize,
+                              const double& regulator) override;
+      double NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                              const basis::RelativeCMStateLSJT& ket,
+                              const util::OscillatorParameter& b,
+                              const bool& regularize,
                               const double& regulator) override;
 
       double N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
-                               const double& osc_b,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
+                               const double& regulator) override;
+      double N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                               const basis::RelativeCMStateLSJT& ket,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
                                const double& regulator) override;
 
       double N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
-                               const double& osc_b,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
+                               const double& regulator) override;
+      double N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                               const basis::RelativeCMStateLSJT& ket,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
                                const double& regulator) override;
 
       double N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
-                               const double& osc_b,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
+                               const double& regulator) override;
+      double N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                               const basis::RelativeCMStateLSJT& ket,
+                               const util::OscillatorParameter& b,
+                               const bool& regularize,
                                const double& regulator) override;
     };
 }

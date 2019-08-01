@@ -152,6 +152,8 @@ namespace chiral
                        * (t != tp) * (s != sp));
 
     auto result = Hat(j) * (symm_term + asymm_term);
+    if (isnan(result))
+      result = 0;
     return result;
   }
 
@@ -198,6 +200,8 @@ namespace chiral
     // Final result.
     auto result = (lec_prefactor * T1_rme *
                    (zpi_integral * A6S1_rme + tpi_integral * S1_rme));
+    if (isnan(result))
+      result = 0;
     return result;
   }
 
@@ -266,6 +270,8 @@ namespace chiral
     auto relative_cm = mpir_integral * api_r;
     auto relative = zpi_integral * A6S1_rme + tpi_integral * S1_rme;
     auto result = lec_prefactor * T1_rme * (relative_cm + relative);
+    if (isnan(result))
+      result = 0;
     return result;
   }
 
