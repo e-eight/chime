@@ -29,7 +29,7 @@ namespace am
 
     double result = 0;
     if (sp == s)
-      result = std::sqrt(s * (s + 1.));
+      result = std::sqrt(s * (s + 1));
     else
       result = ParitySign(s) * std::sqrt(3);
     return result;
@@ -41,10 +41,34 @@ namespace am
 
     double result = 0;
     if (sp == s)
-      result = std::sqrt(s * (s + 1.));
+      result = std::sqrt(s * (s + 1));
     else
       result = ParitySign(sp) * std::sqrt(3);
     return result;
+  }
+
+  // Calculate reduced matrix element of (\vec{σ}_1 + \vec{σ}_2) / 2 in its
+  // eigenbasis.
+  // Arguments:
+  //  sp (int): bra spin
+  //  s (int): ket spin
+  // Returns:
+  //  reduced matrix element (double), Rose convention
+  inline double SpinSymmetricRME(const int& sp, const int& s)
+  {
+    return (std::sqrt(s * (s + 1)) * (s == sp));
+  }
+
+  // Calculate reduced matrix element of (\vec{σ}_1 - \vec{σ}_2) / 2 in its
+  // eigenbasis.
+  // Arguments:
+  //  sp (int): bra spin
+  //  s (int): ket spin
+  // Returns:
+  //  reduced matrix element (double), Rose convention
+  inline double SpinAsymmetricRME(const int& sp, const int& s)
+  {
+    return (0.5 * (PauliOneRME(sp, s) - PauliTwoRME(sp, s)));
   }
 
   // Calculate reduced matrix element of [\vec{σ}_1 ⊗ \vec{σ}_2]_k in a

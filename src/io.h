@@ -100,16 +100,22 @@ namespace io
           }
         // Write the contribution at each order.
         std::string cord_str = cord._to_string();
-        std::string order_file = fmt::format("{}_2b_rel_{}_N_{:d}_J_{:d}_hw_{:.1f}_{}.dat",
-                                             name, cord_str, Nmax, Jmax, hw, time_str);
+        std::string order_file = fmt::format("{}_2b_rel_{}_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
+                                             name, cord_str, Nmax, Jmax, hw);
+        if(regularize)
+          order_file += fmt::format("_regulator_{:.1f}", regulator);
+        order_file += fmt::format("_{}.dat", time_str);
         basis::WriteRelativeOperatorLSJT(order_file, space, labels, sectors, temp_matrices, true);
 
         if (cord == ord)
           break;
       }
     // Write the cumulative matrix element.
-    std::string cumulative_file = fmt::format("{}_2b_rel_{}_cumulative_N_{:d}_J_{:d}_hw_{:.1f}_{}.dat",
-                                              name, order, Nmax, Jmax, hw, time_str);
+    std::string cumulative_file = fmt::format("{}_2b_rel_{}_cumulative_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
+                                              name, order, Nmax, Jmax, hw);
+    if(regularize)
+      cumulative_file += fmt::format("_regulator_{:.1f}", regulator);
+    cumulative_file += fmt::format("_{}.dat", time_str);
     basis::WriteRelativeOperatorLSJT(cumulative_file, space, labels, sectors, matrices, true);
   }
 
@@ -197,16 +203,22 @@ namespace io
           }
         // Write the contribution at each order.
         std::string cord_str = cord._to_string();
-        std::string order_file = fmt::format("{}_2b_rel_{}_N_{:d}_hw_{:.1f}_{}.dat",
-                                             name, cord_str, Nmax, hw, time_str);
+        std::string order_file = fmt::format("{}_2b_rel_cm_{}_Nmax_{:d}_hw_{:.1f}",
+                                             name, cord_str, Nmax, hw);
+        if(regularize)
+          order_file += fmt::format("_regulator_{:.1f}", regulator);
+        order_file += fmt::format("_{}.dat", time_str);
         basis::WriteRelativeCMOperatorLSJT(order_file, space, labels, sectors, temp_matrices, true);
 
         if (cord == ord)
           break;
       }
     // Write the cumulative matrix element.
-    std::string cumulative_file = fmt::format("{}_2b_rel_{}_cumulative_N_{:d}_hw_{:.1f}_{}.dat",
-                                              name, order, Nmax, hw, time_str);
+    std::string cumulative_file = fmt::format("{}_2b_rel_cm_{}_cumulative_Nmax_{:d}_hw_{:.1f}",
+                                              name, order, Nmax, hw);
+    if(regularize)
+      cumulative_file += fmt::format("_regulator_{:.1f}", regulator);
+    cumulative_file += fmt::format("_{}.dat", time_str);
     basis::WriteRelativeCMOperatorLSJT(cumulative_file, space, labels, sectors, matrices, true);
   }
 

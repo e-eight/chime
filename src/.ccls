@@ -1,0 +1,6 @@
+clang
+%h -x c++-header
+-I../lib
+-I../lib/basis
+-I../lib/am
+-I../lib/fmt

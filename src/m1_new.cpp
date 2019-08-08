@@ -9,11 +9,8 @@
 
 namespace chiral
 {
-
-  /*
-   * Leading order matrix element.
-   * Under the LENPIC power counting, there is no contribution to M1 at LO.
-   */
+  // Leading order matrix element.
+  // Under the LENPIC power counting, there is no contribution to M1 at LO.
   double M1Operator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
                                      const util::OscillatorParameter& b,
@@ -32,14 +29,11 @@ namespace chiral
     return 0;
   }
 
-
-  /*
-   * Next to leading order matrix element.
-   * There are both one body and two body corrections. One body correction is
-   * the same as impulse approximation. Two body correction is isovector in
-   * nature, and has both center of mass and relative components. The one body
-   * component is not regularized.
-   */
+  // Next to leading order matrix element.
+  // There are both one body and two body corrections. One body correction is
+  // the same as impulse approximation. Two body correction is isovector in
+  // nature, and has both center of mass and relative components. The one body
+  // component is not regularized.
   double NLO1Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
                   const util::OscillatorParameter& b);
@@ -141,7 +135,6 @@ namespace chiral
                                * ParitySign(lr + jp)
                                * Hat(s) * std::sqrt(s * (s + 1))
                                * am::Wigner6J(1, j, lr, jp, 1, 1));
-
     auto symm_term = ((symm_term_angular + symm_term_spin)
                       * (t == tp) * (s == sp));
 
@@ -275,10 +268,7 @@ namespace chiral
     return result;
   }
 
-  /*
-   * Next to next to leading order.
-   * There are no chiral eft correction at N2LO.
-   */
+  // Next to next to leading order. There are no chiral eft correction at N2LO.
   double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
@@ -297,13 +287,10 @@ namespace chiral
     return 0;
   }
 
-
-  /*
-   * Next to next to next to leading order.
-   * There are both isoscalar and isovector two body chiral eft corrections at
-   * N3LO. Currently only the isoscalar part has been implemented, as that is
-   * important for the deuteron.
-   */
+  // Next to next to next to leading order.
+  // There are both isoscalar and isovector two body chiral eft corrections at
+  // N3LO. Currently only the isoscalar part has been implemented, as that is
+  // important for the deuteron.
   double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
@@ -322,11 +309,8 @@ namespace chiral
     return 0;
   }
 
-
-  /*
-   * Next to next to next to next to leading order.
-   * At present there are no results for N4LO.
-   */
+  // Next to next to next to next to leading order.
+  // At present there are no results for N4LO.
   double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
