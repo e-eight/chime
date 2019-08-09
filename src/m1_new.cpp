@@ -166,7 +166,7 @@ namespace chiral
     // OscillatorParameter and scaling.
     auto brel = b.relative();
     auto scaled_regulator = regulator / brel;
-    auto scaled_pion_mass = constants::pion_mass_fm / brel;
+    auto scaled_pion_mass = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
     quadrature::gsl_params p{nr, lr, nrp, lrp, regularize, scaled_regulator, scaled_pion_mass};
@@ -217,12 +217,12 @@ namespace chiral
     // CM oscillator parameter and scaling.
     auto bcm = b.cm();
     auto scaled_regulator_cm = regulator / bcm;
-    auto scaled_pion_mass_cm = constants::pion_mass_fm / bcm;
+    auto scaled_pion_mass_cm = constants::pion_mass_fm * bcm;
 
     // Relative oscillator parameter and scaling.
     auto brel = b.relative();
     auto scaled_regulator_rel = regulator / brel;
-    auto scaled_pion_mass_rel = constants::pion_mass_fm / brel;
+    auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
     quadrature::gsl_params pcm{nc, lc, ncp, lcp, regularize, scaled_regulator_cm, scaled_pion_mass_cm};

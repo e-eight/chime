@@ -34,6 +34,11 @@ namespace constants
   constexpr double d18_fm = d18_Gev * hbarc_GeV * hbarc_GeV; // (in fm^2)
   constexpr double L2_GeV = 0.188; // (in GeV^{-4})
   constexpr double L2_fm = L2_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV; // (in fm^4)
+  constexpr double c3_GeV = 1;
+  constexpr double c3_fm = c3_GeV * hbarc_GeV * hbarc_GeV;
+  constexpr double c4_GeV = 1;
+  constexpr double c4_fm = c4_GeV * hbarc_GeV * hbarc_GeV;
+  constexpr double D = 1;
 }
 
 #endif

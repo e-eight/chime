@@ -5,7 +5,7 @@
 
 namespace sf
 {
-  double Laguerre(const int n, const double a, const double x)
+  static double Laguerre(const int n, const double a, const double x)
   {
     switch (n)
       {

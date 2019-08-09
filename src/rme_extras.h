@@ -177,21 +177,39 @@ namespace am
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
-  inline double RelativeTotalSpinRME(const int& lp,
-                                     const int& l,
-                                     const int& sp,
-                                     const int& s,
-                                     const int& jp,
-                                     const int& j,
-                                     const int& a,
-                                     const int& b)
+  inline double RelativeSpinSymmetricRME(const int& lp,
+                                         const int& l,
+                                         const int& sp,
+                                         const int& s,
+                                         const int& jp,
+                                         const int& j,
+                                         const int& a,
+                                         const int& b)
   {
     assert(AllowedTriangle(a, 1, b));
 
     auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
-    auto prme = (PauliOneRME(sp, s) + PauliTwoRME(sp, s))/2;
+    auto prme = SpinSymmetricRME(sp, s);
+    auto result = (hat_product * wigner_9j * crme * prme);
+    return result;
+  }
+  inline double RelativeSpinAsymmetricRME(const int& lp,
+                                         const int& l,
+                                         const int& sp,
+                                         const int& s,
+                                         const int& jp,
+                                         const int& j,
+                                         const int& a,
+                                         const int& b)
+  {
+    assert(AllowedTriangle(a, 1, b));
+
+    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
+    auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
+    auto crme = SphericalHarmonicCRME(lp, l, a);
+    auto prme = SpinAsymmetricRME(sp, s);
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
@@ -325,20 +343,20 @@ namespace am
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }
-  inline double RelativeCMTotalSpinRME(const int& lrp,
-                                       const int& lr,
-                                       const int& lcp,
-                                       const int& lc,
-                                       const int& Lp,
-                                       const int& L,
-                                       const int& Sp,
-                                       const int& S,
-                                       const int& Jp,
-                                       const int& J,
-                                       const int& a,
-                                       const int& b,
-                                       const int& c,
-                                       const int& d)
+  inline double RelativeCMSpinSymmetricRME(const int& lrp,
+                                           const int& lr,
+                                           const int& lcp,
+                                           const int& lc,
+                                           const int& Lp,
+                                           const int& L,
+                                           const int& Sp,
+                                           const int& S,
+                                           const int& Jp,
+                                           const int& J,
+                                           const int& a,
+                                           const int& b,
+                                           const int& c,
+                                           const int& d)
   {
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
@@ -349,7 +367,35 @@ namespace am
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
                          * SphericalHarmonicCRME(lcp, lc, b));
-    auto prme = (PauliOneRME(Sp, S) + PauliTwoRME(Sp, S)) / 2;
+    auto prme = SpinSymmetricRME(Sp, S);
+    auto result = (hat_product * wigner_product * crme_product * prme);
+    return result;
+  }
+  inline double RelativeCMSpinAsymmetricRME(const int& lrp,
+                                            const int& lr,
+                                            const int& lcp,
+                                            const int& lc,
+                                            const int& Lp,
+                                            const int& L,
+                                            const int& Sp,
+                                            const int& S,
+                                            const int& Jp,
+                                            const int& J,
+                                            const int& a,
+                                            const int& b,
+                                            const int& c,
+                                            const int& d)
+  {
+    assert(AllowedTriangle(a, b, c));
+    assert(AllowedTriangle(c, 1, d));
+
+    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
+                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto wigner_product = (Wigner9J(L, S, J, c, 1, d, Lp, Sp, Jp)
+                           * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
+    auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
+                         * SphericalHarmonicCRME(lcp, lc, b));
+    auto prme = SpinAsymmetricRME(Sp, S);
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }

@@ -2,10 +2,10 @@ project (chime_src LANGUAGES CXX)
 
 set (TARGET chime.exe)
 
-set (SOURCES main.cpp m1_new.cpp)
+set (SOURCES main.cpp m1_new.cpp gt.cpp)
 
 set (HEADERS cli.h constants.h rme_extras.h utility.h io.h chiral.h factory.h
-             operators.h threedho.h quadrature.h m1.h)
+             operators.h threedho.h quadrature.h m1.h gt.h)
 
 add_executable(${TARGET} ${SOURCES} ${HEADERS})
 
