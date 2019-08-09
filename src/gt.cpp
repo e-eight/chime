@@ -84,7 +84,9 @@ namespace chiral
     auto scaled_pion_mass = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params p {nrp, lrp, nr, lr, regularize, scaled_regulator, scaled_pion_mass};
+    quadrature::gsl_params_pion p {nrp, lrp, nr, lr, regularize, scaled_regulator, scaled_pion_mass};
+    quadrature::gsl_params_contact c {nr, lr, 2.0 / scaled_regulator};
+    quadrature::gsl_params_contact cp {nrp, lrp, 2.0 / scaled_regulator};
 
     // Symmetric and asymmetric RMEs.
     auto symm_rme_spin = am::SpinSymmetricRME(sp, s);
@@ -97,7 +99,9 @@ namespace chiral
                          * ho::CoordinateSpaceNorm(nrp, lrp, 1));
     auto ypi_integral = norm_product * quadrature::IntegralYPiR(p);
     auto wpi_integral = norm_product * quadrature::IntegralWPiRYPiR(p);
-    auto contact_integral = norm_product * quadrature::IntegralRegularizedDelta(p);
+    auto contact_integral = (quadrature::IntegralMomentumGaussian(c)
+                             * quadrature::IntegralMomentumGaussian(cp));
+    contact_integral *= (norm_product / util::cube(brel));
 
     // Common part of pion exchange term prefactors.
     auto pion_prefactor = (2 * constants::gA
@@ -135,12 +139,22 @@ namespace chiral
       c4_result = 0;
 
     // D term.
+    // Evaluating the lec D.
+    double lec_cD = 0;
+    double regulator_tol = 10e-10;
+    if (abs(regulator - 0.9) < regulator_tol)
+      lec_cD = 1.7;
+    if (abs(regulator - 1) < regulator_tol)
+      lec_cD = 7.2;
+    auto lec_D = (lec_cD / (util::square(constants::pion_decay_constant_fm)
+                            * constants::lambda_chiral_fm));
+    // D final result.
     double D_result = 0;
     if (lrp == 0 && lr == 0)
       {
         D_result = ((symm_rme_spin * symm_rme_isospin)
                     + (asymm_rme_spin * asymm_rme_isospin));
-        D_result *= (-0.5 * constants::D * contact_integral);
+        D_result *= (-0.5 * lec_D * contact_integral);
         if (isnan(D_result))
           D_result = 0;
       }

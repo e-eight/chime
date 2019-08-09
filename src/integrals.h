@@ -16,8 +16,8 @@
 
 namespace quadrature
 {
-  // Struct for passing parameters to GSL integration routines.
-  struct gsl_params
+  // Structs for passing parameters to GSL integration routines.
+  struct gsl_params_pion
   {
     std::size_t np;
     std::size_t lp;
@@ -28,9 +28,16 @@ namespace quadrature
     double scaled_pion_mass;
   };
 
+  struct gsl_params_contact
+  {
+    std::size_t n;
+    std::size_t l;
+    double scaled_regulator;
+  };
+
   // Integrates m_π R (or m_π r) sandwiched between the radial basis states,
   // in coordinate space. The radial basis states are not normalized.
-  static double IntegralMPiR(const gsl_params& p)
+  static double IntegralMPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -52,7 +59,7 @@ namespace quadrature
 
   // Integrates the Yukawa function sandwiched between radial basis states,
   // in coordinate space. The basis states are not normalized.
-  static double IntegralYPiR(const gsl_params& p)
+  static double IntegralYPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -75,7 +82,7 @@ namespace quadrature
 
   // Integrates W_π(r) Y_π(r), sandwiched between unnormalized coordinate
   // space radial basis states.
-  static double IntegralWPiRYPiR(const gsl_params& p)
+  static double IntegralWPiRYPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -99,7 +106,7 @@ namespace quadrature
 
   // Integrates m_π r W_π(r) Y_π(r), sandwiched between unnormalized coordinate
   // space radial basis states.
-  static double IntegralMPiRWPiRYPiR(const gsl_params& p)
+  static double IntegralMPiRWPiRYPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -122,7 +129,7 @@ namespace quadrature
 
   // Integrates Z_π(r)Y_π(r), sandwiched between unnormalized coordinate space
   // radial basis states.
-  static double IntegralZPiYPiR(const gsl_params& p)
+  static double IntegralZPiYPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -146,7 +153,7 @@ namespace quadrature
 
   // Integrates T_π(r)Y_π(r), sandwiched between unnormalized coordinate space
   // radial basis states.
-  static double IntegralTPiYPiR(const gsl_params& p)
+  static double IntegralTPiYPiR(const gsl_params_pion& p)
   {
     auto integrand =
       [&p](double y)
@@ -168,28 +175,23 @@ namespace quadrature
     return result;
   }
 
-  // Integrates the regularized approximation of δ(r)/4πr^2,
-  // exp(-r^2 / Regulator^2) / (2π√π r^2 Regulator), sandwiched between
-  // unnormalized coordinate space radial basis states.
-  static double IntegralRegularizedDelta(const gsl_params& p)
+  // Integrates a Gaussian, part of the nonlocal momentum space regulator, with
+  // an unnormalized radial basis state.
+  static double IntegralMomentumGaussian(gsl_params_contact& p)
   {
     auto integrand =
       [&p](double y)
       {
         return (std::exp(-y / util::square(p.scaled_regulator))
-                * sf::Laguerre(p.n, p.l + 0.5, y)
-                * sf::Laguerre(p.np, p.lp + 0.5, y));
+                * sf::Laguerre(p.n, p.l + 0.5, y));
       };
 
     double a = 0;
-    double b = 1;
-    double alpha = (p.l + p.lp - 1) / 2.0;
-    std::size_t nodes = (p.n + p.np) / 2 + 1;
+    double b = 0.5;
+    double alpha = (p.l + 1) / 2.0;
+    std::size_t nodes = p.n + 1;
     auto integral = GaussLaguerre(integrand, a, b, alpha, nodes);
-    auto oscb = p.scaled_pion_mass / constants::pion_mass_fm;
-    auto result = ((oscb * integral)
-                   / (4 * constants::pi * constants::sqrtpi * p.scaled_regulator));
-    return result;
+    return integral;
   }
 }
 

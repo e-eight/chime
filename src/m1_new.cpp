@@ -169,7 +169,7 @@ namespace chiral
     auto scaled_pion_mass = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params p{nr, lr, nrp, lrp, regularize, scaled_regulator, scaled_pion_mass};
+    quadrature::gsl_params_pion p{nr, lr, nrp, lrp, regularize, scaled_regulator, scaled_pion_mass};
 
     // Radial integrals.
     auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
@@ -225,8 +225,8 @@ namespace chiral
     auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params pcm{nc, lc, ncp, lcp, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
-    quadrature::gsl_params prel{nr, lr, nrp, lrp, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
+    quadrature::gsl_params_pion pcm{nc, lc, ncp, lcp, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
+    quadrature::gsl_params_pion prel{nr, lr, nrp, lrp, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
 
     // Radial integrals.
     // CM integral.

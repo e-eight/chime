@@ -22,6 +22,8 @@ namespace constants
   constexpr double nuclear_magneton_fm = 1.0 / (nucleon_mass_fm * 2); // (e = 1)
 
   // Low energy constants
+  constexpr double lambda_chiral_MeV = 700; // (in MeV)
+  constexpr double lambda_chiral_fm = lambda_chiral_MeV / hbarc; // (in fm^{-1})
   constexpr double isoscalar_nucleon_charge_radius_sq_fm = 0.603729; // (in fm^2)
   constexpr double isoscalar_nucleon_magnetic_moment = 0.88;
   constexpr double isovector_nucleon_magnetic_moment = 4.706;
@@ -34,11 +36,10 @@ namespace constants
   constexpr double d18_fm = d18_Gev * hbarc_GeV * hbarc_GeV; // (in fm^2)
   constexpr double L2_GeV = 0.188; // (in GeV^{-4})
   constexpr double L2_fm = L2_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV; // (in fm^4)
-  constexpr double c3_GeV = 1;
-  constexpr double c3_fm = c3_GeV * hbarc_GeV * hbarc_GeV;
-  constexpr double c4_GeV = 1;
-  constexpr double c4_fm = c4_GeV * hbarc_GeV * hbarc_GeV;
-  constexpr double D = 1;
+  constexpr double c3_GeV = -4.69; // (in GeV^{-1})
+  constexpr double c3_fm = c3_GeV * hbarc_GeV;
+  constexpr double c4_GeV = 3.40; // (in GeV^{-1})
+  constexpr double c4_fm = c4_GeV * hbarc_GeV;
 }
 
 #endif
