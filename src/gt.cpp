@@ -104,10 +104,10 @@ namespace chiral
     contact_integral *= (norm_product / util::cube(brel));
 
     // Common part of pion exchange term prefactors.
-    auto pion_prefactor = (2 * constants::gA
-                         * util::cube(constants::pion_mass_fm));
+    auto pion_prefactor = (constants::gA
+                           * util::cube(constants::pion_mass_fm));
     pion_prefactor /= (12 * constants::pi
-                     * util::square(constants::pion_decay_constant_fm));
+                       * util::square(constants::pion_decay_constant_fm));
 
     // C3 term.
     // Symmetric term.
@@ -121,7 +121,7 @@ namespace chiral
                       * wpi_integral);
     asymm_term_c3 *= asymm_rme_isospin;
     // C3 prefactor.
-    auto c3_prefactor = pion_prefactor * constants::c3_fm;
+    auto c3_prefactor = -pion_prefactor * constants::c3_fm;
     // C3 final result.
     auto c3_result = (c3_prefactor * (symm_term_c3 + asymm_term_c3));
     if (isnan(c3_result))
@@ -133,7 +133,7 @@ namespace chiral
     spin_rme += (std::sqrt(10) * wpi_integral
                  * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 2, 2, 1));
     auto isospin_rme = 0.5 * am::PauliProductRME(tp, t, 1);
-    auto c4_prefactor = pion_prefactor * constants::c4_fm;
+    auto c4_prefactor = 0.5 * pion_prefactor * constants::c4_fm;
     auto c4_result = (c4_prefactor * isospin_rme * spin_rme);
     if (isnan(c4_result))
       c4_result = 0;
