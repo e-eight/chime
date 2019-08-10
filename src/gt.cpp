@@ -27,12 +27,12 @@ namespace chiral
       return 0;
 
     auto symm_term = am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    symm_term *= am::SpinSymmetricRME(tp, t);
+    symm_term *= 2 * am::SpinSymmetricRME(tp, t);
 
     auto asymm_term = am::RelativeSpinAsymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    asymm_term *= am::SpinAsymmetricRME(tp, t);
+    asymm_term *= 2 * am::SpinAsymmetricRME(tp, t);
 
-    auto result = (-constants::gA * (symm_term + asymm_term));
+    auto result = (std::sqrt(2) * constants::gA * (symm_term + asymm_term));
     if (isnan(result))
       result = 0;
     return result;
@@ -90,9 +90,9 @@ namespace chiral
 
     // Symmetric and asymmetric RMEs.
     auto symm_rme_spin = am::SpinSymmetricRME(sp, s);
-    auto symm_rme_isospin = am::SpinSymmetricRME(tp, t);
+    auto symm_rme_isospin = 2 * am::SpinSymmetricRME(tp, t);
     auto asymm_rme_spin = am::SpinAsymmetricRME(sp, s);
-    auto asymm_rme_isospin = am::SpinAsymmetricRME(sp, s);
+    auto asymm_rme_isospin = 2 * am::SpinAsymmetricRME(tp, t);
 
     // Radial integrals.
     auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
@@ -121,7 +121,7 @@ namespace chiral
                       * wpi_integral);
     asymm_term_c3 *= asymm_rme_isospin;
     // C3 prefactor.
-    auto c3_prefactor = -pion_prefactor * constants::c3_fm;
+    auto c3_prefactor = pion_prefactor * constants::c3_fm;
     // C3 final result.
     auto c3_result = (c3_prefactor * (symm_term_c3 + asymm_term_c3));
     if (isnan(c3_result))
@@ -133,7 +133,7 @@ namespace chiral
     spin_rme += (std::sqrt(10) * wpi_integral
                  * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 2, 2, 1));
     auto isospin_rme = 0.5 * am::PauliProductRME(tp, t, 1);
-    auto c4_prefactor = 0.5 * pion_prefactor * constants::c4_fm;
+    auto c4_prefactor = -pion_prefactor * constants::c4_fm;
     auto c4_result = (c4_prefactor * isospin_rme * spin_rme);
     if (isnan(c4_result))
       c4_result = 0;
@@ -154,13 +154,13 @@ namespace chiral
       {
         D_result = ((symm_rme_spin * symm_rme_isospin)
                     + (asymm_rme_spin * asymm_rme_isospin));
-        D_result *= (-0.5 * lec_D * contact_integral);
+        D_result *= (0.25 * lec_D * contact_integral);
         if (isnan(D_result))
           D_result = 0;
       }
 
     // Overall result
-    auto result = (c3_result + c4_result + D_result);
+    auto result = std::sqrt(2) * (c3_result + c4_result + D_result);
     return result;
   }
 
