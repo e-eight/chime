@@ -27,12 +27,13 @@ namespace chiral
       return 0;
 
     auto symm_term = am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    symm_term *= 2 * am::SpinSymmetricRME(tp, t);
+    symm_term *= am::SpinSymmetricRME(tp, t);
 
-    auto asymm_term = am::RelativeSpinAsymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    asymm_term *= 2 * am::SpinAsymmetricRME(tp, t);
+    auto asymm_term = am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
+    asymm_term *= am::SpinAntisymmetricRME(tp, t);
 
-    auto result = (std::sqrt(2) * constants::gA * (symm_term + asymm_term));
+    auto result = ((-constants::gA / constants::sqrt2pi)
+                   * (symm_term + asymm_term));
     if (isnan(result))
       result = 0;
     return result;
@@ -84,29 +85,26 @@ namespace chiral
     auto scaled_pion_mass = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params_pion p {nrp, lrp, nr, lr, regularize, scaled_regulator, scaled_pion_mass};
-    quadrature::gsl_params_contact c {nr, lr, 2.0 / scaled_regulator};
-    quadrature::gsl_params_contact cp {nrp, lrp, 2.0 / scaled_regulator};
+    quadrature::gsl_params_2n p {nrp, lrp, nr, lr, regularize, scaled_regulator, scaled_pion_mass};
 
-    // Symmetric and asymmetric RMEs.
-    auto symm_rme_spin = am::SpinSymmetricRME(sp, s);
-    auto symm_rme_isospin = 2 * am::SpinSymmetricRME(tp, t);
-    auto asymm_rme_spin = am::SpinAsymmetricRME(sp, s);
-    auto asymm_rme_isospin = 2 * am::SpinAsymmetricRME(tp, t);
+    // Common symmetric and asymmetric spin and isospin RMEs.
+    auto symm_rme_spin = am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
+    auto symm_rme_isospin = am::SpinSymmetricRME(tp, t);
+    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
+    auto asymm_rme_isospin = am::SpinAntisymmetricRME(tp, t);
 
     // Radial integrals.
     auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
                          * ho::CoordinateSpaceNorm(nrp, lrp, 1));
     auto ypi_integral = norm_product * quadrature::IntegralYPiR(p);
     auto wpi_integral = norm_product * quadrature::IntegralWPiRYPiR(p);
-    auto contact_integral = (quadrature::IntegralMomentumGaussian(c)
-                             * quadrature::IntegralMomentumGaussian(cp));
-    contact_integral *= (norm_product / util::cube(brel));
+    auto delta_integral = norm_product * quadrature::IntegralRegularizedDelta(p);
+    delta_integral /= util::cube(brel);
 
     // Common part of pion exchange term prefactors.
     auto pion_prefactor = (constants::gA
                            * util::cube(constants::pion_mass_fm));
-    pion_prefactor /= (12 * constants::pi
+    pion_prefactor /= (6 * constants::pi
                        * util::square(constants::pion_decay_constant_fm));
 
     // C3 term.
@@ -117,11 +115,11 @@ namespace chiral
     symm_term_c3 *= symm_rme_isospin;
     // Asymmetric term.
     auto asymm_term_c3 = asymm_rme_spin * ypi_integral;
-    asymm_term_c3 += (am::RelativeSpinAsymmetricRME(lrp, lr, sp, s, jp, j, 2, 1)
+    asymm_term_c3 += (am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 2, 1)
                       * wpi_integral);
     asymm_term_c3 *= asymm_rme_isospin;
     // C3 prefactor.
-    auto c3_prefactor = pion_prefactor * constants::c3_fm;
+    auto c3_prefactor = -pion_prefactor * constants::c3_fm;
     // C3 final result.
     auto c3_result = (c3_prefactor * (symm_term_c3 + asymm_term_c3));
     if (isnan(c3_result))
@@ -133,34 +131,28 @@ namespace chiral
     spin_rme += (std::sqrt(10) * wpi_integral
                  * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 2, 2, 1));
     auto isospin_rme = 0.5 * am::PauliProductRME(tp, t, 1);
-    auto c4_prefactor = -pion_prefactor * constants::c4_fm;
+    auto c4_prefactor = pion_prefactor * constants::c4_fm;
     auto c4_result = (c4_prefactor * isospin_rme * spin_rme);
     if (isnan(c4_result))
       c4_result = 0;
 
     // D term.
-    // Evaluating the lec D.
-    double lec_cD = 0;
-    double regulator_tol = 10e-10;
-    if (abs(regulator - 0.9) < regulator_tol)
-      lec_cD = 1.7;
-    if (abs(regulator - 1) < regulator_tol)
-      lec_cD = 7.2;
-    auto lec_D = (lec_cD / (util::square(constants::pion_decay_constant_fm)
-                            * constants::lambda_chiral_fm));
-    // D final result.
     double D_result = 0;
-    if (lrp == 0 && lr == 0)
+    if (lrp == 0 && lr == 0 && nrp == nr)
       {
+        norm_product = (ho::CoordinateSpaceNorm(nrp, 0, 1)
+                         * ho::CoordinateSpaceNorm(nr, 0, 1));
+        auto wf_product = sf::Laguerre(nrp, 0.5, 0) * sf::Laguerre(nr, 0.5, 0);
         D_result = ((symm_rme_spin * symm_rme_isospin)
                     + (asymm_rme_spin * asymm_rme_isospin));
-        D_result *= (0.25 * lec_D * contact_integral);
+        D_result *= (-0.5 * constants::D_fm * norm_product * wf_product);
+        D_result /= util::cube(brel);
         if (isnan(D_result))
           D_result = 0;
       }
 
     // Overall result
-    auto result = std::sqrt(2) * (c3_result + c4_result + D_result);
+    auto result = ((c3_result + c4_result + D_result) / (constants::sqrt2pi));
     return result;
   }
 

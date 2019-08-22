@@ -66,9 +66,9 @@ namespace am
   //  s (int): ket spin
   // Returns:
   //  reduced matrix element (double), Rose convention
-  inline double SpinAsymmetricRME(const int& sp, const int& s)
+  inline double SpinAntisymmetricRME(const int& sp, const int& s)
   {
-    return (0.5 * (PauliOneRME(sp, s) - PauliTwoRME(sp, s)));
+    return std::sqrt(3) * ((s == 0 && sp == 1) - (s == 1 && sp == 0));
   }
 
   // Calculate reduced matrix element of [\vec{σ}_1 ⊗ \vec{σ}_2]_k in a
@@ -195,21 +195,21 @@ namespace am
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
-  inline double RelativeSpinAsymmetricRME(const int& lp,
-                                         const int& l,
-                                         const int& sp,
-                                         const int& s,
-                                         const int& jp,
-                                         const int& j,
-                                         const int& a,
-                                         const int& b)
+  inline double RelativeSpinAntisymmetricRME(const int& lp,
+                                             const int& l,
+                                             const int& sp,
+                                             const int& s,
+                                             const int& jp,
+                                             const int& j,
+                                             const int& a,
+                                             const int& b)
   {
     assert(AllowedTriangle(a, 1, b));
 
     auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
-    auto prme = SpinAsymmetricRME(sp, s);
+    auto prme = SpinAntisymmetricRME(sp, s);
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
@@ -371,20 +371,20 @@ namespace am
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }
-  inline double RelativeCMSpinAsymmetricRME(const int& lrp,
-                                            const int& lr,
-                                            const int& lcp,
-                                            const int& lc,
-                                            const int& Lp,
-                                            const int& L,
-                                            const int& Sp,
-                                            const int& S,
-                                            const int& Jp,
-                                            const int& J,
-                                            const int& a,
-                                            const int& b,
-                                            const int& c,
-                                            const int& d)
+  inline double RelativeCMSpinAntisymmetricRME(const int& lrp,
+                                               const int& lr,
+                                               const int& lcp,
+                                               const int& lc,
+                                               const int& Lp,
+                                               const int& L,
+                                               const int& Sp,
+                                               const int& S,
+                                               const int& Jp,
+                                               const int& J,
+                                               const int& a,
+                                               const int& b,
+                                               const int& c,
+                                               const int& d)
   {
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
@@ -395,11 +395,99 @@ namespace am
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
                          * SphericalHarmonicCRME(lcp, lc, b));
-    auto prme = SpinAsymmetricRME(Sp, S);
+    auto prme = SpinAntisymmetricRME(Sp, S);
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }
 
+  // Calculate reduced matrix element of L_{cm} + L_{rel} in a LS coupled basis.
+  // Arguments:
+  //  lrp (int): bra orbital angular momentum, relative
+  //  lr  (int): ket orbital angular momentum, relative
+  //  lcp (int): bra orbital angular momentum, cm
+  //  lc  (int): ket orbital angular momentum, cm
+  //  Lp  (int): bra total orbital angular momentum
+  //  L   (int): ket total orbital angular momentum
+  //  Sp  (int): bra spin
+  //  S   (int): ket spin
+  //  Jp  (int): bra angular momentum
+  //  J   (int): ket angular momentum
+  // Returns:
+  //  reduced matrix element (double)
+  inline double RelativeCMLsumRME(const int& lrp, const int& lr,
+                                  const int& lcp, const int& lc,
+                                  const int& Lp, const int& L,
+                                  const int& Sp, const int& S,
+                                  const int& Jp, const int& J)
+  {
+    if (lrp != lr && lcp != lc)
+      return 0;
+    auto hat_product = (Hat(Lp) * Hat(J) * Hat(lr) * Hat(lc) * Hat(L));
+    auto parity = ParitySign(J + Lp + S + lc + lr);
+    auto LS6j = am::Wigner6J(L, Lp, 1, Jp, J, S);
+    auto cm_term = (ParitySign(Lp) * am::Wigner6J(lc, lc, 1, L, Lp, lr)
+                    * (AngularMomentumJRME(lc, lc) / Hat(lr)));
+    auto rel_term = (ParitySign(L) * am::Wigner6J(lr, lr, 1, Lp, L, lc)
+                     * (AngularMomentumJRME(lr, lr) / Hat(lc)));
+    auto result = (hat_product * parity * LS6j * (cm_term + rel_term));
+    return result;
+  }
+
+  // Calculate matrix element of the gradient operator in radial HO basis.
+  // The HO length parameter is taken to be 1.
+  //
+  // Arguments:
+  //  np (int): bra radial quantum number
+  //  n  (int): ket radial quantum number
+  //  lp (int): bra orbital angular momentum
+  //  l  (int): ket orbital angular momentum
+  // Returns:
+  //  matrix element (double)
+  inline double GradientME(const int& np, const int& n,
+                           const int& lp, const int& l)
+  {
+    double result = 0;
+    if (lp == l + 1)
+      {
+        result = (-std::sqrt(n + l + 1.5) * (np == n)
+                  + 3 * std::sqrt(n) * (np == n - 1));
+        result *= std::sqrt((l + 1.0) / (2 * l + 3.0));
+      }
+    if (l == lp + 1)
+      {
+        result = (-std::sqrt(np + lp + 1.5) * (n == np)
+                  + 3 * std::sqrt(np) * (n == np - 1));
+        result *= std::sqrt((lp + 1.0) / (2 * lp + 1));
+      }
+    return result;
+  }
+
+  // Calculate matrix element of r (or R) in radial HO basis.
+  // The HO length parameter is taken to be 1.
+  //
+  // Arguments:
+  //  np (int): bra radial quantum number
+  //  n  (int): ket radial quantum number
+  //  lp (int): bra orbital angular momentum
+  //  l  (int): ket orbital angular momentum
+  // Returns:
+  //  matrix element (double)
+  inline double RadiusME(const int& np, const int& n,
+                         const int& lp, const int& l)
+  {
+    double result = 0;
+    if (lp == l + 1)
+      {
+        result = (std::sqrt(n + l + 1.5) * (np == n)
+                  - std::sqrt(n) * (np + 1 == n));
+      }
+    if (l == lp + 1)
+      {
+        result = RadiusME(n, np, l, lp);
+      }
+    result *= SphericalHarmonicCRME(lp, l, 1);
+    return result;
+  }
 }
 
 #endif

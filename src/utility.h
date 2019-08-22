@@ -55,16 +55,10 @@ namespace util
 
   // Square function.
   template <class T>
-  T square(const T a)
-  {
-    return a * a;
-  }
+  T square(const T a) { return a * a; }
   // Cube function.
   template <class T>
-  T cube(const T a)
-  {
-    return a * a * a;
-  }
+  T cube(const T a) { return a * a * a; }
 
 
   // Lenpic coordinate space semi local regulator.

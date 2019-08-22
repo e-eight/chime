@@ -6,6 +6,7 @@ namespace constants
   constexpr double pi = 3.1415926535897932384626433832795028841971693993751;
   constexpr double sqrtpi = 1.7724538509055160272981674833411451827975494561224;
   constexpr double sqrt2 = 1.4142135623730950488016887242096980785696718753769;
+  constexpr double sqrt2pi = 2.5066282746310005024157652848110452530069867406099;
 
   // Conversion Factor
   constexpr double hbarc = 197.3269602; // (in MeV fm)
@@ -40,6 +41,8 @@ namespace constants
   constexpr double c3_fm = c3_GeV * hbarc_GeV;
   constexpr double c4_GeV = 3.40; // (in GeV^{-1})
   constexpr double c4_fm = c4_GeV * hbarc_GeV;
+  constexpr double cD = 2.1; // (Recommended value from Epelbaum et.al. 2018)
+  constexpr double D_fm = cD / (lambda_chiral_fm * pion_decay_constant_fm * pion_decay_constant_fm); // (in fm^3)
 }
 
 #endif

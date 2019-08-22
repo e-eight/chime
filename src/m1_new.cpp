@@ -29,76 +29,49 @@ namespace chiral
     return 0;
   }
 
-  // Next to leading order matrix element.
+  // Next to leading order reduced matrix element.
   // There are both one body and two body corrections. One body correction is
   // the same as impulse approximation. Two body correction is isovector in
   // nature, and has both center of mass and relative components. The one body
   // component is not regularized.
-  double NLO1Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const util::OscillatorParameter& b);
 
-  double NLO1Body(const basis::RelativeCMStateLSJT& bra,
-                  const basis::RelativeCMStateLSJT& ket,
-                  const util::OscillatorParameter& b);
-
-  double NLO2Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const util::OscillatorParameter& b,
-                  const bool& regularize,
-                  const double& regulator);
-
-  double NLO2Body(const basis::RelativeCMStateLSJT& bra,
-                  const basis::RelativeCMStateLSJT& ket,
-                  const util::OscillatorParameter& b,
-                  const bool& regularize,
-                  const double& regulator);
-
+  // Relative NLO reduced matrix element.
   double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
                                       const util::OscillatorParameter& b,
                                       const bool& regularize,
                                       const double& regulator)
   {
-    return NLO1Body(bra, ket, b) + NLO2Body(bra, ket, b, regularize, regulator);
+    // Relative quantum numbers.
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t lr = ket.L(), lrp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // CM quantum numbers.
+    std::size_t nc = 0, ncp = 0;
+    std::size_t lc = 0, lcp = 0;
+
+    // Coupled L.
+    std::size_t L = lr, Lp = lrp;
+
+    auto one_body_term = NLO1Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc,
+                                  Lp, L, Sp, S, Jp, J, Tp, T);
+    auto two_body_term = NLO2Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc, lrp, lr,
+                                  Sp, S, Jp, J, Tp, T, b, regularize, regulator);
+    auto result = one_body_term + two_body_term;
+    return result;
   }
 
+  // Relative-cm NLO reduced matrix element.
   double M1Operator::NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                       const basis::RelativeCMStateLSJT &ket,
                                       const util::OscillatorParameter &b,
                                       const bool &regularize,
                                       const double &regulator)
   {
-    return NLO1Body(bra, ket, b) + NLO2Body(bra, ket, b, regularize, regulator);
-  }
-
-  // The one body rme is same for both relative and relative-cm. However since
-  // the NLO1Body function accepts either RelativeStateLSJT or RelativeCMStateLSJT
-  // structures for bra and ket, we will first write OneBodyRME to do the actual
-  // computation and use NLO1Body as a wrapper around it.
-  double OneBodyRME(const std::size_t nr, const std::size_t nrp,
-                    const std::size_t lr, const std::size_t lrp,
-                    const std::size_t s, const std::size_t sp,
-                    const std::size_t j, const std::size_t jp,
-                    const std::size_t t, const std::size_t tp);
-
-  double NLO1Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const util::OscillatorParameter& b)
-  {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t lr = ket.L(), lrp = bra.L();
-    std::size_t s = ket.S(), sp = bra.S();
-    std::size_t j = ket.J(), jp = bra.J();
-    std::size_t t = ket.T(), tp = bra.T();
-
-    return OneBodyRME(nr, nrp, lr, lrp, s, sp, j, jp, t, tp);
-  }
-
-  double NLO1Body(const basis::RelativeCMStateLSJT& bra,
-                  const basis::RelativeCMStateLSJT& ket,
-                  const util::OscillatorParameter& b)
-  {
+    // Relative-cm quantum numbers.
     std::size_t nr = ket.Nr(), nrp = bra.Nr();
     std::size_t nc = ket.Nc(), ncp = bra.Nc();
     std::size_t lr = ket.lr(), lrp = bra.lc();
@@ -108,112 +81,63 @@ namespace chiral
     std::size_t J = ket.J(), Jp = bra.J();
     std::size_t T = ket.T(), Tp = bra.T();
 
-    bool kronecker = (nc == ncp && lc == lcp);
-    if (!kronecker)
-      return 0;
-    return OneBodyRME(nr, nrp, lr, lrp, S, Sp, J, Jp, T, Tp);
+    auto one_body_term = NLO1Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc,
+                                  lrp, lr, Sp, S, Jp, J, Tp, T);
+    auto two_body_term = NLO2Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc, lrp, lr,
+                                  Sp, S, Jp, J, Tp, T, b, regularize, regulator);
+    auto result = one_body_term + two_body_term;
+    return result;
   }
 
-  double OneBodyRME(const std::size_t nr, const std::size_t nrp,
-                    const std::size_t lr, const std::size_t lrp,
-                    const std::size_t s, const std::size_t sp,
-                    const std::size_t j, const std::size_t jp,
-                    const std::size_t t, const std::size_t tp)
+
+  double NLO1Body(const std::size_t& nrp, const std::size_t& nr,
+                  const std::size_t& lrp, const std::size_t& lr,
+                  const std::size_t& ncp, const std::size_t& nc,
+                  const std::size_t& lcp, const std::size_t& lc,
+                  const std::size_t& Lp, const std::size_t& L,
+                  const std::size_t& Sp, const std::size_t& S,
+                  const std::size_t& Jp, const std::size_t& J,
+                  const std::size_t& Tp, const std::size_t& T)
   {
-    bool kronecker = (nr == nrp && lr == lrp);
-    if (!kronecker)
-      return 0;
+    // Spin and isospin RMEs.
+    auto symm_rme_spin = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+    auto asymm_rme_spin = am::RelativeCMSpinAntisymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
 
-    auto symm_term_angular = ((1 + 0.5 * std::sqrt(t * (t + 1)))
-                              * ParitySign(1 + lr + s + j)
-                              * Hat(lr) * std::sqrt(lr * (lr + 1))
-                              * am::Wigner6J(lr, j, s, jp, lrp, 1));
+    // Orbital angular momentum MEs.
+    auto lsum_me = am::RelativeCMLsumRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J) * (nrp == nr && ncp == nc);
+    auto mass_ratio = std::sqrt(constants::reduced_nucleon_mass_fm / (2 * constants::nucleon_mass_fm));
+    auto rcm_prel_me = mass_ratio * am::GradientME(nrp, nr, lrp, lr) * am::RadiusME(ncp, nc, lcp, lc);
+    auto rrel_pcm_me = am::RadiusME(nrp, nr, lrp, lr) * am::GradientME(ncp, nc, lcp, lc) / mass_ratio;
 
-    auto symm_term_spin = ((constants::isoscalar_nucleon_magnetic_moment
-                            + (std::sqrt(t * (t + 1))
-                               * constants::isovector_nucleon_magnetic_moment))
-                               * ParitySign(lr + jp)
-                               * Hat(s) * std::sqrt(s * (s + 1))
-                               * am::Wigner6J(1, j, lr, jp, 1, 1));
-    auto symm_term = ((symm_term_angular + symm_term_spin)
-                      * (t == tp) * (s == sp));
+    // Purely orbital angular momentum terms.
+    auto oam_diagonal_term = 0.5 * ((Tp == T) + symm_rme_isospin) * lsum_me;
+    auto oam_cross_term = asymm_rme_isospin * (rcm_prel_me + 0.25 * rrel_pcm_me);
 
-    auto asymm_term = (0.75 * (ParitySign(t) - ParitySign(tp))
-                       * (ParitySign(s) - ParitySign(sp))
-                       * ParitySign(lr + s + jp + 1) * Hat(sp)
-                       * am::Wigner6J(s, j, lr, jp, sp, 1)
-                       * (t != tp) * (s != sp));
+    // Purely spin terms.
+    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+                           + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin) * symm_rme_spin);
+    auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
 
-    auto result = Hat(j) * (symm_term + asymm_term);
+    // Complete result.
+    auto result = oam_diagonal_term + spin_symm_term + spin_asymm_term + oam_cross_term;
     if (isnan(result))
       result = 0;
     return result;
   }
 
-  // Relative two body part.
-  double NLO2Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
+  double NLO2Body(const std::size_t& nrp, const std::size_t& nr,
+                  const std::size_t& lrp, const std::size_t& lr,
+                  const std::size_t& ncp, const std::size_t& nc,
+                  const std::size_t& lcp, const std::size_t& lc,
+                  const std::size_t& Lp, const std::size_t& L,
+                  const std::size_t& Sp, const std::size_t& S,
+                  const std::size_t& Jp, const std::size_t& J,
+                  const std::size_t& Tp, const std::size_t& T,
                   const util::OscillatorParameter& b,
-                  const bool& regularize,
-                  const double& regulator)
+                  const bool& regularize, const double regulator)
   {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t lr = ket.L(), lrp = bra.L();
-    std::size_t s = ket.S(), sp = bra.S();
-    std::size_t j = ket.J(), jp = bra.J();
-    std::size_t t = ket.T(), tp = bra.T();
-
-    // OscillatorParameter and scaling.
-    auto brel = b.relative();
-    auto scaled_regulator = regulator / brel;
-    auto scaled_pion_mass = constants::pion_mass_fm * brel;
-
-    // Parameters for integration routines.
-    quadrature::gsl_params_pion p{nr, lr, nrp, lrp, regularize, scaled_regulator, scaled_pion_mass};
-
-    // Radial integrals.
-    auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
-                         * ho::CoordinateSpaceNorm(nrp, lrp, 1));
-    auto zpi_integral = norm_product * quadrature::IntegralZPiYPiR(p);
-    auto tpi_integral = norm_product * quadrature::IntegralTPiYPiR(p);
-
-    // Angular momentum rmes.
-    auto A6S1_rme = std::sqrt(10) * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 2, 1, 1);
-    auto S1_rme = am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 0, 1, 1);
-
-    // Isospin rme
-    auto T1_rme = am::PauliProductRME(tp, t, 1);
-
-    // LEC prefactor.
-    auto num = constants::gA * util::cube(constants::pion_mass_fm) * constants::d18_fm;
-    auto denom = 12 * constants::pi * util::square(constants::pion_decay_constant_fm);
-    auto lec_prefactor = num / denom;
-    lec_prefactor /= constants::nuclear_magneton_fm;
-
-    // Final result.
-    auto result = (lec_prefactor * T1_rme *
-                   (zpi_integral * A6S1_rme + tpi_integral * S1_rme));
-    if (isnan(result))
-      result = 0;
-    return result;
-  }
-
-  // Relative-cm two body component.
-  double NLO2Body(const basis::RelativeCMStateLSJT& bra,
-                  const basis::RelativeCMStateLSJT& ket,
-                  const util::OscillatorParameter& b,
-                  const bool& regularize,
-                  const double& regulator)
-  {
-    std::size_t nr = ket.Nr(), nrp = bra.Nr();
-    std::size_t nc = ket.Nc(), ncp = bra.Nc();
-    std::size_t lr = ket.lr(), lrp = bra.lc();
-    std::size_t lc = ket.lc(), lcp = bra.lc();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
-
     // CM oscillator parameter and scaling.
     auto bcm = b.cm();
     auto scaled_regulator_cm = regulator / bcm;
@@ -225,8 +149,8 @@ namespace chiral
     auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params_pion pcm{nc, lc, ncp, lcp, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
-    quadrature::gsl_params_pion prel{nr, lr, nrp, lrp, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
+    quadrature::gsl_params_2n pcm{ncp, lcp, nc, lc, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
+    quadrature::gsl_params_2n prel{nrp, lrp, nr, lr, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
 
     // Radial integrals.
     // CM integral.
@@ -268,6 +192,7 @@ namespace chiral
     return result;
   }
 
+
   // Next to next to leading order. There are no chiral eft correction at N2LO.
   double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
@@ -287,6 +212,7 @@ namespace chiral
     return 0;
   }
 
+
   // Next to next to next to leading order.
   // There are both isoscalar and isovector two body chiral eft corrections at
   // N3LO. Currently only the isoscalar part has been implemented, as that is
@@ -297,7 +223,22 @@ namespace chiral
                                        const bool& regularize,
                                        const double& regulator)
   {
-    return 0;
+    // Relative quantum numbers.
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t lr = ket.L(), lrp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // CM quantum numbers.
+    std::size_t nc = 0, ncp = 0;
+    std::size_t lc = 0, lcp = 0;
+
+    // Coupled L.
+    std::size_t L = lr, Lp = lrp;
+
+    return N3LO2BodyIsoscalar(nrp, nr, lrp, lr, ncp, nc, lcp, lc, Lp, L,
+                              Sp, S, Jp, J, Tp, T, b, regularize, regulator);
   }
 
   double M1Operator::N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
@@ -306,7 +247,70 @@ namespace chiral
                                        const bool& regularize,
                                        const double& regulator)
   {
-    return 0;
+    // Relative-cm quantum numbers.
+    std::size_t nr = ket.Nr(), nrp = bra.Nr();
+    std::size_t nc = ket.Nc(), ncp = bra.Nc();
+    std::size_t lr = ket.lr(), lrp = bra.lc();
+    std::size_t lc = ket.lc(), lcp = bra.lc();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    return N3LO2BodyIsoscalar(nrp, nr, lrp, lr, ncp, nc, lcp, lc, Lp, L,
+                              Sp, S, Jp, J, Tp, T, b, regularize, regulator);
+  }
+
+  double N3LO2bodyIsoscalar(const std::size_t& nrp, const std::size_t& nr,
+                            const std::size_t& lrp, const std::size_t& lr,
+                            const std::size_t& ncp, const std::size_t& nc,
+                            const std::size_t& lcp, const std::size_t& lc,
+                            const std::size_t& Lp, const std::size_t& L,
+                            const std::size_t& Sp, const std::size_t& S,
+                            const std::size_t& Jp, const std::size_t& J,
+                            const std::size_t& Tp, const std::size_t& T,
+                            const util::OscillatorParameter& b,
+                            const bool& regularize, const double regulator)
+  {
+    // Spin rmes.
+    auto S_rme = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+
+    // GSL parameters for radial integrals.
+    auto brel = b.relative();
+    auto scaled_regulator_rel = regulator / brel;
+    auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
+    quadrature::gsl_params_2n p{nrp, lrp, nr, lr, regularize, scaled_pion_mass_rel, scaled_regulator_rel};
+
+    // d9 term.
+    // d9 isospin rme.
+    auto T0_rme = am::PauliProductRME(Tp, T, 0);
+    // d9 radial integrals.
+    auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
+                         * ho::CoordinateSpaceNorm(nrp, lrp, 1));
+    auto ypi_integral = norm_product * quadrature::IntegralYPiR(p);
+    auto wpi_integral = norm_product * quadrature::IntegralWPiRYPiR(p);
+    // d9  angular momentum rmes.
+    auto A6S_rme = (std::sqrt(10) * am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 2, 0, 2, 1));
+    // d9 prefactor.
+    auto d9_prefactor = (constants::gA * constants::d9_fm
+                         * util::cube(constants::pion_mass_fm));
+    d9_prefactor /= (std::sqrt(3) * constants::pi
+                     * util::square(constants::pion_decay_constant_fm));
+    auto d9_term = (d9_prefactor * T0_rme
+                    * (wpi_integral * A6S_rme - ypi_integral * S_rme));
+
+    // L2 term.
+    double L2_term = 0;
+    if (lrp == 0 && lr == 0 && Tp == T)
+      {
+        auto delta_integral = norm_product * quadrature::IntegralRegularizedDelta(p);
+        delta_integral /= util::cube(brel);
+        L2_term += (2 * constants::L2_fm * S_rme * delta_integral);
+      }
+
+    // Overall result.
+    auto result = d9_term + L2_term;
+    return result;
   }
 
   // Next to next to next to next to leading order.
