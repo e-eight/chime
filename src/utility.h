@@ -7,6 +7,14 @@
 #include <tuple>
 #include "constants.h"
 
+
+// Square function.
+template <class T>
+T square(const T a) { return a * a; }
+// Cube function.
+template <class T>
+T cube(const T a) { return a * a * a; }
+
 namespace util
 {
   // make_unique, because C++11 does not have one.
@@ -16,7 +24,6 @@ namespace util
   {
     return std::unique_ptr<T>( new T( std::forward<Args>(args)... ));
   }
-
 
   // Returns an array of type T, and length size.
   template <class T, std::size_t size>
@@ -53,33 +60,23 @@ namespace util
   };
 
 
-  // Square function.
-  template <class T>
-  T square(const T a) { return a * a; }
-  // Cube function.
-  template <class T>
-  T cube(const T a) { return a * a * a; }
-
-
-  // Lenpic coordinate space semi local regulator.
-  static inline double LenpicSemiLocalRegulator(const double r, const double R)
+  // Lenpic coordinate space local regulator.
+  static inline double LenpicLocalRegulator(const double r, const double R)
   {
     return std::pow(1 - std::exp(-square(r / R)), 6);
   }
   static inline double ApplyRegulator(const bool regularize, const double r, const double R)
   {
-    return regularize ? LenpicSemiLocalRegulator(r, R) : 1;
+    return regularize ? LenpicLocalRegulator(r, R) : 1;
   }
 
 
-  // Yukawa function that appears in many operator matrix elements.
+  // Yukawa and associated functions that appear in many operator matrix elements.
   static inline double YPi(const double scaled_r, const double scaled_pion_mass)
   {
     auto rpi = scaled_pion_mass * scaled_r;
     return std::exp(-rpi) / rpi;
   }
-
-  // W_\pi, T_\pi, and  Z_\pi appearing in multiple operator matrix elements.
   static inline double ZPi(const double scaled_r, const double scaled_pion_mass)
   {
     return 1 + scaled_pion_mass * scaled_r;

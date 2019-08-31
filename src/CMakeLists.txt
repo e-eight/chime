@@ -3,7 +3,7 @@ project (chime_src LANGUAGES CXX)
 set (TARGET chime.exe)
 set (TEST test.exe)
 
-set (TARGET_SOURCES main.cpp m1_new.cpp gt.cpp)
+set (TARGET_SOURCES main.cpp m1.cpp gt.cpp)
 set (TEST_SOURCES test.cpp)
 
 set (HEADERS cli.h constants.h rme_extras.h utility.h io.h chiral.h factory.h

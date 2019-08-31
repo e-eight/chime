@@ -169,22 +169,24 @@ namespace quadrature
     return result;
   }
 
-  // Integrates a regularized delta function, a Gaussian whose variance is
-  // 2/Regulator, sandwiched between unnormalized radial basis states.
+  // Integrates the regularized contact term in the radial momentum basis.
+  // The regulator function is e^{(p^2 + p'^2) / Λ^2} where Λ is twice the
+  // value of the LENPIC regulator.
+  static double F(std::size_t n, double regulator, double result)
+  {
+    if (n == 0)
+      return result;
+    else
+      return F(n - 1, regulator,
+               (((2 - square(regulator)) / (2 + square(regulator)))
+                * std::sqrt((2 * n + 1.0) / (2 * n)) * result));
+  }
   static double IntegralRegularizedDelta(gsl_params_2n& p)
   {
-    auto integrand =
-      [&p](double y)
-      {
-        return (sf::Laguerre(p.n, p.l, y) * sf::Laguerre(p.np, p.lp, y));
-      };
-
-    double a = 0;
-    double b = 1 + (1 / util::square(p.scaled_regulator));
-    double alpha = 0.5;
-    std::size_t nodes = (p.n + p.np) / 2 + 1;
-    auto integral = GaussLaguerre(integrand, a, b, alpha, nodes);
-    auto result = integral / (2 * util::cube(constants::sqrtpi * p.scaled_regulator));
+    auto F_product = (F(p.n, p.scaled_regulator, 1)
+                      * F(p.np, p.scaled_regulator, 1));
+    auto result = 8 * F_product;
+    result /= cube(constants::sqrtpi * (2 + p.scaled_regulator));
     return result;
   }
 }

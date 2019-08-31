@@ -73,6 +73,27 @@ namespace chiral
                              const bool& regularize,
                              const double& regulator) override;
   };
+
+  double LO1Body(const basis::RelativeStateLSJT& bra,
+                 const basis::RelativeStateLSJT& ket);
+
+  double c3Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const util::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator);
+
+  double c4Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const util::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator);
+
+  double DTerm(const basis::RelativeStateLSJT& bra,
+               const basis::RelativeStateLSJT& ket,
+               const util::OscillatorParameter& b,
+               const bool& regularize,
+               const double& regulator);
 }
 
 #endif

@@ -12,6 +12,18 @@
 #include "am/racah_reduction.h"
 #include "am/rme.h"
 
+// Product of Hats.
+template <class T>
+double HatProduct(T x)
+{
+  return Hat(x);
+}
+template <class T, class... Args>
+double HatProduct(T x, Args... args)
+{
+  return Hat(x) * HatProduct(args...);
+}
+
 namespace am
 {
   // Calculate reduced matrix element of Pauli matrices in two-body (iso)spin
@@ -68,7 +80,7 @@ namespace am
   //  reduced matrix element (double), Rose convention
   inline double SpinAntisymmetricRME(const int& sp, const int& s)
   {
-    return std::sqrt(3) * ((s == 0 && sp == 1) - (s == 1 && sp == 0));
+    return ((s == 0 && sp == 1) - std::sqrt(3) * (s == 1 && sp == 0));
   }
 
   // Calculate reduced matrix element of [\vec{σ}_1 ⊗ \vec{σ}_2]_k in a
@@ -84,7 +96,7 @@ namespace am
   {
     assert(AllowedTriangle(1, 1, k));
 
-    auto hat_product = 2 * Hat(s) * Hat(k);
+    auto hat_product = 2 * HatProduct(s, k);
     auto half = HalfInt(1, 2);
     auto wigner_9j = Wigner9J(half, half, s, 1, 1, k, half, half, sp);
     auto result = 3 * hat_product * wigner_9j;
@@ -119,7 +131,7 @@ namespace am
   {
     assert(AllowedTriangle(a, b, c));
 
-    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(c);
+    auto hat_product = HatProduct(lp, sp, j, c);
     auto wigner_9j = Wigner9J(l, s, j, a, b, c, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
     auto pprme = PauliProductRME(sp, s, b);
@@ -152,7 +164,7 @@ namespace am
   {
     assert(AllowedTriangle(a, 1, b));
 
-    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
+    auto hat_product = HatProduct(lp, sp, j, b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
     auto prme = PauliOneRME(sp, s);
@@ -170,7 +182,7 @@ namespace am
   {
     assert(AllowedTriangle(a, 1, b));
 
-    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
+    auto hat_product = HatProduct(lp, sp, j, b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
     auto prme = PauliTwoRME(sp, s);
@@ -188,7 +200,7 @@ namespace am
   {
     assert(AllowedTriangle(a, 1, b));
 
-    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
+    auto hat_product = HatProduct(lp, sp, j, b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
     auto prme = SpinSymmetricRME(sp, s);
@@ -206,7 +218,7 @@ namespace am
   {
     assert(AllowedTriangle(a, 1, b));
 
-    auto hat_product = Hat(lp) * Hat(sp) * Hat(j) * Hat(b);
+    auto hat_product = HatProduct(lp, sp, j, b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
     auto crme = SphericalHarmonicCRME(lp, l, a);
     auto prme = SpinAntisymmetricRME(sp, s);
@@ -255,8 +267,7 @@ namespace am
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, d, e));
 
-    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
-                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto hat_product = HatProduct(Lp, Sp, J, lrp, lcp, c, L);
     auto wigner_product = (Wigner9J(L, S, J, c, d, e, Lp, Sp, Jp)
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
@@ -305,8 +316,7 @@ namespace am
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
 
-    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
-                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto hat_product = HatProduct(Lp, Sp, J, lrp, lcp, c, L);
     auto wigner_product = (Wigner9J(L, S, J, c, 1, d, Lp, Sp, Jp)
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
@@ -333,8 +343,7 @@ namespace am
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
 
-    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
-                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto hat_product = HatProduct(Lp, Sp, J, lrp, lcp, c, L);
     auto wigner_product = (Wigner9J(L, S, J, c, 1, d, Lp, Sp, Jp)
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
@@ -361,8 +370,7 @@ namespace am
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
 
-    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
-                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto hat_product = HatProduct(Lp, Sp, J, lrp, lcp, c, L);
     auto wigner_product = (Wigner9J(L, S, J, c, 1, d, Lp, Sp, Jp)
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
@@ -389,14 +397,37 @@ namespace am
     assert(AllowedTriangle(a, b, c));
     assert(AllowedTriangle(c, 1, d));
 
-    auto hat_product = (Hat(Lp) * Hat(Sp) * Hat(J) * Hat(lrp)
-                        * Hat(lcp) * Hat(c) * Hat(L));
+    auto hat_product = HatProduct(Lp, Sp, J, lrp, lcp, c, L);
     auto wigner_product = (Wigner9J(L, S, J, c, 1, d, Lp, Sp, Jp)
                            * Wigner9J(lr, lc, L, a, b, c, lrp, lcp, Lp));
     auto crme_product = (SphericalHarmonicCRME(lrp, lr, a)
                          * SphericalHarmonicCRME(lcp, lc, b));
     auto prme = SpinAntisymmetricRME(Sp, S);
     auto result = (hat_product * wigner_product * crme_product * prme);
+    return result;
+  }
+
+  // Calculate reduced matrix element of L_{rel} in a LS coupled basis.
+  // Arguments:
+  //  lp (int): bra orbital angular momentum, relative
+  //  l  (int): ket orbital angular momentum, relative
+  //  sp  (int): bra spin
+  //  s   (int): ket spin
+  //  jp  (int): bra angular momentum
+  //  j   (int): ket angular momentum
+  // Returns:
+  //  reduced matrix element (double)
+  inline double RelativeLrelRME(const int& lp, const int& l,
+                                const int& sp, const int& s,
+                                const int& jp, const int& j)
+  {
+    if (sp != s)
+      return 0;
+    auto hat_product = HatProduct(j, lp);
+    auto wigner_6j = am::Wigner6J(l, lp, 1, jp, j, s);
+    auto parity = ParitySign(lp + s + j + 1);
+    auto lrel_rme = AngularMomentumJRME(lp, l);
+    auto result = (parity * hat_product * wigner_6j * lrel_rme);
     return result;
   }
 
@@ -422,7 +453,7 @@ namespace am
   {
     if (lrp != lr && lcp != lc)
       return 0;
-    auto hat_product = (Hat(Lp) * Hat(J) * Hat(lr) * Hat(lc) * Hat(L));
+    auto hat_product = HatProduct(Lp, J, lr, lc, L);
     auto parity = ParitySign(J + Lp + S + lc + lr);
     auto LS6j = am::Wigner6J(L, Lp, 1, Jp, J, S);
     auto cm_term = (ParitySign(Lp) * am::Wigner6J(lc, lc, 1, L, Lp, lr)

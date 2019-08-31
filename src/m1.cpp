@@ -1,307 +1,391 @@
 #include <cmath>
-#include <unordered_map>
-#include <gsl/gsl_sf_laguerre.h>
 #include "basis/lsjt_scheme.h"
-#include "rme_extended.h"
+#include "rme_extras.h"
 #include "constants.h"
 #include "utility.h"
-#include "chiral.h"
-#include "quadrature.h"
+#include "integrals.h"
 #include "threedho.h"
 #include "m1.h"
 
 namespace chiral
 {
-  ///////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// LO Matrix Element ////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
-
+  // Leading order matrix element.
+  // Under the LENPIC power counting, there is no contribution to M1 at LO.
   double M1Operator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const double& osc_b,
+                                     const util::OscillatorParameter& b,
+                                     const bool& regularize,
                                      const double& regulator)
   {
     return 0;
   }
 
-  ///////////////////////////////////////////////////////////////////////////////
-  //////////////////////////// NLO Matrix Element ///////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
+  double M1Operator::LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                     const basis::RelativeCMStateLSJT& ket,
+                                     const util::OscillatorParameter& b,
+                                     const bool& regularize,
+                                     const double& regulator)
+  {
+    return 0;
+  }
+
+  // Next to leading order reduced matrix element.
+  // There are both one body and two body corrections. One body correction is
+  // the same as impulse approximation. Two body correction is isovector in
+  // nature, and has both center of mass and relative components. The one body
+  // component is not regularized.
+
+  // Relative NLO reduced matrix element.
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const double& osc_b,
-                  const double& regulator);
+                  const basis::RelativeStateLSJT& ket)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    if (nr != nrp || L != Lp)
+      return 0;
+
+    // Spin and isospin RMEs.
+    auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+
+    // Purely spin terms.
+    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+                           + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin) * symm_rme_spin);
+    auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
+
+    // Purely orbital angular momentum term.
+    auto lrel_rme = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
+    auto oam_term = (0.5 * ((Tp == T) + symm_rme_isospin) * lrel_rme);
+
+    auto result = oam_term + spin_symm_term + spin_asymm_term;
+    return result;
+  }
+
   double NLO2Body(const basis::RelativeStateLSJT& bra,
                   const basis::RelativeStateLSJT& ket,
-                  const double& osc_b,
-                  const double& regulator);
+                  const util::OscillatorParameter& b,
+                  const bool& regularize,
+                  const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // Relative oscillator parameter and scaling.
+    auto brel = b.relative();
+    auto scaled_regulator_rel = regulator / brel;
+    auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
+
+    // Parameters for integration routines.
+    quadrature::gsl_params_2n
+      prel{nrp, Lp, nr, L, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
+
+    // Radial integrals.
+    auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, L, 1)
+                             * ho::CoordinateSpaceNorm(nrp, Lp, 1));
+    auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
+    auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
+
+    // Angular momentum RMEs.
+    auto A6S1_rme = (std::sqrt(10) * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
+    auto S1_rme = am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 0, 1, 1);
+
+    // Isospin rme.
+    auto T1_rme = am::PauliProductRME(Tp, T, 1);
+
+    // LEC prefactor. (g_A m_π^3 \bar{d}_18 / 12 π F_π^2 μ_N)
+    auto lecp = (constants::gA * constants::d18_fm
+                 * cube(constants::pion_mass_fm));
+    lecp /= (12 * constants::pi * constants::nuclear_magneton_fm
+             * square(constants::pion_decay_constant_fm));
+
+    // Overall result.
+    auto result = A6S1_rme * zpi_integral + S1_rme * tpi_integral;
+    result *= lecp * T1_rme;
+    if (isnan(result))
+      result = 0;
+    return result;
+  }
 
   double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
-                                      const double& osc_b,
+                                      const util::OscillatorParameter& b,
+                                      const bool& regularize,
                                       const double& regulator)
   {
-    return (NLO1Body(bra, ket, osc_b, regulator)
-            + NLO2Body(bra, ket, osc_b, regulator));
-  }
-
-  double NLO1Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const double& osc_b,
-                  const double& regulator)
-  {
-    int ni = ket.N(), nf = bra.N();
-    int li = ket.L(), lf = bra.L();
-    int si = ket.S(), sf = bra.S();
-    int ji = ket.J(), jf = bra.J();
-    int ti = ket.T(), tf = bra.T();
-
-    // Radial quanta.
-    auto nri = (ni - li) / 2;
-    auto nrf = (nf - lf) / 2;
-
-    bool kronecker = (nri == nrf && li == lf);
-    if (!kronecker)
-      return 0;
-
-    auto symm_term_angular = ((1 + 0.5 * std::sqrt(ti * (ti + 1)))
-                                  * std::pow(-1, 1 + li + si + ji)
-                                  * Hat(li) * std::sqrt(li * (li + 1))
-                                  * am::Wigner6J(li, ji, si, jf, li, 1));
-
-    auto symm_term_spin = ((constants::isoscalar_nucleon_magnetic_moment
-                                + (std::sqrt(ti * (ti + 1))
-                                   * constants::isovector_nucleon_magnetic_moment))
-                               * std::pow(-1, li + jf)
-                               * Hat(si) * std::sqrt(si * (si + 1))
-                               * am::Wigner6J(1, ji, li, jf, 1, 1));
-
-    auto symm_term = (symm_term_angular + symm_term_spin) * (tf == ti) * (sf == si);
-
-    auto asymm_term = (0.75 * (ParitySign(ti) - ParitySign(tf))
-                       * (ParitySign(si) - ParitySign(sf))
-                       * ParitySign(li + si + jf + 1) * Hat(sf)
-                       * am::Wigner6J(si, ji, li, jf, sf, 1)
-                       * (tf != ti) * (sf != si));
-
-    auto result = Hat(ji) * (symm_term + asymm_term);
+    auto one_body_term = NLO1Body(bra, ket);
+    auto two_body_term = NLO2Body(bra, ket, b, regularize, regulator);
+    auto result = one_body_term + two_body_term;
     return result;
   }
 
-  double NLO2Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket,
-                  const double& osc_b,
-                  const double& regulator)
+  // Relative-cm NLO reduced matrix element.
+  double M1Operator::NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                      const basis::RelativeCMStateLSJT &ket,
+                                      const util::OscillatorParameter &b,
+                                      const bool &regularize,
+                                      const double &regulator)
   {
+    // Relative-cm quantum numbers.
+    // std::size_t nr = ket.Nr(), nrp = bra.Nr();
+    // std::size_t nc = ket.Nc(), ncp = bra.Nc();
+    // std::size_t lr = ket.lr(), lrp = bra.lc();
+    // std::size_t lc = ket.lc(), lcp = bra.lc();
+    // std::size_t L = ket.L(), Lp = bra.L();
+    // std::size_t S = ket.S(), Sp = bra.S();
+    // std::size_t J = ket.J(), Jp = bra.J();
+    // std::size_t T = ket.T(), Tp = bra.T();
+
+    // auto one_body_term = NLO1Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc,
+    //                               lrp, lr, Sp, S, Jp, J, Tp, T);
+    // auto two_body_term = NLO2Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc, lrp, lr,
+    //                               Sp, S, Jp, J, Tp, T, b, regularize, regulator);
+    // auto result = one_body_term + two_body_term;
+    // return result;
     return 0;
   }
 
-  ///////////////////////////////////////////////////////////////////////////////
-  /////////////////////////// N2LO Matrix Element ///////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
 
+  // double NLO1Body(const std::size_t& nrp, const std::size_t& nr,
+  //                 const std::size_t& lrp, const std::size_t& lr,
+  //                 const std::size_t& ncp, const std::size_t& nc,
+  //                 const std::size_t& lcp, const std::size_t& lc,
+  //                 const std::size_t& Lp, const std::size_t& L,
+  //                 const std::size_t& Sp, const std::size_t& S,
+  //                 const std::size_t& Jp, const std::size_t& J,
+  //                 const std::size_t& Tp, const std::size_t& T)
+  // {
+  //   // Spin and isospin RMEs.
+  //   auto symm_rme_spin = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+  //   auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+  //   auto asymm_rme_spin = am::RelativeCMSpinAntisymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+  //   auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+
+  //   // Orbital angular momentum MEs.
+  //   auto lsum_me = am::RelativeCMLsumRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J) * (nrp == nr && ncp == nc);
+  //   auto mass_ratio = std::sqrt(constants::reduced_nucleon_mass_fm / (2 * constants::nucleon_mass_fm));
+  //   auto rcm_prel_me = mass_ratio * am::GradientME(nrp, nr, lrp, lr) * am::RadiusME(ncp, nc, lcp, lc);
+  //   auto rrel_pcm_me = am::RadiusME(nrp, nr, lrp, lr) * am::GradientME(ncp, nc, lcp, lc) / mass_ratio;
+
+  //   // Purely orbital angular momentum terms.
+  //   auto oam_diagonal_term = 0.5 * ((Tp == T) + symm_rme_isospin) * lsum_me;
+  //   auto oam_cross_term = asymm_rme_isospin * (rcm_prel_me + 0.25 * rrel_pcm_me);
+
+  //   // Purely spin terms.
+  //   auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+  //                          + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin) * symm_rme_spin);
+  //   auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
+
+  //   // Complete result.
+  //   auto result = oam_diagonal_term + spin_symm_term + spin_asymm_term + oam_cross_term;
+  //   if (isnan(result))
+  //     result = 0;
+  //   return result;
+  // }
+
+  // double NLO2Body(const std::size_t& nrp, const std::size_t& nr,
+  //                 const std::size_t& lrp, const std::size_t& lr,
+  //                 const std::size_t& ncp, const std::size_t& nc,
+  //                 const std::size_t& lcp, const std::size_t& lc,
+  //                 const std::size_t& Lp, const std::size_t& L,
+  //                 const std::size_t& Sp, const std::size_t& S,
+  //                 const std::size_t& Jp, const std::size_t& J,
+  //                 const std::size_t& Tp, const std::size_t& T,
+  //                 const util::OscillatorParameter& b,
+  //                 const bool& regularize, const double regulator)
+  // {
+  //   // CM oscillator parameter and scaling.
+  //   auto bcm = b.cm();
+  //   auto scaled_regulator_cm = regulator / bcm;
+  //   auto scaled_pion_mass_cm = constants::pion_mass_fm * bcm;
+
+  //   // Relative oscillator parameter and scaling.
+  //   auto brel = b.relative();
+  //   auto scaled_regulator_rel = regulator / brel;
+  //   auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
+
+  //   // Parameters for integration routines.
+  //   quadrature::gsl_params_2n pcm{ncp, lcp, nc, lc, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
+  //   quadrature::gsl_params_2n prel{nrp, lrp, nr, lr, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
+
+  //   // Radial integrals.
+  //   // CM integral.
+  //   auto norm_product_cm = (ho::CoordinateSpaceNorm(nc, lc, 1)
+  //                           * ho::CoordinateSpaceNorm(ncp, lcp, 1));
+  //   auto mpir_integral = norm_product_cm * quadrature::IntegralMPiR(pcm);
+  //   // Relative integrals.
+  //   auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, lr, 1)
+  //                            * ho::CoordinateSpaceNorm(nrp, lrp, 1));
+  //   auto mpir_wpi_integral = norm_product_rel * quadrature::IntegralMPiRWPiRYPiR(prel);
+  //   auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
+  //   auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
+
+  //   // Angular momentum rmes.
+  //   auto A1_rme = (-std::sqrt(3) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 0, 1));
+  //   auto A2_rme = (std::sqrt(3.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 2, 1));
+  //   auto A3_rme = (std::sqrt(9.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 2, 2, 1));
+  //   auto A4_rme = (std::sqrt(14.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 2, 2, 1));
+  //   auto A5_rme = (std::sqrt(28.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 3, 2, 1));
+  //   auto A6S1_rme = (std::sqrt(10) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 2, 2, 1, 1));
+  //   auto S1_rme = am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1, 1);
+
+  //   // Isospin rme.
+  //   auto T1_rme = am::PauliProductRME(Tp, T, 1);
+
+  //   // LEC prefactor. (g_A m_π^3 \bar{d}_18 / 12 π F_π^2 μ_N)
+  //   auto num = constants::gA * util::cube(constants::pion_mass_fm) * constants::d18_fm;
+  //   auto denom = 12 * constants::pi * util::square(constants::pion_decay_constant_fm);
+  //   auto lec_prefactor = num / denom;
+  //   lec_prefactor /= constants::nuclear_magneton_fm;
+
+  //   // Final result.
+  //   auto api_r = A1_rme + mpir_wpi_integral * (A2_rme + A3_rme + A4_rme + A5_rme);
+  //   auto relative_cm = mpir_integral * api_r;
+  //   auto relative = zpi_integral * A6S1_rme + tpi_integral * S1_rme;
+  //   auto result = lec_prefactor * T1_rme * (relative_cm + relative);
+  //   if (isnan(result))
+  //     result = 0;
+  //   return result;
+  // }
+
+
+  // Next to next to leading order. There are no chiral eft correction at N2LO.
   double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
                                        const double& regulator)
   {
     return 0;
   }
 
-  ///////////////////////////////////////////////////////////////////////////////
-  /////////////////////////// N3LO Matrix Element ///////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
+  double M1Operator::N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator)
+  {
+    return 0;
+  }
 
-  struct gsl_params { int nrf; int nri; int lf; int li; double scale; double regulator; };
-  double IntegralA(const gsl_params& p);
-  double IntegralB(const gsl_params& p);
-  double IntegralC(const gsl_params& p);
+
+  // Next to next to next to leading order.
+  // There are both isoscalar and isovector two body chiral eft corrections at
+  // N3LO. Currently only the isoscalar part has been implemented, as that is
+  // important for the deuteron.
+
+  double N3LO2BodyIsoscalar(const basis::RelativeStateLSJT& bra,
+                            const basis::RelativeStateLSJT& ket,
+                            const util::OscillatorParameter& b,
+                            const bool& regularize,
+                            const double regulator)
+  {
+    // Relative quantum numbers.
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // Spin rmes.
+    auto S_rme = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+
+    // GSL parameters for radial integrals.
+    auto brel = b.relative();
+    auto scaled_regulator_rel = regulator / brel;
+    auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
+    quadrature::gsl_params_2n prel{nrp, Lp, nr, L, regularize, scaled_pion_mass_rel, scaled_regulator_rel};
+
+    // d9 term.
+    // d9 isospin rme.
+    auto T0_rme = am::PauliProductRME(Tp, T, 0);
+    // d9 radial integrals.
+    auto norm_product = (ho::CoordinateSpaceNorm(nr, L, 1)
+                         * ho::CoordinateSpaceNorm(nrp, Lp, 1));
+    auto ypi_integral = norm_product * quadrature::IntegralYPiR(prel);
+    auto wpi_integral = norm_product * quadrature::IntegralWPiRYPiR(prel);
+    // d9  angular momentum rmes.
+    auto A6S_rme = (std::sqrt(10) * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 2, 1));
+    // d9 prefactor.
+    auto d9_prefactor = (constants::gA * constants::d9_fm
+                         * cube(constants::pion_mass_fm));
+    d9_prefactor /= (std::sqrt(3) * constants::pi
+                     * square(constants::pion_decay_constant_fm));
+    auto d9_term = (d9_prefactor * T0_rme
+                    * (wpi_integral * A6S_rme - ypi_integral * S_rme));
+
+    // L2 term.
+    double L2_term = 0;
+    if (L == 0 && L == 0 && Tp == T)
+      {
+        auto delta_integral = norm_product * quadrature::IntegralRegularizedDelta(prel);
+        delta_integral /= cube(brel);
+        L2_term += (2 * constants::L2_fm * S_rme * delta_integral);
+      }
+
+    // Overall result.
+    auto result = d9_term + L2_term;
+    result *= 2 * constants::nucleon_mass_fm;
+    if (isnan(result))
+      result = 0;
+    return result;
+  }
 
   double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
                                        const double& regulator)
   {
-    int ni = ket.N(), nf = bra.N();
-    int li = ket.L(), lf = bra.L();
-    int si = ket.S(), sf = bra.S();
-    int ji = ket.J(), jf = bra.J();
-    int ti = ket.T(), tf = bra.T();
-
-    // Radial quanta.
-    auto nri = (ni - li) / 2;
-    auto nrf = (nf - lf) / 2;
-
-    // Overall selection criteria.
-    bool kronecker = (si == 1 && sf == 1 && ti == tf);
-    if (!kronecker)
-      return 0;
-
-    auto mpi_b = constants::pion_mass_fm * osc_b;
-    auto regulator_b = regulator / osc_b;
-    auto d9_factor = ((4 * constants::d9_fm * constants::gA
-                       / std::pow(constants::pion_decay_constant_fm, 2))
-                      * am::PauliDotProductRME(tf, ti));
-    gsl_params p {nrf, nri, lf, li, mpi_b, regulator_b};
-
-    // One pion exchange term with d9.
-    auto term1 = ((std::sqrt(1.0 / 3.0)
-                   * am::LSCoupledTotalSpinY0Rank1RME(lf, sf, jf, li, si, ji))
-                  - (std::sqrt(2.0 / 3.0)
-                     * am::LSCoupledTotalSpinY2Rank1RME(lf, sf, jf, li, si, ji)));
-    term1 *= (IntegralA(p) * std::sqrt(4.0 * constants::pi / 3.0));
-    auto term2 = IntegralB(p) * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji);
-    auto one_pion_exchange_term = d9_factor * (term1 - term2);
-    one_pion_exchange_term *= (std::pow(constants::pion_mass_fm, 3)
-                               / (4 * constants::pi));
-
-    // Contact term with d9 and L2.
-    double contact_term = 0;
-    if (li == 0 && lf == 0)
-      {
-        auto L2_d9_factor = (2 * constants::L2_fm - (d9_factor / 3));
-        auto scaled_IntegralC = IntegralC(p);
-        scaled_IntegralC /= (4 * std::pow(constants::pi, 1.5)
-                             * regulator * osc_b * osc_b);
-        contact_term = (L2_d9_factor * scaled_IntegralC
-                        * am::LSCoupledTotalSpinRME(lf, sf, jf, li, si, ji));
-      }
-
-    // Total value in terms of nuclear magneton.
-    auto result = one_pion_exchange_term + contact_term;
-    result /= constants::nuclear_magneton_fm;
+    auto result = N3LO2BodyIsoscalar(bra, ket, b, regularize, regulator);
     return result;
   }
 
-  // double Chi(int n)
-  // {
-  //   return n == 0 ? 1 : std::sqrt((2 * n + 1.0) / (2 * n)) * Chi(n - 1);
-  // }
-
-  double IntegralA(const gsl_params& p)
+  double M1Operator::N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator)
   {
-    auto integrand =
-      [&p](double y)
-      {
-        return (std::exp(-p.scale * std::sqrt(y))
-                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
-                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
-                * util::TPi(y, p.scale)
-                * util::LenpicSemiLocalRegulator(std::sqrt(y), p.regulator));
-      };
+    // Relative-cm quantum numbers.
+    // std::size_t nr = ket.Nr(), nrp = bra.Nr();
+    // std::size_t nc = ket.Nc(), ncp = bra.Nc();
+    // std::size_t lr = ket.lr(), lrp = bra.lc();
+    // std::size_t lc = ket.lc(), lcp = bra.lc();
+    // std::size_t L = ket.L(), Lp = bra.L();
+    // std::size_t S = ket.S(), Sp = bra.S();
+    // std::size_t J = ket.J(), Jp = bra.J();
+    // std::size_t T = ket.T(), Tp = bra.T();
 
-    double a = 0;
-    double b = 1;
-    double alpha = (p.lf + p.li) / 2.0;
-    int nodes = (p.nrf + p.nri) / 2 + 1;
-    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
-
-    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
-                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
-    norm_product /= (2 * p.scale);
-
-    auto result = norm_product * integral;
-    return integral;
+    // return N3LO2BodyIsoscalar(nrp, nr, lrp, lr, ncp, nc, lcp, lc, Lp, L,
+    //                           Sp, S, Jp, J, Tp, T, b, regularize, regulator);
+    return 0;
   }
 
-  double IntegralB(const gsl_params& p)
-  {
-    auto integrand =
-      [&p](double y)
-      {
-        return (std::exp(-p.scale * std::sqrt(y))
-                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
-                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y)
-                * util::ZPi(y, p.scale)
-                * util::LenpicSemiLocalRegulator(std::sqrt(y), p.regulator));
-      };
-
-    double a = 0;
-    double b = 1;
-    double alpha = (p.lf + p.li) / 2.0;
-    int nodes = (p.nrf + p.nri) / 2 + 1;
-    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
-
-    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
-                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
-    norm_product /= (2 * p.scale);
-
-    auto result = norm_product * integral;
-    return integral;
-  }
-
-  double IntegralC(const gsl_params& p)
-  {
-    auto integrand =
-      [&p](double y)
-      {
-        return (std::exp(-y / std::pow(p.regulator, 2))
-                * gsl_sf_laguerre_n(p.nrf, p.lf + 0.5, y)
-                * gsl_sf_laguerre_n(p.nri, p.li + 0.5, y));
-      };
-
-    double a = 0;
-    double b = 1;
-    double alpha = (p.lf + p.li - 1) / 2.0;
-    int nodes = (p.nrf + p.nri) / 2 + 1;
-    auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
-
-    auto norm_product = (threedho::CoordinateSpaceNorm(p.nri, p.li, 1)
-                         * threedho::CoordinateSpaceNorm(p.nrf, p.lf, 1));
-
-    auto result = norm_product * integral;
-    return integral;
-  }
-
-  // double IntegralB(int np, int lp, int n, int l, double scale)
-  // {
-  //   struct params { int np_; int n_; int lp_; int l_; double scale_; };
-  //   params p = { np, n, lp, l, scale };
-  //   auto integrand =
-  //     [&p](double y)
-  //     {
-  //       // return ((p.lp_ == 0 && p.l_ == 0)
-  //       //         ? ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-  //       //            * gsl_sf_laguerre_n(p.np_, 0.5, y)
-  //       //            * gsl_sf_laguerre_n(p.n_, 0.5, y)
-  //       //            * (3 - 3 * std::exp(-p.scale_ * std::sqrt(y))
-  //       //               + 3 * p.scale_ * std::sqrt(y)
-  //       //               + p.scale_ * p.scale_ * y))
-  //       //         : ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-  //       //            * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-  //       //            * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-  //       //            * (3 + 3 * p.scale_ * std::sqrt(y)
-  //       //               + p.scale_ * p.scale_ * y)));
-  //       return ((std::exp(-p.scale_ * std::sqrt(y)) / y)
-  //               * gsl_sf_laguerre_n(p.np_, p.lp_ + 0.5, y)
-  //               * gsl_sf_laguerre_n(p.n_, p.l_ + 0.5, y)
-  //               * (3 + 3 * p.scale_ * std::sqrt(y) + p.scale_ * p.scale_ * y)
-  //               * LenpicSemiLocalRegulator(std::sqrt(y), 0.9
-  //                                          * constants::pion_mass_fm / p.scale_));
-  //     };
-
-  //   double a = 0;
-  //   double b = 1;
-  //   double alpha = (lp + l) / 2.0;
-  //   int nodes = (np + n) / 2 + 1;
-  //   auto integral = quadrature::GaussLaguerre(integrand, a, b, alpha, nodes);
-
-  //   auto norm_product = (threedho::CoordinateSpaceNorm(n, l, 1)
-  //                        * threedho::CoordinateSpaceNorm(np, lp, 1));
-  //   norm_product /= (2 * std::pow(scale, 3));
-
-  //   auto result = norm_product * integral;
-  //   return integral;
-  // }
-
-  ///////////////////////////////////////////////////////////////////////////////
-  /////////////////////////// N4LO Matrix Element ///////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////
-
+  // Next to next to next to next to leading order.
+  // At present there are no results for N4LO.
   double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const double& osc_b,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator)
+  {
+    return 0;
+  }
+
+  double M1Operator::N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
                                        const double& regulator)
   {
     return 0;

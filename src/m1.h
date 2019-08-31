@@ -77,37 +77,6 @@ namespace chiral
                                const bool& regularize,
                                const double& regulator) override;
     };
-
-  double NLO1Body(const std::size_t& nrp, const std::size_t& nr,
-                  const std::size_t& lrp, const std::size_t& lr,
-                  const std::size_t& ncp, const std::size_t& nc,
-                  const std::size_t& lcp, const std::size_t& lc,
-                  const std::size_t& Lp, const std::size_t& L,
-                  const std::size_t& Sp, const std::size_t& S,
-                  const std::size_t& Jp, const std::size_t& J,
-                  const std::size_t& Tp, const std::size_t& T);
-
-  double NLO2Body(const std::size_t& nrp, const std::size_t& nr,
-                  const std::size_t& lrp, const std::size_t& lr,
-                  const std::size_t& ncp, const std::size_t& nc,
-                  const std::size_t& lcp, const std::size_t& lc,
-                  const std::size_t& Lp, const std::size_t& L,
-                  const std::size_t& Sp, const std::size_t& S,
-                  const std::size_t& Jp, const std::size_t& J,
-                  const std::size_t& Tp, const std::size_t& T,
-                  const util::OscillatorParameter& b,
-                  const bool& regularize, const double regulator);
-
-  double N3LO2BodyIsoscalar(const std::size_t& nrp, const std::size_t& nr,
-                            const std::size_t& lrp, const std::size_t& lr,
-                            const std::size_t& ncp, const std::size_t& nc,
-                            const std::size_t& lcp, const std::size_t& lc,
-                            const std::size_t& Lp, const std::size_t& L,
-                            const std::size_t& Sp, const std::size_t& S,
-                            const std::size_t& Jp, const std::size_t& J,
-                            const std::size_t& Tp, const std::size_t& T,
-                            const util::OscillatorParameter& b,
-                            const bool& regularize, const double regulator);
 }
 
 #endif

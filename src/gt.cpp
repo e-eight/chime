@@ -16,26 +16,30 @@ namespace chiral
                                      const bool& regularize,
                                      const double& regulator)
   {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t lr = ket.L(), lrp = bra.L();
-    std::size_t s = ket.S(), sp = bra.S();
-    std::size_t j = ket.J(), jp = bra.J();
-    std::size_t t = ket.T(), tp = bra.T();
+    auto result = constants::sqrt2 * LO1Body(bra, ket);
+    return result;
+  }
 
-    bool kronecker = (nr == nrp && lr == lrp);
-    if (!kronecker)
+  double LO1Body(const basis::RelativeStateLSJT& bra,
+                 const basis::RelativeStateLSJT& ket)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    if (nr != nrp || L != Lp)
       return 0;
 
-    auto symm_term = am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    symm_term *= am::SpinSymmetricRME(tp, t);
+    // Angular momentum & isospin RMEs.
+    auto symm_term = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    symm_term *= am::SpinSymmetricRME(Tp, T);
+    auto asymm_term = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    asymm_term *= am::SpinAntisymmetricRME(Tp, T);
 
-    auto asymm_term = am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    asymm_term *= am::SpinAntisymmetricRME(tp, t);
-
-    auto result = ((-constants::gA / constants::sqrt2pi)
-                   * (symm_term + asymm_term));
-    if (isnan(result))
-      result = 0;
+    // Result.
+    auto result = (-constants::gA * (symm_term + asymm_term));
     return result;
   }
 
@@ -73,86 +77,130 @@ namespace chiral
                                        const bool& regularize,
                                        const double& regulator)
   {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t lr = ket.L(), lrp = bra.L();
-    std::size_t s = ket.S(), sp = bra.S();
-    std::size_t j = ket.J(), jp = bra.J();
-    std::size_t t = ket.T(), tp = bra.T();
+    auto result = (constants::sqrt2 * (c3Term(bra, ket, b, regularize, regulator)
+                                       + c4Term(bra, ket, b, regularize, regulator)
+                                       + DTerm(bra, ket, b, regularize, regulator)));
+    return result;
+  }
 
-    //OscillatorParameter and scaling.
+  double c3Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const util::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // Isospin RMEs.
+    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+
+    // Angular momentum RMEs.
+    auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    auto symm_rme_spin_A6 = (std::sqrt(10)
+                             * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 2, 1));
+    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    auto asymm_rme_spin_A6 = (std::sqrt(10)
+                              * am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 2, 1));
+
+    // Radial integrals.
     auto brel = b.relative();
     auto scaled_regulator = regulator / brel;
     auto scaled_pion_mass = constants::pion_mass_fm * brel;
+    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
+    auto wpi_ypi_integral = quadrature::IntegralWPiRYPiR(p);
+    auto ypi_integral = quadrature::IntegralYPiR(p);
 
-    // Parameters for integration routines.
-    quadrature::gsl_params_2n p {nrp, lrp, nr, lr, regularize, scaled_regulator, scaled_pion_mass};
+    // Result.
+    auto prefactor = (2 * constants::gA * constants::c3_fm
+                      * cube(constants::pion_mass_fm));
+    prefactor /= (12 * square(constants::pion_decay_constant_fm)
+                  * constants::pi);
+    symm_rme_spin *= symm_rme_isospin;
+    symm_rme_spin_A6 *= symm_rme_isospin;
+    asymm_rme_spin *= asymm_rme_isospin;
+    asymm_rme_spin_A6 *= asymm_rme_isospin;
+    auto result = ((symm_rme_spin_A6 + asymm_rme_spin_A6) * wpi_ypi_integral
+                   - (symm_rme_spin + asymm_rme_spin) * ypi_integral);
+    result *= (constants::sqrt2 * prefactor);
+    return result;
+  }
 
-    // Common symmetric and asymmetric spin and isospin RMEs.
-    auto symm_rme_spin = am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    auto symm_rme_isospin = am::SpinSymmetricRME(tp, t);
-    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 0, 1);
-    auto asymm_rme_isospin = am::SpinAntisymmetricRME(tp, t);
+  double c4Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const util::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    // Isospin RME.
+    auto pp_rme_isospin = am::PauliProductRME(Tp, T, 1);
+
+    // Angular momentum RMEs.
+    auto pp_rme_spin = am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 0, 1, 1);
+    auto pp_rme_spin_A6 = (std::sqrt(10)
+                           * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
 
     // Radial integrals.
-    auto norm_product = (ho::CoordinateSpaceNorm(nr, lr, 1)
-                         * ho::CoordinateSpaceNorm(nrp, lrp, 1));
-    auto ypi_integral = norm_product * quadrature::IntegralYPiR(p);
-    auto wpi_integral = norm_product * quadrature::IntegralWPiRYPiR(p);
-    auto delta_integral = norm_product * quadrature::IntegralRegularizedDelta(p);
-    delta_integral /= util::cube(brel);
+    auto brel = b.relative();
+    auto scaled_regulator = regulator / brel;
+    auto scaled_pion_mass = constants::pion_mass_fm * brel;
+    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
+    auto wpi_ypi_integral = quadrature::IntegralWPiRYPiR(p);
+    auto ypi_integral = quadrature::IntegralYPiR(p);
 
-    // Common part of pion exchange term prefactors.
-    auto pion_prefactor = (constants::gA
-                           * util::cube(constants::pion_mass_fm));
-    pion_prefactor /= (6 * constants::pi
-                       * util::square(constants::pion_decay_constant_fm));
+    // Result.
+    auto prefactor = (constants::gA * constants::c4_fm
+                      * cube(constants::pion_mass_fm));
+    prefactor /= (12 * square(constants::pion_decay_constant_fm)
+                  * constants::pi);
+    auto result = (pp_rme_isospin * (pp_rme_spin_A6 * wpi_ypi_integral
+                                     + 2 * pp_rme_spin * ypi_integral));
+    result *= (constants::sqrt2 * prefactor);
+    return result;
+  }
 
-    // C3 term.
-    // Symmetric term.
-    auto symm_term_c3 = symm_rme_spin * ypi_integral;
-    symm_term_c3 += (am::RelativeSpinSymmetricRME(lrp, lr, sp, s, jp, j, 2, 1)
-                     * wpi_integral);
-    symm_term_c3 *= symm_rme_isospin;
-    // Asymmetric term.
-    auto asymm_term_c3 = asymm_rme_spin * ypi_integral;
-    asymm_term_c3 += (am::RelativeSpinAntisymmetricRME(lrp, lr, sp, s, jp, j, 2, 1)
-                      * wpi_integral);
-    asymm_term_c3 *= asymm_rme_isospin;
-    // C3 prefactor.
-    auto c3_prefactor = -pion_prefactor * constants::c3_fm;
-    // C3 final result.
-    auto c3_result = (c3_prefactor * (symm_term_c3 + asymm_term_c3));
-    if (isnan(c3_result))
-      c3_result = 0;
+  double DTerm(const basis::RelativeStateLSJT& bra,
+               const basis::RelativeStateLSJT& ket,
+               const util::OscillatorParameter& b,
+               const bool& regularize,
+               const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
 
-    // C4 term.
-    auto spin_rme = (2 * ypi_integral
-                     * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 0, 1, 1));
-    spin_rme += (std::sqrt(10) * wpi_integral
-                 * am::RelativePauliProductRME(lrp, lr, sp, s, jp, j, 2, 2, 1));
-    auto isospin_rme = 0.5 * am::PauliProductRME(tp, t, 1);
-    auto c4_prefactor = pion_prefactor * constants::c4_fm;
-    auto c4_result = (c4_prefactor * isospin_rme * spin_rme);
-    if (isnan(c4_result))
-      c4_result = 0;
+    if (Lp != 0 || L != 0)
+      return 0;
 
-    // D term.
-    double D_result = 0;
-    if (lrp == 0 && lr == 0 && nrp == nr)
-      {
-        norm_product = (ho::CoordinateSpaceNorm(nrp, 0, 1)
-                         * ho::CoordinateSpaceNorm(nr, 0, 1));
-        auto wf_product = sf::Laguerre(nrp, 0.5, 0) * sf::Laguerre(nr, 0.5, 0);
-        D_result = ((symm_rme_spin * symm_rme_isospin)
-                    + (asymm_rme_spin * asymm_rme_isospin));
-        D_result *= (-0.5 * constants::D_fm * norm_product * wf_product);
-        D_result /= util::cube(brel);
-        if (isnan(D_result))
-          D_result = 0;
-      }
+    // Angular momentum and isospin RMEs.
+    auto symm_term = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    symm_term *= am::SpinSymmetricRME(Tp, T);
+    auto asymm_term = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    asymm_term *= am::SpinAntisymmetricRME(Tp, T);
 
-    // Overall result
-    auto result = ((c3_result + c4_result + D_result) / (constants::sqrt2pi));
+    // Radial integral.
+    auto brel = b.relative();
+    auto scaled_regulator = regulator / brel;
+    auto scaled_pion_mass = constants::pion_mass_fm * brel;
+    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
+    auto delta_integral = quadrature::IntegralRegularizedDelta(p);
+    delta_integral /= cube(brel);
+
+    // Result.
+    auto result = (symm_term + asymm_term) * delta_integral;
+    result *= (-0.5 * constants::D_fm);
     return result;
   }
 
