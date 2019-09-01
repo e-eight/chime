@@ -83,7 +83,7 @@ namespace util
   }
   static inline double TPi(const double scaled_r, const double scaled_pion_mass)
   {
-    return 2 * ZPi(scaled_r, scaled_pion_mass) - 1;
+    return 2 * scaled_pion_mass * scaled_r - 1;
   }
   static inline double WPi(const double scaled_r, const double scaled_pion_mass)
   {

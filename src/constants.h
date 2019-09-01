@@ -31,12 +31,12 @@ namespace constants
   constexpr double gA = 1.25;
   constexpr double pion_decay_constant_MeV = 92.4;
   constexpr double pion_decay_constant_fm = pion_decay_constant_MeV / hbarc; // (in fm^{-1})
-  constexpr double d9_GeV = -0.011; // (in GeV^{-2})
+  constexpr double d9_GeV = -0.06; // (in GeV^{-2}, from Gasparyan, Lutz, 2010)
   constexpr double d9_fm = d9_GeV * hbarc_GeV * hbarc_GeV; // (in fm^2)
   constexpr double d18_Gev = -10.14; // (in GeV^{-2})
   constexpr double d18_fm = d18_Gev * hbarc_GeV * hbarc_GeV; // (in fm^2)
-  constexpr double L2_GeV = 0.188; // (in GeV^{-4})
-  constexpr double L2_fm = L2_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV * hbarc_GeV; // (in fm^4)
+  // constexpr double L2_GeV = 0.188; // (in GeV^{-4})
+  constexpr double L2_fm = -0.149; // (in fm^4, from Chen, Rupak, Savage, 1999)
   constexpr double c3_GeV = -4.69; // (in GeV^{-1})
   constexpr double c3_fm = c3_GeV * hbarc_GeV;
   constexpr double c4_GeV = 3.40; // (in GeV^{-1})

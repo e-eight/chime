@@ -195,8 +195,7 @@ namespace chiral
     auto scaled_regulator = regulator / brel;
     auto scaled_pion_mass = constants::pion_mass_fm * brel;
     quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
-    auto delta_integral = quadrature::IntegralRegularizedDelta(p);
-    delta_integral /= cube(brel);
+    auto delta_integral = quadrature::IntegralRegularizedDelta(p) / cube(brel);
 
     // Result.
     auto result = (symm_term + asymm_term) * delta_integral;

@@ -327,8 +327,7 @@ namespace chiral
     double L2_term = 0;
     if (L == 0 && L == 0 && Tp == T)
       {
-        auto delta_integral = norm_product * quadrature::IntegralRegularizedDelta(prel);
-        delta_integral /= cube(brel);
+        auto delta_integral = quadrature::IntegralRegularizedDelta(prel) / cube(brel);
         L2_term += (2 * constants::L2_fm * S_rme * delta_integral);
       }
 

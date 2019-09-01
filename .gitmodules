@@ -1,12 +1,12 @@
 [submodule "lib/basis"]
 	path = lib/basis
-	url = https://github.com/e-eight/basis.git
+	url = ../basis.git
 [submodule "lib/am"]
 	path = lib/am
-	url = https://github.com/e-eight/am.git
+	url = ../am.git
 [submodule "lib/mcutils"]
 	path = lib/mcutils
-	url = https://github.com/e-eight/mcutils.git
+	url = ../mcutils.git
 [submodule "lib/fmt"]
 	path = lib/fmt
 	url = https://github.com/fmtlib/fmt
