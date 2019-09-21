@@ -24,6 +24,7 @@ have =cmake= 3.1 and =make= on your system):
 #+BEGIN_SRC bash
   git clone https://github.com/e-eight/chime.git
   cd chime
+  git submodule update --init
   mkdir build
   cd build
   cmake ..
