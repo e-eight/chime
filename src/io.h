@@ -34,7 +34,16 @@ namespace io
     // Create operator.
     fmt::print("Generating {} matrix elements...\n", name);
     auto op = chiral::Operator::make(name);
-    auto ord = chiral::Order::_from_string_nocase(order.c_str());
+    chiral::Order ord;
+    try
+      {
+        ord = chiral::m_order.at(order);
+      }
+    catch(std::out_of_range& oor)
+      {
+        std::cerr << "Chiral order must be in [lo, n4lo].\n";
+        std::terminate();
+      }
 
     // Set up operator and file header parameters.
     fmt::print("Beginning RelativeLSJT operator basis setup...\n");
@@ -69,7 +78,7 @@ namespace io
     std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;
 
     // Iterate over chiral orders.
-    for (chiral::Order cord : chiral::Order::_values())
+    for (const auto& cord : chiral::v_order)
       {
         // Iterate over isospin channels.
         for (std::size_t T0 = T0_min; T0 <= T0_max; ++T0)
@@ -99,7 +108,7 @@ namespace io
 
           }
         // Write the contribution at each order.
-        std::string cord_str = cord._to_string();
+        std::string cord_str = chiral::reverse_m_order[cord];
         std::string order_file = fmt::format("{}_2b_rel_{}_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
                                              name, cord_str, Nmax, Jmax, hw);
         if(regularize)
@@ -132,7 +141,16 @@ namespace io
     // Create operator.
     fmt::print("Generating {} matrix elements...\n", name);
     auto op = chiral::Operator::make(name);
-    auto ord = chiral::Order::_from_string_nocase(order.c_str());
+    chiral::Order ord;
+    try
+      {
+        ord = chiral::m_order.at(order);
+      }
+    catch(std::out_of_range& oor)
+      {
+        std::cerr << "Chiral order must be in [lo, n4lo].\n";
+        std::terminate();
+      }
 
     // Set up operator and file header parameters.
     fmt::print("Beginning RelativeCMLSJT operator basis setup...\n");
@@ -172,7 +190,7 @@ namespace io
     std::array<basis::OperatorBlocks<double>, 3> temp_matrices = matrices;
 
     // Iterate over chiral orders.
-    for (chiral::Order cord : chiral::Order::_values())
+    for (const auto& cord : chiral::v_order)
       {
         // Iterate over isospin channels.
         for (std::size_t T0 = T0_min; T0 <= T0_max; ++T0)
@@ -202,7 +220,7 @@ namespace io
 
           }
         // Write the contribution at each order.
-        std::string cord_str = cord._to_string();
+        std::string cord_str = chiral::reverse_m_order[cord];
         std::string order_file = fmt::format("{}_2b_rel_cm_{}_Nmax_{:d}_hw_{:.1f}",
                                              name, cord_str, Nmax, hw);
         if(regularize)

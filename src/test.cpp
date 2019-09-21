@@ -4,6 +4,7 @@
 #include "utility.h"
 #include "constants.h"
 #include "fmt/format.h"
+#include "chiral.h"
 
 int main()
 {
@@ -40,4 +41,9 @@ int main()
 
   fmt::print("(Delta regularization) F: n=0: {}, n=100: {}\n",
              quadrature::F(0, 0, 1), quadrature::F(100, 0, 1));
+
+  fmt::print("Chiral orders: ");
+  for(const auto& order : chiral::v_order)
+    fmt::print("{} ", chiral::reverse_m_order[order]);
+  fmt::print("\n");
 }
