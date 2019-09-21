@@ -1,6 +1,6 @@
 #include <iomanip>
 #include "io.h"
-#include "cli.h"
+#include "CLI/CLI.hpp"
 
 int main(int argc, char** argv)
 {
