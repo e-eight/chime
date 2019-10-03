@@ -1,3 +1,4 @@
+
 #include <cmath>
 #include "basis/lsjt_scheme.h"
 #include "rme_extras.h"
@@ -61,7 +62,7 @@ namespace chiral
     auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
 
     // Purely orbital angular momentum term.
-    auto lrel_rme = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
+    auto lrel_rme = 0; //am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
     auto oam_term = (0.5 * ((Tp == T) + symm_rme_isospin) * lrel_rme);
 
     auto result = oam_term + spin_symm_term + spin_asymm_term;
@@ -124,7 +125,7 @@ namespace chiral
   {
     auto one_body_term = NLO1Body(bra, ket);
     auto two_body_term = NLO2Body(bra, ket, b, regularize, regulator);
-    auto result = one_body_term + two_body_term;
+    auto result = one_body_term; //+ two_body_term;
     return result;
   }
 

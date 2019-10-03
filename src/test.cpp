@@ -31,6 +31,9 @@ int main()
 
   fmt::print("Wigner 6J: {}\n", am::Wigner6J(0, 0, 0, 1, 1, 1));
 
+  fmt::print("Relative spin symmetric product: {}\n",
+             am::RelativeSpinSymmetricRME(1, 1, 1, 1, 1, 1, 0, 1));
+
   fmt::print("Relative spin isospin asymmetric product: {}\n",
              am::RelativeSpinAntisymmetricRME(0, 0, 1, 0, 1, 0, 0, 1)
              * am::SpinAntisymmetricRME(0, 1));
