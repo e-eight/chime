@@ -1,4 +1,3 @@
-
 #include <cmath>
 #include "basis/lsjt_scheme.h"
 #include "rme_extras.h"
@@ -50,22 +49,35 @@ namespace chiral
     if (nr != nrp || L != Lp)
       return 0;
 
-    // Spin and isospin RMEs.
-    auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
-    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+    // Spin terms.
+    auto isoscalar_spin_term = (constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+                                * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1));
+    auto isovector_spin_term = (0.5 * constants::isovector_nucleon_magnetic_moment
+                                * (am::PauliOneRME(Tp, T) * am::RelativePauliOneRME(Lp, L, Sp, S, Jp, J, 0, 1)
+                                   + am::PauliTwoRME(Tp, T) * am::RelativePauliTwoRME(Lp, L, Sp, S, Jp, J, 0, 1)));
 
-    // Purely spin terms.
-    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
-                           + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin) * symm_rme_spin);
-    auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
+    // Orbital angular momentum terms.
+    auto isoscalar_oam_term = (0.5 * (Tp == T) * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J));
+    auto isovector_oam_term = (0.5 * am::SpinSymmetricRME(Tp, T) * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J));
 
-    // Purely orbital angular momentum term.
-    auto lrel_rme = 0; //am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
-    auto oam_term = (0.5 * ((Tp == T) + symm_rme_isospin) * lrel_rme);
+    // auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    // auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+    // auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+    // auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
 
-    auto result = oam_term + spin_symm_term + spin_asymm_term;
+    // // Purely spin terms.
+    // auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+    //                        + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin) * symm_rme_spin);
+    // auto spin_asymm_term = constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin;
+
+    // // Purely orbital angular momentum term.
+    // auto oam_term = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
+    // oam_term *= 0.5 * (Tp == T) + symm_rme_isospin;
+
+    // auto result = oam_term + spin_symm_term + spin_asymm_term;
+
+    auto result = (isoscalar_spin_term + isoscalar_oam_term
+                   + isovector_spin_term + isovector_oam_term);
     return result;
   }
 

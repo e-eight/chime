@@ -38,6 +38,11 @@ int main()
              am::RelativeSpinAntisymmetricRME(0, 0, 1, 0, 1, 0, 0, 1)
              * am::SpinAntisymmetricRME(0, 1));
 
+  fmt::print("Relative Lrel: {} {} {}\n",
+             am::RelativeLrelRME(2, 2, 1, 1, 2, 2),
+             am::RelativeLrelRME(1, 1, 1, 1, 0, 1),
+             am::RelativeLrelRME(2, 2, 1, 1, 3, 3));
+
   fmt::print("LECs: D = {}\n", constants::D_fm);
 
   fmt::print("Hat product: {}\n", HatProduct(0, 1, 2, 3));
