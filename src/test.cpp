@@ -39,7 +39,7 @@ int main()
              * am::SpinAntisymmetricRME(0, 1));
 
   fmt::print("Relative Lrel: {} {} {}\n",
-             am::RelativeLrelRME(2, 2, 1, 1, 2, 2),
+             am::RelativeLrelRME(1, 1, 1, 1, 0, 1),
              am::RelativeLrelRME(1, 1, 1, 1, 0, 1),
              am::RelativeLrelRME(2, 2, 1, 1, 3, 3));
 
