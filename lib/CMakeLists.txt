@@ -6,6 +6,7 @@ endif()
 
 project(libs LANGUAGES CXX)
 
+add_subdirectory(eigen3)
 add_subdirectory(fmt)
 add_subdirectory(CLI11)
 add_subdirectory(am)

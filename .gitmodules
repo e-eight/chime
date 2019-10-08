@@ -13,3 +13,6 @@
 [submodule "lib/CLI11"]
 	path = lib/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
+[submodule "lib/eigen3"]
+	path = lib/eigen3
+	url = https://github.com/eigenteam/eigen-git-mirror.git
