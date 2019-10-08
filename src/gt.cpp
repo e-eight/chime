@@ -14,8 +14,14 @@ namespace chiral
                                      const basis::RelativeStateLSJT& ket,
                                      const util::OscillatorParameter& b,
                                      const bool& regularize,
-                                     const double& regulator)
+                                     const double& regulator,
+                                     const std::size_t& T0,
+                                     const std::size_t& Abody)
   {
+    if (T0 != 1)
+      return 0;
+    if (Abody != 1)
+      return 0;
     auto result = constants::sqrt2 * LO1Body(bra, ket);
     return result;
   }
@@ -47,7 +53,9 @@ namespace chiral
                                      const basis::RelativeCMStateLSJT& ket,
                                      const util::OscillatorParameter& b,
                                      const bool& regularize,
-                                     const double& regulator)
+                                     const double& regulator,
+                                     const std::size_t& T0,
+                                     const std::size_t& Abody)
   {
     return 0;
   }
@@ -57,7 +65,9 @@ namespace chiral
                                       const basis::RelativeStateLSJT& ket,
                                       const util::OscillatorParameter& b,
                                       const bool& regularize,
-                                      const double& regulator)
+                                      const double& regulator,
+                                      const std::size_t& T0,
+                                      const std::size_t& Abody)
   {
     return 0;
   }
@@ -65,7 +75,9 @@ namespace chiral
                                       const basis::RelativeCMStateLSJT& ket,
                                       const util::OscillatorParameter& b,
                                       const bool& regularize,
-                                      const double& regulator)
+                                      const double& regulator,
+                                      const std::size_t& T0,
+                                      const std::size_t& Abody)
   {
     return 0;
   }
@@ -75,8 +87,14 @@ namespace chiral
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
+    if (T0 != 1)
+      return 0;
+    if (Abody != 2)
+      return 0;
     auto result = (constants::sqrt2 * (c3Term(bra, ket, b, regularize, regulator)
                                        + c4Term(bra, ket, b, regularize, regulator)
                                        + DTerm(bra, ket, b, regularize, regulator)));
@@ -207,7 +225,9 @@ namespace chiral
                                        const basis::RelativeCMStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
     return 0;
   }
@@ -216,7 +236,9 @@ namespace chiral
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
     return 0;
   }
@@ -224,7 +246,9 @@ namespace chiral
                                        const basis::RelativeCMStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
     return 0;
   }
@@ -233,7 +257,9 @@ namespace chiral
                                        const basis::RelativeStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
     return 0;
   }
@@ -241,7 +267,9 @@ namespace chiral
                                        const basis::RelativeCMStateLSJT& ket,
                                        const util::OscillatorParameter& b,
                                        const bool& regularize,
-                                       const double& regulator)
+                                       const double& regulator,
+                                       const std::size_t& T0,
+                                       const std::size_t& Abody)
   {
     return 0;
   }
