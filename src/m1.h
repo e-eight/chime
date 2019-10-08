@@ -25,74 +25,75 @@ namespace chiral
                              const util::OscillatorParameter& b,
                              const bool& regularize,
                              const double& regulator,
-                             const std::size_t& T0) override;
+                             const std::size_t& T0,
+                             const std::size_t& Abody) override;
       double LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                              const basis::RelativeCMStateLSJT& ket,
                              const util::OscillatorParameter& b,
                              const bool& regularize,
                              const double& regulator,
-                             const std::size_t& T0) override;
+                             const std::size_t& T0,
+                             const std::size_t& Abody) override;
 
       double NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                               const basis::RelativeStateLSJT& ket,
                               const util::OscillatorParameter& b,
                               const bool& regularize,
                               const double& regulator,
-                              const std::size_t& T0) override;
+                              const std::size_t& T0,
+                              const std::size_t& Abody) override;
       double NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                               const basis::RelativeCMStateLSJT& ket,
                               const util::OscillatorParameter& b,
                               const bool& regularize,
                               const double& regulator,
-                              const std::size_t& T0) override;
+                              const std::size_t& T0,
+                              const std::size_t& Abody) override;
 
       double N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
       double N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                const basis::RelativeCMStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
 
       double N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
       double N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                const basis::RelativeCMStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
 
       double N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                const basis::RelativeStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
       double N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                const basis::RelativeCMStateLSJT& ket,
                                const util::OscillatorParameter& b,
                                const bool& regularize,
                                const double& regulator,
-                               const std::size_t& T0) override;
-
-      double BareMatrixElement(const basis::RelativeStateLSJT& bra,
-                               const basis::RelativeStateLSJT& ket,
-                               const util::OscillatorParameter& b,
-                               const std::size_t& T0) override;
-      double BareMatrixElement(const basis::RelativeCMStateLSJT& bra,
-                               const basis::RelativeCMStateLSJT& ket,
-                               const util::OscillatorParameter& b,
-                               const std::size_t& T0) override;
+                               const std::size_t& T0,
+                               const std::size_t& Abody) override;
     };
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,

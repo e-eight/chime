@@ -11,6 +11,8 @@
 #include "am/wigner_gsl.h"
 #include "am/racah_reduction.h"
 #include "am/rme.h"
+#include "integrals.h"
+#include "threedho.h"
 
 // Product of Hats.
 template <class T>
@@ -515,6 +517,13 @@ namespace am
     if (l == lp + 1)
       {
         result = RadiusME(n, np, l, lp);
+      }
+    if (lp == l)
+      {
+        quadrature::gsl_params_2n p{np, lp, n, l, false, 1, 1};
+        auto norm_product = (ho::CoordinateSpaceNorm(n, l, 1)
+                            * ho::CoordinateSpaceNorm(np, lp, 1));
+        result = norm_product * quadrature::IntegralMPiR(p);
       }
     result *= SphericalHarmonicCRME(lp, l, 1);
     return result;

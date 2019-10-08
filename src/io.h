@@ -23,6 +23,7 @@ namespace io
 
   void WriteRelativeFiles(const std::string& name,
                           const std::string& order,
+                          const std::size_t& Abody,
                           const double& hw,
                           const std::size_t& Nmax,
                           const std::size_t& Jmax,
@@ -35,15 +36,16 @@ namespace io
     fmt::print("Generating {} matrix elements...\n", name);
     auto op = chiral::Operator::make(name);
     chiral::Order ord;
-    try
-      {
-        ord = chiral::m_order.at(order);
-      }
-    catch(std::out_of_range& oor)
-      {
-        std::cerr << "Chiral order must be in [lo, n4lo].\n";
-        std::terminate();
-      }
+    // try
+    //   {
+    //     ord = chiral::m_order.at(order);
+    //   }
+    // catch(std::out_of_range& oor)
+    //   {
+    //     std::cerr << "Chiral order must be in [lo, n4lo].\n";
+    //     std::terminate();
+    //   }
+    ord = chiral::m_order.at(order);
 
     // Set up operator and file header parameters.
     fmt::print("Beginning RelativeLSJT operator basis setup...\n");
@@ -98,19 +100,20 @@ namespace io
                       {
                         const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
                         util::OscillatorParameter b(hw);
-                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator, T0);
+                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b,
+                                                            regularize, regulator, T0, Abody);
                         temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
                         matrices[T0][sector_index](bra_index, ket_index) += rme;
                       }
                   }
 
               }
-
           }
+
         // Write the contribution at each order.
         std::string cord_str = chiral::reverse_m_order[cord];
-        std::string order_file = fmt::format("{}_2b_rel_{}_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
-                                             name, cord_str, Nmax, Jmax, hw);
+        std::string order_file = fmt::format("{}_{:d}n_rel_{}_Nmax{:d}_Jmax{:d}_hw{:.1f}",
+                                             name, Abody, cord_str, Nmax, Jmax, hw);
         if(regularize)
           order_file += fmt::format("_regulator_{:.1f}", regulator);
         order_file += fmt::format("_{}.dat", time_str);
@@ -120,8 +123,8 @@ namespace io
           break;
       }
     // Write the cumulative matrix element.
-    std::string cumulative_file = fmt::format("{}_2b_rel_{}_cumulative_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
-                                              name, order, Nmax, Jmax, hw);
+    std::string cumulative_file = fmt::format("{}_{:d}n_rel_{}_cumulative_Nmax_{:d}_Jmax_{:d}_hw_{:.1f}",
+                                              name, Abody, order, Nmax, Jmax, hw);
     if(regularize)
       cumulative_file += fmt::format("_regulator_{:.1f}", regulator);
     cumulative_file += fmt::format("_{}.dat", time_str);
@@ -131,6 +134,7 @@ namespace io
 
   void WriteRelativeCMFiles(const std::string& name,
                             const std::string& order,
+                            const std::size_t& Abody,
                             const double& hw,
                             const std::size_t& Nmax,
                             const std::size_t& T0_min,
@@ -142,15 +146,16 @@ namespace io
     fmt::print("Generating {} matrix elements...\n", name);
     auto op = chiral::Operator::make(name);
     chiral::Order ord;
-    try
-      {
-        ord = chiral::m_order.at(order);
-      }
-    catch(std::out_of_range& oor)
-      {
-        std::cerr << "Chiral order must be in [lo, n4lo].\n";
-        std::terminate();
-      }
+    // try
+    //   {
+    //     ord = chiral::m_order.at(order);
+    //   }
+    // catch(std::out_of_range& oor)
+    //   {
+    //     std::cerr << "Chiral order must be in [lo, n4lo].\n";
+    //     std::terminate();
+    //   }
+    ord = chiral::m_order.at(order);
 
     // Set up operator and file header parameters.
     fmt::print("Beginning RelativeCMLSJT operator basis setup...\n");
@@ -210,7 +215,8 @@ namespace io
                       {
                         const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
                         util::OscillatorParameter b(hw);
-                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator, T0);
+                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b,
+                                                            regularize, regulator, T0, Abody);
                         temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
                         matrices[T0][sector_index](bra_index, ket_index) += rme;
                       }
@@ -221,8 +227,8 @@ namespace io
           }
         // Write the contribution at each order.
         std::string cord_str = chiral::reverse_m_order[cord];
-        std::string order_file = fmt::format("{}_2b_rel_cm_{}_Nmax_{:d}_hw_{:.1f}",
-                                             name, cord_str, Nmax, hw);
+        std::string order_file = fmt::format("{}_{:d}n_relcm_{}_Nmax{:d}_hw{:.1f}",
+                                             name, Abody, cord_str, Nmax, hw);
         if(regularize)
           order_file += fmt::format("_regulator_{:.1f}", regulator);
         order_file += fmt::format("_{}.dat", time_str);
@@ -232,14 +238,13 @@ namespace io
           break;
       }
     // Write the cumulative matrix element.
-    std::string cumulative_file = fmt::format("{}_2b_rel_cm_{}_cumulative_Nmax_{:d}_hw_{:.1f}",
-                                              name, order, Nmax, hw);
+    std::string cumulative_file = fmt::format("{}_{:d}n_relcm_{}_cumulative_Nmax_{:d}_hw_{:.1f}",
+                                              name, Abody, order, Nmax, hw);
     if(regularize)
       cumulative_file += fmt::format("_regulator_{:.1f}", regulator);
     cumulative_file += fmt::format("_{}.dat", time_str);
     basis::WriteRelativeCMOperatorLSJT(cumulative_file, space, labels, sectors, matrices, true);
   }
-
 }
 
 #endif

@@ -13,6 +13,7 @@ int main(int argc, char** argv)
   // flags
   std::string name = "m1";
   std::string order = "lo";
+  std::size_t Abody = 1;
   bool has_cm = false;
   double hw = 10;
   int Nmax = 200;
@@ -25,6 +26,7 @@ int main(int argc, char** argv)
 
   app.add_option("-n,--name", name, "Name of operator.");
   app.add_option("-o,--order", order, "Chiral order of operator.");
+  app.add_option("-A,--Abody", Abody, "One body or two body chiral operator.");
   app.add_flag("-C,--has_cm", has_cm, "Does the operator depend on the CM?");
   app.add_option("-E,--hw", hw, "Oscillator energy of basis.");
   app.add_option("-N,--Nmax", Nmax, "Nmax truncation of basis.");
@@ -51,7 +53,7 @@ int main(int argc, char** argv)
   //////////////////////////////////////////////////////////////////////////////
 
   if (has_cm)
-    io::WriteRelativeCMFiles(name, order, hw, Nmax, T0_min, T0_max, regularize, regulator);
+    io::WriteRelativeCMFiles(name, order, Abody, hw, Nmax, T0_min, T0_max, regularize, regulator);
   else
-    io::WriteRelativeFiles(name, order, hw, Nmax, Jmax, T0_min, T0_max, regularize, regulator);
+    io::WriteRelativeFiles(name, order, Abody, hw, Nmax, Jmax, T0_min, T0_max, regularize, regulator);
 }
