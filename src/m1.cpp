@@ -56,16 +56,24 @@ namespace chiral
     auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
 
     // Purely spin terms.
-    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment
                             + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin)
-                           * symm_rme_spin);
+                           * symm_rme_spin) * (Tp == T);
     auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin);
 
-    // Purely orbital angular momentum term.
-    auto oam_term = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
-    oam_term *= (0.5 * (Tp == T) + symm_rme_isospin);
+    // auto isoscalar_spin = (constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
+    //                        * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1));
+    // auto isovector_spin = (am::PauliOneRME(Tp, T) * am::RelativePauliOneRME(Lp, L, Sp, S, Jp, J, 0, 1)
+    //                        + am::PauliTwoRME(Tp, T) * am::RelativePauliTwoRME(Lp, L, Sp, S, Jp, J, 0, 1));
+    // isovector_spin *= 0.5 * constants::isovector_nucleon_magnetic_moment;
 
-    auto result = oam_term + spin_symm_term + spin_asymm_term;
+
+    // Purely orbital angular momentum term.
+    // auto oam_term = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
+    // oam_term *= 0.5 * ((Tp == T) + symm_rme_isospin);
+
+    // auto result = isoscalar_spin + isovector_spin; // oam_term +
+    auto result = spin_symm_term + spin_asymm_term;
     return result;
   }
 

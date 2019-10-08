@@ -68,7 +68,7 @@ namespace am
   //  reduced matrix element (double), Rose convention
   inline double SpinSymmetricRME(const int& sp, const int& s)
   {
-    return (std::sqrt(s * (s + 1)) * (s == sp));
+    return AngularMomentumJRME(sp, s);
   }
 
   // Calculate reduced matrix element of (\vec{σ}_1 - \vec{σ}_2) / 2 in its
@@ -198,7 +198,7 @@ namespace am
                                          const int& a,
                                          const int& b)
   {
-    assert(AllowedTriangle(a, 1, b));
+    // assert(AllowedTriangle(a, 1, b));
 
     auto hat_product = HatProduct(lp, sp, j, b);
     auto wigner_9j = Wigner9J(l, s, j, a, 1, b, lp, sp, jp);
