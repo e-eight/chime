@@ -98,7 +98,7 @@ namespace io
                       {
                         const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
                         util::OscillatorParameter b(hw);
-                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator);
+                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator, T0);
                         temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
                         matrices[T0][sector_index](bra_index, ket_index) += rme;
                       }
@@ -210,7 +210,7 @@ namespace io
                       {
                         const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
                         util::OscillatorParameter b(hw);
-                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator);
+                        auto rme = op->ReducedMatrixElement(cord, bra_state, ket_state, b, regularize, regulator, T0);
                         temp_matrices[T0][sector_index](bra_index, ket_index) = rme;
                         matrices[T0][sector_index](bra_index, ket_index) += rme;
                       }

@@ -15,7 +15,8 @@ namespace chiral
                                      const basis::RelativeStateLSJT& ket,
                                      const util::OscillatorParameter& b,
                                      const bool& regularize,
-                                     const double& regulator)
+                                     const double& regulator,
+                                     const std::size_t& T0)
   {
     return 0;
   }
@@ -24,9 +25,117 @@ namespace chiral
                                      const basis::RelativeCMStateLSJT& ket,
                                      const util::OscillatorParameter& b,
                                      const bool& regularize,
-                                     const double& regulator)
+                                     const double& regulator,
+                                     const std::size_t& T0)
   {
     return 0;
+  }
+
+  double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
+                                      const basis::RelativeStateLSJT& ket,
+                                      const util::OscillatorParameter& b,
+                                      const bool& regularize,
+                                      const double& regulator,
+                                      const std::size_t& T0)
+  {
+    auto one_body_term = NLO1Body(bra, ket, T0);
+    auto two_body_term = NLO2Body(bra, ket, b, regularize, regulator, T0);
+    auto result = one_body_term; // + two_body_term;
+    return result;
+  }
+
+  double M1Operator::NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                      const basis::RelativeCMStateLSJT& ket,
+                                      const util::OscillatorParameter& b,
+                                      const bool& regularize,
+                                      const double& regulator,
+                                      const std::size_t& T0)
+  {
+    auto one_body_term = NLO1Body(bra, ket, T0);
+    auto two_body_term = NLO2Body(bra, ket, b, regularize, regulator, T0);
+    auto result = one_body_term + two_body_term;
+    return result;
+  }
+
+  // Next to next to leading order. There are no chiral eft correction at N2LO.
+  double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
+                                       const basis::RelativeStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    return 0;
+  }
+
+  double M1Operator::N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    return 0;
+  }
+
+    double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
+                                       const basis::RelativeStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    auto result = N3LO2BodyIsoscalar(bra, ket, b, regularize, regulator, T0);
+    return result;
+  }
+
+  double M1Operator::N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    auto result = N3LO2BodyIsoscalar(bra, ket, b, regularize, regulator, T0);
+    return 0;
+  }
+
+  // Next to next to next to next to leading order.
+  // At present there are no results for N4LO.
+  double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
+                                       const basis::RelativeStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    return 0;
+  }
+
+  double M1Operator::N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const bool& regularize,
+                                       const double& regulator,
+                                       const std::size_t& T0)
+  {
+    return 0;
+  }
+
+  double M1Operator::BareMatrixElement(const basis::RelativeStateLSJT& bra,
+                                       const basis::RelativeStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const std::size_t& T0)
+  {
+    return NLO1Body(bra, ket, T0);
+  }
+
+  double M1Operator::BareMatrixElement(const basis::RelativeCMStateLSJT& bra,
+                                       const basis::RelativeCMStateLSJT& ket,
+                                       const util::OscillatorParameter& b,
+                                       const std::size_t& T0)
+  {
+    return NLO1Body(bra, ket, T0);
   }
 
   // Next to leading order reduced matrix element.
@@ -38,7 +147,8 @@ namespace chiral
   // Relative NLO reduced matrix element.
 
   double NLO1Body(const basis::RelativeStateLSJT& bra,
-                  const basis::RelativeStateLSJT& ket)
+                  const basis::RelativeStateLSJT& ket,
+                  const std::size_t& T0)
   {
     std::size_t nr = ket.n(), nrp = bra.n();
     std::size_t L = ket.L(), Lp = bra.L();
@@ -54,26 +164,36 @@ namespace chiral
     auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
     auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
     auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+    auto delta_T = Tp == T;
 
-    // Purely spin terms.
-    auto spin_symm_term = ((constants::isoscalar_nucleon_magnetic_moment
-                            + constants::isovector_nucleon_magnetic_moment * symm_rme_isospin)
-                           * symm_rme_spin) * (Tp == T);
-    auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment * asymm_rme_isospin * asymm_rme_spin);
+    double result = 0;
 
-    // auto isoscalar_spin = (constants::isoscalar_nucleon_magnetic_moment * (Tp == T)
-    //                        * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1));
-    // auto isovector_spin = (am::PauliOneRME(Tp, T) * am::RelativePauliOneRME(Lp, L, Sp, S, Jp, J, 0, 1)
-    //                        + am::PauliTwoRME(Tp, T) * am::RelativePauliTwoRME(Lp, L, Sp, S, Jp, J, 0, 1));
-    // isovector_spin *= 0.5 * constants::isovector_nucleon_magnetic_moment;
+    if (T0 == 0)
+      {
+        // Purely spin term.
+        auto spin_symm_term = (constants::isoscalar_nucleon_magnetic_moment
+                               * symm_rme_spin * delta_T);
+        // Purely orbital angular momentum term.
+        auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J) * delta_T);
+        result = spin_symm_term + oam_term;
+      }
+    else if (T0 == 1)
+      {
+        // Purely spin terms.
+        auto spin_symm_term = (constants::isovector_nucleon_magnetic_moment
+                               * symm_rme_spin * symm_rme_isospin);
+        auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment
+                                * asymm_rme_spin * asymm_rme_isospin);
+        // Purely orbital angular momentum term.
+        auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J)
+                         * symm_rme_isospin);
+        result = spin_symm_term + spin_asymm_term + oam_term;
+      }
+    else
+      {
+        result = 0;
+      }
 
-
-    // Purely orbital angular momentum term.
-    // auto oam_term = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
-    // oam_term *= 0.5 * ((Tp == T) + symm_rme_isospin);
-
-    // auto result = isoscalar_spin + isovector_spin; // oam_term +
-    auto result = spin_symm_term + spin_asymm_term;
     return result;
   }
 
@@ -81,8 +201,12 @@ namespace chiral
                   const basis::RelativeStateLSJT& ket,
                   const util::OscillatorParameter& b,
                   const bool& regularize,
-                  const double& regulator)
+                  const double& regulator,
+                  const std::size_t& T0)
   {
+    if (T0 != 1)
+      return 0;
+
     std::size_t nr = ket.n(), nrp = bra.n();
     std::size_t L = ket.L(), Lp = bra.L();
     std::size_t S = ket.S(), Sp = bra.S();
@@ -125,54 +249,10 @@ namespace chiral
     return result;
   }
 
-  double M1Operator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
-                                      const basis::RelativeStateLSJT& ket,
-                                      const util::OscillatorParameter& b,
-                                      const bool& regularize,
-                                      const double& regulator)
+  double NLO1Body(const basis::RelativeCMStateLSJT& bra,
+                  const basis::RelativeCMStateLSJT& ket,
+                  const std::size_t& T0)
   {
-    auto one_body_term = NLO1Body(bra, ket);
-    auto two_body_term = NLO2Body(bra, ket, b, regularize, regulator);
-    auto result = one_body_term; //+ two_body_term;
-    return result;
-  }
-
-  // Relative-cm NLO reduced matrix element.
-  double M1Operator::NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
-                                      const basis::RelativeCMStateLSJT &ket,
-                                      const util::OscillatorParameter &b,
-                                      const bool &regularize,
-                                      const double &regulator)
-  {
-    // Relative-cm quantum numbers.
-    // std::size_t nr = ket.Nr(), nrp = bra.Nr();
-    // std::size_t nc = ket.Nc(), ncp = bra.Nc();
-    // std::size_t lr = ket.lr(), lrp = bra.lc();
-    // std::size_t lc = ket.lc(), lcp = bra.lc();
-    // std::size_t L = ket.L(), Lp = bra.L();
-    // std::size_t S = ket.S(), Sp = bra.S();
-    // std::size_t J = ket.J(), Jp = bra.J();
-    // std::size_t T = ket.T(), Tp = bra.T();
-
-    // auto one_body_term = NLO1Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc,
-    //                               lrp, lr, Sp, S, Jp, J, Tp, T);
-    // auto two_body_term = NLO2Body(nrp, nr, lrp, lr, ncp, nc, lcp, lc, lrp, lr,
-    //                               Sp, S, Jp, J, Tp, T, b, regularize, regulator);
-    // auto result = one_body_term + two_body_term;
-    // return result;
-    return 0;
-  }
-
-
-  // double NLO1Body(const std::size_t& nrp, const std::size_t& nr,
-  //                 const std::size_t& lrp, const std::size_t& lr,
-  //                 const std::size_t& ncp, const std::size_t& nc,
-  //                 const std::size_t& lcp, const std::size_t& lc,
-  //                 const std::size_t& Lp, const std::size_t& L,
-  //                 const std::size_t& Sp, const std::size_t& S,
-  //                 const std::size_t& Jp, const std::size_t& J,
-  //                 const std::size_t& Tp, const std::size_t& T)
-  // {
   //   // Spin and isospin RMEs.
   //   auto symm_rme_spin = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
   //   auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
@@ -199,19 +279,16 @@ namespace chiral
   //   if (isnan(result))
   //     result = 0;
   //   return result;
-  // }
+    return 0;
+  }
 
-  // double NLO2Body(const std::size_t& nrp, const std::size_t& nr,
-  //                 const std::size_t& lrp, const std::size_t& lr,
-  //                 const std::size_t& ncp, const std::size_t& nc,
-  //                 const std::size_t& lcp, const std::size_t& lc,
-  //                 const std::size_t& Lp, const std::size_t& L,
-  //                 const std::size_t& Sp, const std::size_t& S,
-  //                 const std::size_t& Jp, const std::size_t& J,
-  //                 const std::size_t& Tp, const std::size_t& T,
-  //                 const util::OscillatorParameter& b,
-  //                 const bool& regularize, const double regulator)
-  // {
+  double NLO2Body(const basis::RelativeCMStateLSJT& bra,
+                  const basis::RelativeCMStateLSJT& ket,
+                  const util::OscillatorParameter& b,
+                  const bool& regularize,
+                  const double& regulator,
+                  const std::size_t& T0)
+  {
   //   // CM oscillator parameter and scaling.
   //   auto bcm = b.cm();
   //   auto scaled_regulator_cm = regulator / bcm;
@@ -264,28 +341,8 @@ namespace chiral
   //   if (isnan(result))
   //     result = 0;
   //   return result;
-  // }
-
-
-  // Next to next to leading order. There are no chiral eft correction at N2LO.
-  double M1Operator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
-                                       const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
-  {
     return 0;
   }
-
-  double M1Operator::N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
-                                       const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
-  {
-    return 0;
-  }
-
 
   // Next to next to next to leading order.
   // There are both isoscalar and isovector two body chiral eft corrections at
@@ -296,7 +353,8 @@ namespace chiral
                             const basis::RelativeStateLSJT& ket,
                             const util::OscillatorParameter& b,
                             const bool& regularize,
-                            const double regulator)
+                            const double& regulator,
+                            const std::size_t& T0)
   {
     // Relative quantum numbers.
     std::size_t nr = ket.n(), nrp = bra.n();
@@ -348,54 +406,14 @@ namespace chiral
     return result;
   }
 
-  double M1Operator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
-                                       const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
-  {
-    auto result = N3LO2BodyIsoscalar(bra, ket, b, regularize, regulator);
-    return result;
-  }
-
-  double M1Operator::N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
-                                       const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
-  {
-    // Relative-cm quantum numbers.
-    // std::size_t nr = ket.Nr(), nrp = bra.Nr();
-    // std::size_t nc = ket.Nc(), ncp = bra.Nc();
-    // std::size_t lr = ket.lr(), lrp = bra.lc();
-    // std::size_t lc = ket.lc(), lcp = bra.lc();
-    // std::size_t L = ket.L(), Lp = bra.L();
-    // std::size_t S = ket.S(), Sp = bra.S();
-    // std::size_t J = ket.J(), Jp = bra.J();
-    // std::size_t T = ket.T(), Tp = bra.T();
-
-    // return N3LO2BodyIsoscalar(nrp, nr, lrp, lr, ncp, nc, lcp, lc, Lp, L,
-    //                           Sp, S, Jp, J, Tp, T, b, regularize, regulator);
-    return 0;
-  }
-
-  // Next to next to next to next to leading order.
-  // At present there are no results for N4LO.
-  double M1Operator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
-                                       const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
+  double N3LO2BodyIsoscalar(const basis::RelativeCMStateLSJT& bra,
+                            const basis::RelativeCMStateLSJT& ket,
+                            const util::OscillatorParameter& b,
+                            const bool& regularize,
+                            const double& regulator,
+                            const std::size_t& T0)
   {
     return 0;
   }
 
-  double M1Operator::N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
-                                       const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
-                                       const bool& regularize,
-                                       const double& regulator)
-  {
-    return 0;
-  }
 }
