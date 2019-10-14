@@ -354,8 +354,6 @@ namespace chiral
     auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, lr, 1)
                              * ho::CoordinateSpaceNorm(nrp, lrp, 1));
     auto mpir_wpi_integral = norm_product_rel * quadrature::IntegralMPiRWPiRYPiR(prel);
-    auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
-    auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
 
     // Angular momentum rmes.
     auto A1_rme = (-std::sqrt(3) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 0, 1));
@@ -380,7 +378,11 @@ namespace chiral
     auto relative_cm = mpir_integral * api_r;
     auto relative = 0;
     if (ncp == nc && lcp == lc)
-      relative = (zpi_integral * A6S1_rme + tpi_integral * S1_rme);
+      {
+        auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
+        auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
+        relative = (zpi_integral * A6S1_rme + tpi_integral * S1_rme);
+      }
     auto result = lec_prefactor * T1_rme * (relative_cm + relative);
     if (isnan(result))
       result = 0;
