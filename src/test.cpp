@@ -69,4 +69,10 @@ int main()
   for(const auto& order : chiral::v_order)
     fmt::print("{} ", chiral::reverse_m_order[order]);
   fmt::print("\n");
+
+  auto num = constants::gA * cube(constants::pion_mass_fm) * constants::d18_fm;
+  auto denom = 12 * constants::pi * square(constants::pion_decay_constant_fm);
+  auto lec_prefactor = num / denom;
+  lec_prefactor /= constants::nuclear_magneton_fm;
+  fmt::print("d18 product: {}\n", lec_prefactor);
 }

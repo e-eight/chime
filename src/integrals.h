@@ -31,23 +31,21 @@ namespace quadrature
 
   // Integrates m_π R (or m_π r) sandwiched between the radial basis states,
   // in coordinate space. The radial basis states are not normalized.
-  static double IntegralMPiR(const gsl_params_2n& p)
+  static double dd(std::size_t np, std::size_t n, std::size_t lp, std::size_t l)
   {
-    auto integrand =
-      [&p](double y)
+    return std::sqrt(n + l + 1.5) * (np == n) - std::sqrt(n) * (np + 1 == n);
+  }
+  static double IntegralMPiR(std::size_t np, std::size_t n, std::size_t lp, std::size_t l)
+  {
+    double result = 0;
+    if (lp == l + 1)
       {
-        return (util::ApplyRegulator(p.regularize,
-                                     std::sqrt(y), p.scaled_regulator)
-                * sf::Laguerre(p.n, p.l + 0.5, y)
-                * sf::Laguerre(p.np, p.lp + 0.5, y));
-      };
-
-    double a = 0;
-    double b = 1;
-    double alpha = (p.l + p.lp + 2.0) / 2.0;
-    std::size_t nodes = (p.n + p.np) / 2 + 1;
-    auto integral = GaussLaguerre(integrand, a, b, alpha, nodes);
-    auto result = 0.5 * p.scaled_pion_mass * integral;
+        result = (dd(np, n, lp, l) * am::SphericalHarmonicCRME(lp, l, 1));
+      }
+    if (l == lp + 1)
+      {
+        result = (dd(n, np, l, lp) * am::SphericalHarmonicCRME(lp, l, 1));
+      }
     return result;
   }
 

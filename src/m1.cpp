@@ -344,14 +344,12 @@ namespace chiral
     auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
-    quadrature::gsl_params_2n pcm{ncp, lcp, nc, lc, regularize, scaled_regulator_cm, scaled_pion_mass_cm};
+    // quadrature::gsl_params_2n pcm{ncp, lcp, nc, lc, false, scaled_regulator_cm, scaled_pion_mass_cm};
     quadrature::gsl_params_2n prel{nrp, lrp, nr, lr, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
 
     // Radial integrals.
     // CM integral.
-    auto norm_product_cm = (ho::CoordinateSpaceNorm(nc, lc, 1)
-                            * ho::CoordinateSpaceNorm(ncp, lcp, 1));
-    auto mpir_integral = norm_product_cm * quadrature::IntegralMPiR(pcm);
+    auto mpir_integral = (constants::pion_mass_fm * bcm * quadrature::IntegralMPiR(ncp, nc, lcp, lc));
     // Relative integrals.
     auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, lr, 1)
                              * ho::CoordinateSpaceNorm(nrp, lrp, 1));
@@ -380,7 +378,9 @@ namespace chiral
     // Final result.
     auto api_r = A1_rme + mpir_wpi_integral * (A2_rme + A3_rme + A4_rme + A5_rme);
     auto relative_cm = mpir_integral * api_r;
-    auto relative = zpi_integral * A6S1_rme + tpi_integral * S1_rme;
+    auto relative = 0;
+    if (ncp == nc && lcp == lc)
+      relative = (zpi_integral * A6S1_rme + tpi_integral * S1_rme);
     auto result = lec_prefactor * T1_rme * (relative_cm + relative);
     if (isnan(result))
       result = 0;
