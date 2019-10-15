@@ -87,6 +87,7 @@ namespace quadrature
                 * sf::Laguerre(p.np, p.lp + 0.5, y));
       };
 
+    double error;
     double a = 0;
     double b = 1;
     double alpha = (p.l + p.lp) / 2.0;
@@ -103,13 +104,21 @@ namespace quadrature
     auto integrand =
       [&p](double y)
       {
-        return (util::ApplyRegulator(p.regularize,
+       return (util::ApplyRegulator(p.regularize,
                                      std::sqrt(y), p.scaled_regulator)
-                * util::WPi(std::sqrt(y), p.scaled_pion_mass)
-                * std::exp(-p.scaled_pion_mass * std::sqrt(y))
-                * sf::Laguerre(p.n, p.l + 0.5, y)
-                * sf::Laguerre(p.np, p.lp + 0.5, y));
+               * util::WPi(std::sqrt(y), p.scaled_pion_mass)
+               * std::exp(-p.scaled_pion_mass * std::sqrt(y))
+               * sf::Laguerre(p.n, p.l + 0.5, y)
+               * sf::Laguerre(p.np, p.lp + 0.5, y));
       };
+
+    /* double error; */
+    /* double a = 0; */
+    /* double b = 1; */
+    /* double alpha = (p.l + p.lp) / 2.0; */
+    /* std::size_t nodes = (p.n + p.np) / 2 + 1; */
+    /* double integral = gauss_kronrod<double, 15>::integrate(integrand, 1, std::numeric_limits<double>::infinity(), 0, 0, &error); */
+    /* return integral; */
 
     double a = 0;
     double b = 1;

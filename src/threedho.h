@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <vector>
+#include <gsl/gsl_sf_gamma.h>
 #include "constants.h"
 
 namespace ho
@@ -28,8 +29,8 @@ namespace ho
                                     const std::size_t l,
                                     const double b)
   {
-    auto base_result = (2 / std::sqrt(b * b * b * constants::sqrtpi));
-    return NormRecursion(n, l, base_result);
+    auto result = std::log(2) * gsl_sf_lngamma(n+1) - 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
+    return std::sqrt(std::exp(result));
   }
 
   // Momentum space normalization constant.

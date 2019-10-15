@@ -75,4 +75,7 @@ int main()
   auto lec_prefactor = num / denom;
   lec_prefactor /= constants::nuclear_magneton_fm;
   fmt::print("d18 product: {}\n", lec_prefactor);
+
+  auto cnorm = ho::CoordinateSpaceNorm(0, 0, 1);
+  fmt::print("{}\n", cnorm);
 }

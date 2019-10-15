@@ -352,7 +352,7 @@ namespace chiral
     auto mpir_integral = (constants::pion_mass_fm * bcm * quadrature::IntegralMPiR(ncp, nc, lcp, lc));
     // Relative integrals.
     auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, lr, 1)
-                             * ho::CoordinateSpaceNorm(nrp, lrp, 1));
+                              * ho::CoordinateSpaceNorm(nrp, lrp, 1));
     auto mpir_wpi_integral = norm_product_rel * quadrature::IntegralMPiRWPiRYPiR(prel);
 
     // Angular momentum rmes.
@@ -376,7 +376,7 @@ namespace chiral
     // Final result.
     auto api_r = A1_rme + mpir_wpi_integral * (A2_rme + A3_rme + A4_rme + A5_rme);
     auto relative_cm = mpir_integral * api_r;
-    auto relative = 0;
+    double relative = 0;
     if (ncp == nc && lcp == lc)
       {
         auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
@@ -384,8 +384,6 @@ namespace chiral
         relative = (zpi_integral * A6S1_rme + tpi_integral * S1_rme);
       }
     auto result = lec_prefactor * T1_rme * (relative_cm + relative);
-    if (isnan(result))
-      result = 0;
     return result;
   }
 
