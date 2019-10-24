@@ -144,7 +144,7 @@ namespace chiral
     asymm_rme_spin_A6 *= asymm_rme_isospin;
     auto result = ((symm_rme_spin_A6 + asymm_rme_spin_A6) * wpi_ypi_integral
                    - (symm_rme_spin + asymm_rme_spin) * ypi_integral);
-    result *= (constants::sqrt2 * prefactor);
+    result *= (prefactor);
     return result;
   }
 
@@ -183,7 +183,7 @@ namespace chiral
                   * constants::pi);
     auto result = (pp_rme_isospin * (pp_rme_spin_A6 * wpi_ypi_integral
                                      + 2 * pp_rme_spin * ypi_integral));
-    result *= (constants::sqrt2 * prefactor);
+    result *= (prefactor);
     return result;
   }
 

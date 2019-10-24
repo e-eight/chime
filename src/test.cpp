@@ -76,6 +76,6 @@ int main()
   lec_prefactor /= constants::nuclear_magneton_fm;
   fmt::print("d18 product: {}\n", lec_prefactor);
 
-  auto cnorm = ho::CoordinateSpaceNorm(0, 0, 1);
-  fmt::print("{}\n", cnorm);
+  auto cnorm = ho::CoordinateSpaceNorm(2, 2, 1);
+  fmt::print("Coordinate space HO wf norm {}\n", cnorm);
 }

@@ -23,7 +23,7 @@ namespace constants
   constexpr double nuclear_magneton_fm = 1.0 / (nucleon_mass_fm * 2); // (e = 1)
 
   // Low energy constants
-  constexpr double lambda_chiral_MeV = 700; // (in MeV)
+  constexpr double lambda_chiral_MeV = 600; // (in MeV)
   constexpr double lambda_chiral_fm = lambda_chiral_MeV / hbarc; // (in fm^{-1})
   constexpr double isoscalar_nucleon_charge_radius_sq_fm = 0.603729; // (in fm^2)
   constexpr double isoscalar_nucleon_magnetic_moment = 0.8798046315;

@@ -231,23 +231,20 @@ namespace chiral
     auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
 
     // Angular momentum RMEs.
-    auto A6S1_rme = (std::sqrt(10) * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
+    auto UfS1_rme = (std::sqrt(10) * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
     auto S1_rme = am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 0, 1, 1);
 
     // Isospin rme.
     auto T1_rme = am::PauliProductRME(Tp, T, 1);
 
     // LEC prefactor. (g_A m_π^3 \bar{d}_18 / 12 π F_π^2 μ_N)
-    auto lecp = (constants::gA * constants::d18_fm
-                 * cube(constants::pion_mass_fm));
-    lecp /= (12 * constants::pi * constants::nuclear_magneton_fm
+    auto lecp = (square(constants::gA) * constants::pion_mass_fm);
+    lecp /= (48 * constants::pi * constants::nuclear_magneton_fm
              * square(constants::pion_decay_constant_fm));
 
     // Overall result.
-    auto result = A6S1_rme * zpi_integral + S1_rme * tpi_integral;
-    result *= lecp * T1_rme;
-    if (isnan(result))
-      result = 0;
+    auto result = UfS1_rme * zpi_integral + S1_rme * tpi_integral;
+    result *= -(lecp * T1_rme);
     return result;
   }
 
@@ -356,34 +353,33 @@ namespace chiral
     auto mpir_wpi_integral = norm_product_rel * quadrature::IntegralMPiRWPiRYPiR(prel);
 
     // Angular momentum rmes.
-    auto A1_rme = (-std::sqrt(3) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 0, 1));
-    auto A2_rme = (std::sqrt(3.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 2, 1));
-    auto A3_rme = (std::sqrt(9.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 2, 2, 1));
-    auto A4_rme = (std::sqrt(14.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 2, 2, 1));
-    auto A5_rme = (std::sqrt(28.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 3, 2, 1));
-    auto A6S1_rme = (std::sqrt(10) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 2, 2, 1, 1));
-    auto S1_rme = am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1, 1);
+    auto Ua_rme = (-std::sqrt(3) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 0, 1));
+    auto Ub_rme = (std::sqrt(3.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 1, 2, 1));
+    auto Uc_rme = (std::sqrt(9.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 1, 1, 2, 2, 1));
+    auto Ud_rme = (std::sqrt(14.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 2, 2, 1));
+    auto Ue_rme = (std::sqrt(28.0 / 5.0) * am::RelativeCMPauliProductRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 3, 1, 3, 2, 1));
 
     // Isospin rme.
     auto T1_rme = am::PauliProductRME(Tp, T, 1);
 
-    // LEC prefactor. (g_A m_π^3 \bar{d}_18 / 12 π F_π^2 μ_N)
-    auto num = constants::gA * cube(constants::pion_mass_fm) * constants::d18_fm;
-    auto denom = 12 * constants::pi * square(constants::pion_decay_constant_fm);
-    auto lec_prefactor = num / denom;
-    lec_prefactor /= constants::nuclear_magneton_fm;
+    // LEC prefactor. (g_A^2 m_π / 48 π F_π^2 μ_N)
+    auto lecp = (square(constants::gA) * constants::pion_mass_fm);
+    lecp /= (48 * constants::pi * constants::nuclear_magneton_fm
+             * square(constants::pion_decay_constant_fm));
 
     // Final result.
-    auto api_r = A1_rme + mpir_wpi_integral * (A2_rme + A3_rme + A4_rme + A5_rme);
-    auto relative_cm = mpir_integral * api_r;
+    auto upi_r = Ua_rme + mpir_wpi_integral * (Ub_rme + Uc_rme + Ud_rme + Ue_rme);
+    auto relative_cm = mpir_integral * upi_r;
     double relative = 0;
     if (ncp == nc && lcp == lc)
       {
+        auto UfS1_rme = (std::sqrt(10) * am::RelativePauliProductRME(lrp, lr, Sp, S, Jp, J, 2, 1, 1));
+        auto S1_rme = am::RelativePauliProductRME(lrp, lr, Sp, S, Jp, J, 0, 1, 1);
         auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
         auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
-        relative = (zpi_integral * A6S1_rme + tpi_integral * S1_rme);
+        relative = (zpi_integral * UfS1_rme + tpi_integral * S1_rme);
       }
-    auto result = lec_prefactor * T1_rme * (relative_cm + relative);
+    auto result = -lecp * T1_rme * (relative_cm + relative);
     return result;
   }
 

@@ -191,6 +191,21 @@ namespace am
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
+
+  // Calculate reduced matrix element of
+  // [C_a(\hat{r}) ⊗ \vec{S}]_b in a LS coupled basis.
+  //
+  // Arguments:
+  //  lp (int): bra orbital angular momentum
+  //  l (int): ket orbital angular momentum
+  //  sp (int): bra spin
+  //  s (int): ket spin
+  //  jp (int): bra angular momentum
+  //  j (int): ket angular momentum
+  //  a (int): rank of C_a
+  //  b (int): rank of tensor product
+  // Returns:
+  //  reduced matrix element (double), Rose convention
   inline double RelativeSpinSymmetricRME(const int& lp,
                                          const int& l,
                                          const int& sp,
@@ -209,6 +224,21 @@ namespace am
     auto result = (hat_product * wigner_9j * crme * prme);
     return result;
   }
+
+  // Calculate reduced matrix element of
+  // [C_a(\hat{r}) ⊗ \vec{S}_A]_b in a LS coupled basis.
+  //
+  // Arguments:
+  //  lp (int): bra orbital angular momentum
+  //  l (int): ket orbital angular momentum
+  //  sp (int): bra spin
+  //  s (int): ket spin
+  //  jp (int): bra angular momentum
+  //  j (int): ket angular momentum
+  //  a (int): rank of C_a
+  //  b (int): rank of tensor product
+  // Returns:
+  //  reduced matrix element (double), Rose convention
   inline double RelativeSpinAntisymmetricRME(const int& lp,
                                              const int& l,
                                              const int& sp,
@@ -354,6 +384,29 @@ namespace am
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }
+
+    // Calculate reduced matrix element of
+  // [[C_a(\hat{r}) ⊗ C_b(\hat{R})]_c ⊗ \vec{S}]_d
+  // in a LS coupled basis.
+  //
+  // Arguments:
+  //  lrp (int): bra orbital angular momentum, relative
+  //  lr (int): ket orbital angular momentum, relative
+  //  lcp (int): bra orbital angular momentum, cm
+  //  lc (int): ket orbital angular momentum, cm
+  //  Lp (int): bra total orbital angular momentum
+  //  L (int): ket total orbital angular momentum
+  //  Sp (int): bra spin
+  //  S (int): ket spin
+  //  Jp (int): bra angular momentum
+  //  J (int): ket angular momentum
+  //  a (int): rank of C_a
+  //  b (int): rank of C_b
+  //  c (int): rank of C_a C_b tensor product
+  //  d (int): rank of tensor product
+  // Returns:
+  //  reduced matrix element (double), Rose convention
+
   inline double RelativeCMSpinSymmetricRME(const int& lrp,
                                            const int& lr,
                                            const int& lcp,
@@ -381,6 +434,28 @@ namespace am
     auto result = (hat_product * wigner_product * crme_product * prme);
     return result;
   }
+
+    // Calculate reduced matrix element of
+  // [[C_a(\hat{r}) ⊗ C_b(\hat{R})]_c ⊗ \vec{S}_A]_d
+  // in a LS coupled basis.
+  //
+  // Arguments:
+  //  lrp (int): bra orbital angular momentum, relative
+  //  lr (int): ket orbital angular momentum, relative
+  //  lcp (int): bra orbital angular momentum, cm
+  //  lc (int): ket orbital angular momentum, cm
+  //  Lp (int): bra total orbital angular momentum
+  //  L (int): ket total orbital angular momentum
+  //  Sp (int): bra spin
+  //  S (int): ket spin
+  //  Jp (int): bra angular momentum
+  //  J (int): ket angular momentum
+  //  a (int): rank of C_a
+  //  b (int): rank of C_b
+  //  c (int): rank of C_a C_b tensor product
+  //  d (int): rank of tensor product
+  // Returns:
+  //  reduced matrix element (double), Rose convention
   inline double RelativeCMSpinAntisymmetricRME(const int& lrp,
                                                const int& lr,
                                                const int& lcp,

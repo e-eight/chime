@@ -8,28 +8,12 @@
 
 namespace ho
 {
-  //  Recursion relation for normalization constant of the 3DHO basis.
-  inline double NormRecursion(const std::size_t n,
-                              const std::size_t l,
-                              const double result)
-  {
-    if (n == 0 && l == 0)
-      return result;
-    else if (n == 0)
-      return NormRecursion(n, l - 1, std::sqrt(1 / (l + 0.5)) * result);
-    else if (l == 0)
-      return NormRecursion(n - 1, l, std::sqrt(n / (n + 0.5)) * result);
-    else
-      return NormRecursion(n - 1, l - 1,
-                           std::sqrt(n / ((n + l + 0.5) * (n - l - 0.5))) * result);
-  }
-
   // Coordinate space normalization constant.
   inline double CoordinateSpaceNorm(const std::size_t n,
                                     const std::size_t l,
                                     const double b)
   {
-    auto result = std::log(2) * gsl_sf_lngamma(n+1) - 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
+    auto result = std::log(2) + gsl_sf_lngamma(n+1) - 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
     return std::sqrt(std::exp(result));
   }
 
@@ -38,8 +22,8 @@ namespace ho
                                   const std::size_t l,
                                   const double b)
   {
-    auto base_result = (2 * std::sqrt(b * b * b / constants::sqrtpi));
-    return NormRecursion(n, l, base_result);
+    auto result = std::log(2) + gsl_sf_lngamma(n+1) + 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
+    return std::sqrt(std::exp(result));
   }
 
 
