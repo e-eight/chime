@@ -19,10 +19,10 @@ namespace quadrature
   // Structs for passing parameters to GSL integration routines.
   struct gsl_params_2n
   {
-    std::size_t np;
-    std::size_t lp;
-    std::size_t n;
-    std::size_t l;
+    int np;
+    int lp;
+    int n;
+    int l;
     bool regularize;
     double scaled_regulator;
     double scaled_pion_mass;
@@ -135,20 +135,20 @@ namespace quadrature
     auto integrand =
       [&p](double y)
       {
-        return (util::ApplyRegulator(p.regularize,
-                                     std::sqrt(y), p.scaled_regulator)
-                * util::ZPi(std::sqrt(y), p.scaled_pion_mass)
-                * std::exp(-p.scaled_pion_mass * std::sqrt(y))
+        return ((1 + p.scaled_pion_mass * std::sqrt(y))
+                * (std::exp(-p.scaled_pion_mass * std::sqrt(y)) / std::sqrt(y))
+                * std::pow(1 - std::exp(-std::sqrt(y)
+                                        / square(p.scaled_regulator)), 6)
                 * sf::Laguerre(p.n, p.l + 0.5, y)
                 * sf::Laguerre(p.np, p.lp + 0.5, y));
       };
 
     double a = 0;
     double b = 1;
-    double alpha = (p.l + p.lp) / 2.0;
+    double alpha = (p.l + p.lp + 1) / 2.0;
     std::size_t nodes = (p.n + p.np) / 2 + 1;
-    auto integral = GaussLaguerre(integrand, a, b, alpha, nodes);
-    auto result = 0.5 * integral / p.scaled_pion_mass;
+    auto result = GaussLaguerre(integrand, a, b, alpha, nodes);
+    result /= (2.0 * p.scaled_pion_mass);
     return result;
   }
 
@@ -159,20 +159,20 @@ namespace quadrature
     auto integrand =
       [&p](double y)
       {
-        return (util::ApplyRegulator(p.regularize,
-                                     std::sqrt(y), p.scaled_regulator)
-                * util::TPi(std::sqrt(y), p.scaled_pion_mass)
-                * std::exp(-p.scaled_pion_mass * std::sqrt(y))
+        return ((-1 + 2 * p.scaled_pion_mass * std::sqrt(y))
+                * (std::exp(-p.scaled_pion_mass * std::sqrt(y)) / std::sqrt(y))
+                * std::pow(1 - std::exp(-std::sqrt(y)
+                                        / square(p.scaled_regulator)), 6)
                 * sf::Laguerre(p.n, p.l + 0.5, y)
                 * sf::Laguerre(p.np, p.lp + 0.5, y));
       };
 
     double a = 0;
     double b = 1;
-    double alpha = (p.l + p.lp) / 2.0;
+    double alpha = (p.l + p.lp + 1) / 2.0;
     std::size_t nodes = (p.n + p.np) / 2 + 1;
-    auto integral = GaussLaguerre(integrand, a, b, alpha, nodes);
-    auto result = 0.5 * integral / p.scaled_pion_mass;
+    auto result = GaussLaguerre(integrand, a, b, alpha, nodes);
+    result /= (2.0 * p.scaled_pion_mass);
     return result;
   }
 

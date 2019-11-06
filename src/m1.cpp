@@ -1,4 +1,5 @@
 #include <cmath>
+#include "fmt/format.h"
 #include "basis/lsjt_scheme.h"
 #include "rme_extras.h"
 #include "constants.h"
@@ -152,43 +153,102 @@ namespace chiral
                   const basis::RelativeStateLSJT& ket,
                   const std::size_t& T0)
   {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
+    int nr = ket.n(), nrp = bra.n();
+    int L = ket.L(), Lp = bra.L();
+    int S = ket.S(), Sp = bra.S();
+    int J = ket.J(), Jp = bra.J();
+    int T = ket.T(), Tp = bra.T();
 
-    if (nr != nrp || L != Lp)
+    if (!am::AllowedTriangle(Jp, J, 1))
       return 0;
-
-    // Spin and isospin rmes.
-    auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
-    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
-    auto delta_T = Tp == T;
 
     double result = 0;
 
     if (T0 == 0)
       {
-        // Purely spin term.
-        auto spin_symm_term = (constants::isoscalar_nucleon_magnetic_moment
-                               * symm_rme_spin * delta_T);
-        // Purely orbital angular momentum term.
-        auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J) * delta_T);
-        result = spin_symm_term + oam_term;
+        bool kronecker = (nrp == nr && Lp == L && Sp == S && Tp == T);
+        if (kronecker)
+          {
+            double oam_term = 0.5 * Hat(L) * ParitySign(L + J + 1 + S);
+            oam_term *= (am::Wigner6J(L, L, 1, Jp, J, S) * std::sqrt(L * (L + 1)));
+
+            double spin_term = (constants::isoscalar_nucleon_magnetic_moment
+                                * Hat(S) * ParitySign(S + Jp + L + 1));
+            spin_term *= (am::Wigner6J(S, S, 1, J, Jp, L) * std::sqrt(S * (S + 1)));
+
+            result = Hat(J) * (oam_term + spin_term);
+          }
       }
     else if (T0 == 1)
       {
+        // bool kronecker = (nrp == nr && Lp == L);
+        // if (kronecker)
+        //   {
+        //     double isospin_symm_term = 0;
+        //     if (S == Sp && T == Tp)
+        //       {
+        //         if (T == 1)
+        //           {
+        //             isospin_symm_term = std::sqrt(2);
+
+        //             double oam_term = (0.5 * Hat(L) * am::Wigner6J(L, L, 1, Jp, J, S)
+        //                                * std::sqrt(L * (L + 1)));
+
+        //             double spin_term = 0;
+        //             if (S == 1)
+        //               {
+        //                 spin_term = (constants::isovector_nucleon_magnetic_moment
+        //                          * std::sqrt(6) * am::Wigner6J(1, 1, 1, J, Jp, L));
+        //               }
+
+        //             isospin_symm_term *= (oam_term + spin_term);
+        //           }
+        //       }
+
+        //     double isospin_asymm_term = 0;
+        //     if (S != Sp && T != Tp)
+        //       {
+        //         if (T == 1 && Tp == 0)
+        //           isospin_asymm_term = -std::sqrt(3);
+        //         else if (T == 0 && Tp == 1)
+        //           isospin_asymm_term = 1;
+
+        //         double spin_term = 0;
+        //         if (S == 1 && Sp == 0)
+        //           spin_term = -std::sqrt(3);
+        //         else if (S == 0 && Sp == 1)
+        //           spin_term = 1;
+        //         spin_term *= (Hat(Sp) * am::Wigner6J(Sp, S, 1, J, Jp, L)
+        //                       * constants::isovector_nucleon_magnetic_moment);
+
+        //         isospin_asymm_term *= spin_term;
+
+        //   }
         // Purely spin terms.
-        auto spin_symm_term = (constants::isovector_nucleon_magnetic_moment
-                               * symm_rme_spin * symm_rme_isospin);
-        auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment
-                                * asymm_rme_spin * asymm_rme_isospin);
+        double spin_symm_term = 0;
+        if (Sp == S && Tp == T)
+          {
+            double symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+            double symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+            spin_symm_term = (constants::isovector_nucleon_magnetic_moment
+                              * symm_rme_spin * symm_rme_isospin);
+          }
+        double spin_asymm_term = 0;
+        if (std::abs(Sp - S) == 1 && std::abs(Tp - T) == 1)
+          {
+            double asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
+            double asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+            spin_asymm_term = (constants::isovector_nucleon_magnetic_moment
+                               * asymm_rme_spin * asymm_rme_isospin);
+          }
         // Purely orbital angular momentum term.
-        auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J)
-                         * symm_rme_isospin);
+        double oam_term = 0;
+        if (Lp == L && Tp == T)
+          {
+            double lrel_rme = am::RelativeLrelRME(Lp, L, Sp, S, Jp, J);
+            double symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+            oam_term = (0.5 * lrel_rme * symm_rme_isospin);
+          }
         result = spin_symm_term + spin_asymm_term + oam_term;
       }
     else
@@ -209,42 +269,60 @@ namespace chiral
     if (T0 != 1)
       return 0;
 
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
+    int nr = ket.n(), nrp = bra.n();
+    int L = ket.L(), Lp = bra.L();
+    int S = ket.S(), Sp = bra.S();
+    int J = ket.J(), Jp = bra.J();
+    int T = ket.T(), Tp = bra.T();
+
+    if (!am::AllowedTriangle(J, 1, Jp))
+      return 0;
 
     // Relative oscillator parameter and scaling.
-    auto brel = b.relative();
-    auto scaled_regulator_rel = regulator / brel;
-    auto scaled_pion_mass_rel = constants::pion_mass_fm * brel;
+    double brel = b.relative();
+    double scaled_regulator_rel = regulator / brel;
+    double scaled_pion_mass_rel = constants::pion_mass_fm * brel;
 
     // Parameters for integration routines.
     quadrature::gsl_params_2n
       prel{nrp, Lp, nr, L, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
 
-    // Radial integrals.
-    auto norm_product_rel = (ho::CoordinateSpaceNorm(nr, L, 1)
+    // Product of HO norms for integrals.
+    double norm_product_rel = (ho::CoordinateSpaceNorm(nr, L, 1)
                              * ho::CoordinateSpaceNorm(nrp, Lp, 1));
-    auto zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
-    auto tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
 
-    // Angular momentum RMEs.
-    auto UfS1_rme = (std::sqrt(10) * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
-    auto S1_rme = am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 0, 1, 1);
+    // 9j symbol common to both Uf(S1) and S1.
+    double spin_9j = am::Wigner9J(HalfInt(1, 2), HalfInt(1, 2), S, 1, 1, 1, HalfInt(1, 2), HalfInt(1, 2), Sp);
+
+    // Calculate the Uf(S1) term.
+    double UfS1_term = (18 * std::sqrt(10) * HatProduct(Lp, Sp, J, S));
+    UfS1_term *= (am::Wigner9J(L, S, J, 2, 1, 1, Lp, Sp, Jp) * spin_9j);
+    UfS1_term *= am::SphericalHarmonicCRME(Lp, L, 2);
+    double zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
+    UfS1_term *= zpi_integral;
+
+    // Calculate the S1 term only if L and Lp are the same.
+    double S1_term = 0;
+    if (L == Lp)
+      {
+        S1_term = (ParitySign(S + Jp + Lp + 1) * 6 * std::sqrt(3));
+        S1_term *= HatProduct(S, Sp, J);
+        S1_term *= (am::Wigner6J(Sp, S, 1, J, Jp, L) * spin_9j);
+        double tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
+        S1_term *= tpi_integral;
+      }
 
     // Isospin rme.
-    auto T1_rme = am::PauliProductRME(Tp, T, 1);
+    double T1_rme = 6 * std::sqrt(3) * Hat(T);
+    T1_rme *= am::Wigner9J(HalfInt(1, 2), HalfInt(1, 2), T, 1, 1, 1, HalfInt(1, 2), HalfInt(1, 2), Tp);
 
-    // LEC prefactor. (g_A m_π^3 \bar{d}_18 / 12 π F_π^2 μ_N)
-    auto lecp = (square(constants::gA) * constants::pion_mass_fm);
+    // LEC prefactor. (-g_A^2 m_π / 48 π F_π^2 μ_N)
+    double lecp = -(square(constants::gA) * constants::pion_mass_fm);
     lecp /= (48 * constants::pi * constants::nuclear_magneton_fm
              * square(constants::pion_decay_constant_fm));
 
     // Overall result.
-    auto result = UfS1_rme * zpi_integral + S1_rme * tpi_integral;
-    result *= -(lecp * T1_rme);
+    double result = lecp * T1_rme * (UfS1_term + S1_term);
     return result;
   }
 
@@ -252,62 +330,89 @@ namespace chiral
                   const basis::RelativeCMStateLSJT& ket,
                   const std::size_t& T0)
   {
-    std::size_t nr = ket.Nr(), nrp = bra.Nr();
-    std::size_t lr = ket.lr(), lrp = bra.lr();
-    std::size_t nc = ket.Nc(), ncp = bra.Nc();
-    std::size_t lc = ket.lc(), lcp = bra.lc();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
+    int nr = ket.Nr(), nrp = bra.Nr();
+    int lr = ket.lr(), lrp = bra.lr();
+    int nc = ket.Nc(), ncp = bra.Nc();
+    int lc = ket.lc(), lcp = bra.lc();
+    int L = ket.L(), Lp = bra.L();
+    int S = ket.S(), Sp = bra.S();
+    int J = ket.J(), Jp = bra.J();
+    int T = ket.T(), Tp = bra.T();
 
+    if (!am::AllowedTriangle(J, Jp, 1))
+      return 0;
     // Spin and isospin RMEs.
-    auto symm_rme_spin = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
-    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
-    auto asymm_rme_spin = am::RelativeCMSpinAntisymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
-    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
-    auto delta_T = Tp == T;
+    // auto symm_rme_spin = am::RelativeCMSpinSymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+    // auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
+    // auto asymm_rme_spin = am::RelativeCMSpinAntisymmetricRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J, 0, 0, 0, 1);
+    // auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
+    // auto delta_T = Tp == T;
 
     // Orbital angular momentum MEs.
-    auto lsum_me = (am::RelativeCMLsumRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J)
-                    * (nrp == nr && ncp == nc));
-    auto mass_ratio_sqrt = 0.5; // std::sqrt(constants::reduced_nucleon_mass_fm / (2 * constants::nucleon_mass_fm));
-    auto rcm_prel_me = (mass_ratio_sqrt * am::GradientME(nrp, nr, lrp, lr)
-                        * am::RadiusME(ncp, nc, lcp, lc));
-    auto rrel_pcm_me = (am::RadiusME(nrp, nr, lrp, lr)
-                        * am::GradientME(ncp, nc, lcp, lc) / mass_ratio_sqrt);
+    // auto lsum_me = (am::RelativeCMLsumRME(lrp, lr, lcp, lc, Lp, L, Sp, S, Jp, J)
+    //                 * (nrp == nr && ncp == nc));
+    // auto mass_ratio_sqrt = 0.5; // std::sqrt(constants::reduced_nucleon_mass_fm / (2 * constants::nucleon_mass_fm));
+    // auto rcm_prel_me = (mass_ratio_sqrt * am::GradientME(nrp, nr, lrp, lr)
+    //                     * am::RadiusME(ncp, nc, lcp, lc));
+    // auto rrel_pcm_me = (am::RadiusME(nrp, nr, lrp, lr)
+    //                     * am::GradientME(ncp, nc, lcp, lc) / mass_ratio_sqrt);
 
     double result = 0;
 
     if (T0 == 0)
       {
-        // Purely spin term.
-        auto spin_term = (constants::isoscalar_nucleon_magnetic_moment
-                               * symm_rme_spin * delta_T);
-        // Purely orbital angular momentum term.
-        auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J) * delta_T);
-        result = spin_term + oam_term;
+        bool kronecker = (nrp == nr && lrp == lr && ncp == nc && lcp == lc && Sp == S && Tp == T);
+        if (kronecker)
+          {
+            double oam_term = 0;
+            if (am::AllowedTriangle(L, Lp, 1))
+              {
+                double rel_oam_term = Hat(lr) * ParitySign(Lp + J + S + lr + L + lc);
+                rel_oam_term *= am::Wigner6J(lr, lr, 1, Lp, L, lc);
+                rel_oam_term *= std::sqrt(lr * (lr + 1));
+
+                double cm_oam_term = Hat(lc) * ParitySign(lc + lr + J + S);
+                cm_oam_term *= am::Wigner6J(lc, lc, 1, L, Lp, lr);
+                cm_oam_term *= std::sqrt(lc * (lc + 1));
+
+                oam_term = (0.5 * HatProduct(Lp, L) * am::Wigner6J(L, Lp, 1, Jp, J, S)
+                            * (rel_oam_term + cm_oam_term));
+              }
+
+            double spin_term = 0;
+            if (Lp == L)
+              {
+                spin_term = constants::isoscalar_nucleon_magnetic_moment * Hat(S);
+                spin_term *= (ParitySign(S + Jp + Lp + 1) * am::Wigner6J(Sp, S, 1, J, Jp, L));
+                spin_term *= std::sqrt(S * (S  +1));
+              }
+            // // Purely spin term.
+            // auto spin_term = (constants::isoscalar_nucleon_magnetic_moment
+            //                    * symm_rme_spin * delta_T);
+            // // Purely orbital angular momentum term.
+            // auto oam_term = (0.5 * am::RelativeLrelRME(Lp, L, Sp, S, Jp, J) * delta_T);
+            result = Hat(J) * (spin_term + oam_term);
+          }
       }
     else if (T0 == 1)
       {
         // Purely spin terms.
-        auto spin_symm_term = (constants::isovector_nucleon_magnetic_moment
-                               * symm_rme_spin * symm_rme_isospin);
-        auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment
-                                * asymm_rme_spin * asymm_rme_isospin);
-        // Purely orbital angular momentum term.
-        auto oam_diagonal_term = (0.5 * lsum_me * symm_rme_isospin);
-        auto oam_cross_term = (0.5 * (2 * rcm_prel_me + 0.5 * rrel_pcm_me)
-                               * asymm_rme_isospin);
-        result = (spin_symm_term + spin_asymm_term
-                  + oam_diagonal_term + oam_cross_term);
+        // auto spin_symm_term = (constants::isovector_nucleon_magnetic_moment
+        //                        * symm_rme_spin * symm_rme_isospin);
+        // auto spin_asymm_term = (constants::isovector_nucleon_magnetic_moment
+        //                         * asymm_rme_spin * asymm_rme_isospin);
+        // // Purely orbital angular momentum term.
+        // auto oam_diagonal_term = (0.5 * lsum_me * symm_rme_isospin);
+        // auto oam_cross_term = (0.5 * (2 * rcm_prel_me + 0.5 * rrel_pcm_me)
+        //                        * asymm_rme_isospin);
+        // result = (spin_symm_term + spin_asymm_term
+        //           + oam_diagonal_term + oam_cross_term);
+        result = 0;
       }
     else
       {
         result = 0;
       }
-    if (isnan(result))
-      result = 0;
     return result;
   }
 
@@ -321,14 +426,14 @@ namespace chiral
     if (T0 != 1)
       return 0;
 
-    std::size_t nr = ket.Nr(), nrp = bra.Nr();
-    std::size_t lr = ket.lr(), lrp = bra.lr();
-    std::size_t nc = ket.Nc(), ncp = bra.Nc();
-    std::size_t lc = ket.lc(), lcp = bra.lc();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
+    int nr = ket.Nr(), nrp = bra.Nr();
+    int lr = ket.lr(), lrp = bra.lr();
+    int nc = ket.Nc(), ncp = bra.Nc();
+    int lc = ket.lc(), lcp = bra.lc();
+    int L = ket.L(), Lp = bra.L();
+    int S = ket.S(), Sp = bra.S();
+    int J = ket.J(), Jp = bra.J();
+    int T = ket.T(), Tp = bra.T();
 
     // CM oscillator parameter and scaling.
     auto bcm = b.cm();
@@ -396,11 +501,11 @@ namespace chiral
                             const std::size_t& T0)
   {
     // Relative quantum numbers.
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
+    int nr = ket.n(), nrp = bra.n();
+    int L = ket.L(), Lp = bra.L();
+    int S = ket.S(), Sp = bra.S();
+    int J = ket.J(), Jp = bra.J();
+    int T = ket.T(), Tp = bra.T();
 
     // Spin rmes.
     auto S_rme = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);

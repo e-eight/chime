@@ -498,7 +498,7 @@ namespace am
                                 const int& sp, const int& s,
                                 const int& jp, const int& j)
   {
-    if (sp != s)
+    if (sp != s && lp != l)
       return 0;
     auto hat_product = HatProduct(j, lp);
     auto wigner_6j = am::Wigner6J(l, lp, 1, jp, j, s);

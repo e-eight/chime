@@ -3,5 +3,5 @@ clang
 -I../lib
 -I../lib/basis
 -I../lib/am
--I../lib/fmt
+-I../lib/fmt/include
 -I../lib/CLI11/include
