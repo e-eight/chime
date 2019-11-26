@@ -62,20 +62,34 @@ int main()
 
   fmt::print("Hat product: {}\n", HatProduct(1, 1, 1, 1));
 
-  fmt::print("(Delta regularization) F: n=0: {}, n=100: {}\n",
-             quadrature::F(0, 0, 1), quadrature::F(100, 0, 1));
-
   fmt::print("Chiral orders: ");
   for(const auto& order : chiral::v_order)
     fmt::print("{} ", chiral::reverse_m_order[order]);
   fmt::print("\n");
 
-  auto num = constants::gA * cube(constants::pion_mass_fm) * constants::d18_fm;
-  auto denom = 12 * constants::pi * square(constants::pion_decay_constant_fm);
-  auto lec_prefactor = num / denom;
-  lec_prefactor /= constants::nuclear_magneton_fm;
-  fmt::print("d18 product: {}\n", lec_prefactor);
+  auto nmass = constants::nucleon_mass_MeV;
+  auto rnmass = constants::reduced_nucleon_mass_MeV;
+  fmt::print("Average nucleon mass: {}\n", nmass);
+  fmt::print("Reduced nucleon mass: {}\n", rnmass);
+  fmt::print("mass ratio: {}\n", nmass / rnmass);
 
   auto cnorm = ho::CoordinateSpaceNorm(2, 2, 1);
-  fmt::print("Coordinate space HO wf norm {}\n", cnorm);
+  fmt::print("Coordinate space HO wf norm (n=2, l=2, b=1): {}\n", cnorm);
+
+  fmt::print("Yukawa integrals: \n");
+  auto brel = util::OscillatorParameter(20).relative();
+  auto mpi = constants::pion_mass_fm;
+  fmt::print("ZπYπ: \n");
+  fmt::print("{}\n", quadrature::IntegralZPiYPiR(0, 0, 0, 0, brel, mpi, true, 1.0));
+  fmt::print("{}\n", quadrature::IntegralZPiYPiR(0, 0, 1, 0, brel, mpi, true, 1.0));
+  fmt::print("{}\n", quadrature::IntegralZPiYPiR(1, 0, 1, 0, brel, mpi, true, 1.0));
+  fmt::print("TπYπ: \n");
+  fmt::print("{}\n", quadrature::IntegralTPiYPiR(0, 0, 0, 0, brel, mpi, true, 1.0));
+  fmt::print("{}\n", quadrature::IntegralTPiYPiR(0, 0, 1, 0, brel, mpi, true, 1.0));
+  fmt::print("{}\n", quadrature::IntegralTPiYPiR(1, 0, 1, 0, brel, mpi, true, 1.0));
+
+  auto gpi = constants::gA / (2 * constants::pion_decay_constant_fm);
+  auto mN = constants::nucleon_mass_fm;
+  auto prefactor = -mpi * mN * square(gpi) / (3 * constants::pi);
+  fmt::print("M1 two-body prefactor: {}\n", prefactor);
 }

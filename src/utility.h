@@ -59,39 +59,6 @@ namespace util
     double oscillator_energy; // in MeV
   };
 
-
-  // Lenpic coordinate space local regulator.
-  static inline double LenpicLocalRegulator(const double r, const double R)
-  {
-    return std::pow(1 - std::exp(-square(r / R)), 6);
-  }
-  static inline double ApplyRegulator(const bool regularize, const double r, const double R)
-  {
-    return regularize ? LenpicLocalRegulator(r, R) : 1;
-  }
-
-
-  // Yukawa and associated functions that appear in many operator matrix elements.
-  static inline double YPi(const double scaled_r, const double scaled_pion_mass)
-  {
-    auto rpi = scaled_pion_mass * scaled_r;
-    return std::exp(-rpi) / rpi;
-  }
-  static inline double ZPi(const double scaled_r, const double scaled_pion_mass)
-  {
-    return 1 + scaled_pion_mass * scaled_r;
-  }
-  static inline double TPi(const double scaled_r, const double scaled_pion_mass)
-  {
-    return 2 * scaled_pion_mass * scaled_r - 1;
-  }
-  static inline double WPi(const double scaled_r, const double scaled_pion_mass)
-  {
-    auto rpi2 = square(scaled_pion_mass * scaled_r);
-    return 1 + (ZPi(scaled_r, scaled_pion_mass) / rpi2);
-  }
-
-
   // General memoizer.
   // https://stackoverflow.com/a/17807129, and
   // http://slackito.com/2011/03/17/automatic-memoization-in-cplusplus0x/

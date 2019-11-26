@@ -13,12 +13,18 @@ namespace constants
   constexpr double hbarc_GeV = 0.1973269602; // (in GeV fm)
 
   // Masses
-  constexpr double pion_mass_MeV = 134.9770;
-  constexpr double pion_mass_fm = pion_mass_MeV / hbarc; // (in fm^{-1})
-  constexpr double reduced_nucleon_mass_MeV = 469.4593340;
+  // The units are either MeV or fm^{-1}.
+  constexpr double pion_mass_MeV = 139.57018;
+  constexpr double pion_mass_fm = pion_mass_MeV / hbarc;
+  constexpr double proton_mass_MeV = 938.27208816;
+  constexpr double proton_mass_fm = proton_mass_MeV / hbarc;
+  constexpr double neutron_mass_MeV = 939.56542052;
+  constexpr double neutron_mass_fm = neutron_mass_MeV / hbarc;
+  constexpr double reduced_nucleon_mass_MeV = ((proton_mass_MeV * neutron_mass_MeV)
+                                               / (proton_mass_MeV + neutron_mass_MeV));
   constexpr double reduced_nucleon_mass_fm = reduced_nucleon_mass_MeV / hbarc;
-  constexpr double nucleon_mass_MeV = reduced_nucleon_mass_MeV * 2;
-  constexpr double nucleon_mass_fm = reduced_nucleon_mass_fm * 2;
+  constexpr double nucleon_mass_MeV = ((proton_mass_MeV + neutron_mass_MeV) / 2);
+  constexpr double nucleon_mass_fm = nucleon_mass_MeV / hbarc;
   constexpr double nuclear_magneton_MeV = 1.0 / (nucleon_mass_MeV * 2); // (e = 1)
   constexpr double nuclear_magneton_fm = 1.0 / (nucleon_mass_fm * 2); // (e = 1)
 

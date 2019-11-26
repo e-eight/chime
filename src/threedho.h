@@ -3,26 +3,29 @@
 
 #include <cmath>
 #include <vector>
+#include <algorithm>
 #include <gsl/gsl_sf_gamma.h>
 #include "constants.h"
 
 namespace ho
 {
   // Coordinate space normalization constant.
-  inline double CoordinateSpaceNorm(const std::size_t n,
-                                    const std::size_t l,
-                                    const double b)
+  static inline double CoordinateSpaceNorm(const std::size_t n,
+                                           const std::size_t l,
+                                           const double b)
   {
-    auto result = std::log(2) + gsl_sf_lngamma(n+1) - 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
+    auto result = (std::log(2) + gsl_sf_lngamma(n+1)
+                   - 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5));
     return std::sqrt(std::exp(result));
   }
 
   // Momentum space normalization constant.
-  inline double MomentumSpaceNorm(const std::size_t n,
-                                  const std::size_t l,
-                                  const double b)
+  static inline double MomentumSpaceNorm(const std::size_t n,
+                                         const std::size_t l,
+                                         const double b)
   {
-    auto result = std::log(2) + gsl_sf_lngamma(n+1) + 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5);
+    auto result = (std::log(2) + gsl_sf_lngamma(n+1)
+                   + 3 * std::log(b) - gsl_sf_lngamma(n+l+1.5));
     return std::sqrt(std::exp(result));
   }
 
@@ -46,55 +49,56 @@ namespace ho
   // B(n, a) = (1+a+2n) / \sqrt{(1+n)(1+a+n)}
   // C(n, a) = n(a+n) / \sqrt{n(1+n)(a+n)(1+a+n)}
 
-  inline double CoefficientA(const int& n, const double& a)
+  double AW(int n, double a)
   {
-    return (-1 / std::sqrt((1 + n) * (1 + a + n)));
+    return -1.0 / std::sqrt((n + 1) * (n + a + 1));
+  }
+  double BW(int n, double a)
+  {
+    return (2*n + a + 1) / std::sqrt((n + 1) * (n + a + 1));
+  }
+  double CW(int n, double a)
+  {
+    return std::sqrt(n * (n + a) / ((n + 1) * (n + a + 1)));
   }
 
-  inline double CoefficientB(const int& n, const double& a)
+  // Calculate the value of the 3DHO basis function at a given point.
+  double WaveFunctionValue(int n, int l, double b, double x)
   {
-    return ((1 + a + 2*n) / std::sqrt((1 + n) * (1 + a + n)));
+    if (n == 0)
+      {
+        double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 1.5)));
+        value *= std::exp(-0.5 * square(x / b)) * std::pow(x / b, l);
+        return value;
+      }
+    if (n == 1)
+      {
+        double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 2.5)));
+        value *= (std::exp(-0.5 * square(x / b)) * std::pow(x / b, l)
+                  * (l + 1.5 - square(x / b)));
+        return value;
+      }
+
+    std::vector<double> table(n + 1);
+    table[0] = WaveFunctionValue(0, l, b, x);
+    table[1] = WaveFunctionValue(1, l, b, x);
+    for (int i = 2; i <= n; ++i)
+      {
+        table[i] = ((AW(i-1, l+0.5) * square(x / b) + BW(i-1, l+0.5)) * table[i-1]
+                    - CW(i-1, l+0.5) * table[i-2]);
+      }
+    return table.back();
   }
 
-  inline double CoefficientC(const int& n, const double& a)
-  {
-    return (n * (a + n) / std::sqrt(n * (1 + n) * (a + n) * (1 + a + n)));
-  }
-
-  enum struct Space { configuration, momentum };
-  struct WaveFunction
-  {
-    WaveFunction(): n(0), l(0), b(1.0), space(Space::configuration) {}
-    WaveFunction(int n, int l, double b, Space space)
-      : n(n), l(l), b(b), space(space) {}
-    ~WaveFunction(){}
-
-    double operator()(double x)
+  // Calculates the value of the 3DHO basis function at the given vector of points.
+  std::vector<double> WaveFunctionValue(int n, int l, double b, std::vector<double> xs)
     {
-      auto bx = (space == Space::configuration ? x / b : b * x);
-      auto prefactor = (space == Space::configuration
-                        ? std::sqrt(2 / (b * b * b))
-                        : std::sqrt(2 * b * b * b));
-      std::vector<double> table(n+1);
-      table[0] = (prefactor * std::exp(bx * bx / 2) * std::pow(bx, l)
-                  * std::sqrt(1 / std::tgamma(l + 1.5)));
-      table[1] = (prefactor * std::exp(bx * bx / 2) * std::pow(bx, l)
-                  * (1.5 - bx + l) * std::sqrt(1 / std::tgamma(l + 2.5)));
-      for (int i = 2; i <= n; ++i)
-        {
-          table[i] = ((CoefficientA(i - 2, l + 0.5) * bx * bx
-                      + CoefficientB(i - 1, l + 0.5)) * table[i - 1]
-                      - CoefficientC(i - 1, l + 0.5) * table[i - 2]);
-        }
-      return table[n];
+      int m = xs.size();
+      std::vector<double> values(m);
+      std::transform(xs.begin(), xs.end(), values.begin(),
+                     [=](double x)->double{return WaveFunctionValue(n, l, b, x);});
+      return values;
     }
-
-  private:
-    int n;
-    int l;
-    double b;
-    Space space;
-  };
 }
 
 #endif

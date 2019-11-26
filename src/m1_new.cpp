@@ -1,5 +1,4 @@
 #include <cmath>
-#include "fmt/format.h"
 #include "basis/lsjt_scheme.h"
 #include "rme_extras.h"
 #include "constants.h"
@@ -225,32 +224,32 @@ namespace chiral
 
     double mpi = constants::pion_mass_fm;
     double mN = constants::nucleon_mass_fm;
-    double gpi = constants::gA / constants::pion_decay_constant_fm;
+    double gpi = constants::gA / (2 * constants::pion_decay_constant_fm);
     double brel = b.relative();
 
     if (am::AllowedTriangle(J, 1, Jp) && Sp != S && Tp != T)
       {
         if (Sp < S && Lp == Jp)
           {
-            double result = ParitySign(L + Lp) * am::SphericalHarmonicCRME(Lp, L, 2);
-            result *= am::Wigner6J(2, 1, 1, J, L, Jp);
+            double result = ParitySign(L + Jp) * std::sqrt(30) * Hat(J);
+            result *= am::Wigner6J(2, 1, 1, J, L, Jp) * am::SphericalHarmonicCRME(Lp, L, 2);
             result *= quadrature::IntegralZPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
 
             if (Lp == L)
               {
-                double s1_term = ParitySign(J + Jp);
+                double s1_term = ParitySign(J + Jp + 1) * Hat(J) / Hat(Jp);
                 s1_term *= quadrature::IntegralTPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
-                result -= s1_term;
+                result += s1_term;
               }
 
-            result *= 2 * HatProduct(1, J, T) * std::abs(T - Tp);
-            result *= -mpi * mN * square(gpi) / (24 * constants::pi);
+            result *= Hat(T);
+            result *= -mpi * mN * square(gpi) / (3 * constants::pi);
             return result;
           }
         if (Sp > S && L == J)
           {
-            double result = ParitySign(J + Jp + 1) * am::SphericalHarmonicCRME(Lp, L, 2);
-            result *= am::Wigner6J(1, 1, 2, J, Lp, Jp);
+            double result = ParitySign(L + Jp + 1) * std::sqrt(30) * Hat(Lp);
+            result *= am::Wigner6J(1, 1, 2, J, Lp, Jp) * am::SphericalHarmonicCRME(Lp, L, 2);
             result *= quadrature::IntegralZPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
 
             if (Lp == L)
@@ -258,61 +257,14 @@ namespace chiral
                 result += quadrature::IntegralTPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
               }
 
-            result *= 2 * HatProduct(1, Lp, T) * std::abs(T - Tp);
-            result *= -mpi * mN * square(gpi) / (24 * constants::pi);
+            result *= Hat(T);
+            result *= -mpi * mN * square(gpi) / (3 * constants::pi);
             return result;
           }
         return 0;
       }
     return 0;
   }
-
-    // // Relative oscillator parameter and scaling.
-    // double brel = b.relative();
-    // double scaled_regulator_rel = regulator / brel;
-    // double scaled_pion_mass_rel = constants::pion_mass_fm * brel;
-
-    // // Parameters for integration routines.
-    // quadrature::gsl_params_2n
-    //   prel{nrp, Lp, nr, L, regularize, scaled_regulator_rel, scaled_pion_mass_rel};
-
-    // // Product of HO norms for integrals.
-    // double norm_product_rel = (ho::CoordinateSpaceNorm(nr, L, 1)
-    //                          * ho::CoordinateSpaceNorm(nrp, Lp, 1));
-
-    // // 9j symbol common to both Uf(S1) and S1.
-    // double spin_9j = am::Wigner9J(HalfInt(1, 2), HalfInt(1, 2), S, 1, 1, 1, HalfInt(1, 2), HalfInt(1, 2), Sp);
-
-    // // Calculate the Uf(S1) term.
-    // double UfS1_term = (18 * std::sqrt(10) * HatProduct(Lp, Sp, J, S));
-    // UfS1_term *= (am::Wigner9J(L, S, J, 2, 1, 1, Lp, Sp, Jp) * spin_9j);
-    // UfS1_term *= am::SphericalHarmonicCRME(Lp, L, 2);
-    // double zpi_integral = norm_product_rel * quadrature::IntegralZPiYPiR(prel);
-    // UfS1_term *= zpi_integral;
-
-    // // Calculate the S1 term only if L and Lp are the same.
-    // double S1_term = 0;
-    // if (L == Lp)
-    //   {
-    //     S1_term = (ParitySign(S + Jp + Lp + 1) * 6 * std::sqrt(3));
-    //     S1_term *= HatProduct(S, Sp, J);
-    //     S1_term *= (am::Wigner6J(Sp, S, 1, J, Jp, L) * spin_9j);
-    //     double tpi_integral = norm_product_rel * quadrature::IntegralTPiYPiR(prel);
-    //     S1_term *= tpi_integral;
-    //   }
-
-    // // Isospin rme.
-    // double T1_rme = 6 * std::sqrt(3) * Hat(T);
-    // T1_rme *= am::Wigner9J(HalfInt(1, 2), HalfInt(1, 2), T, 1, 1, 1, HalfInt(1, 2), HalfInt(1, 2), Tp);
-
-    // // LEC prefactor. (-g_A^2 m_π / 48 π F_π^2 μ_N)
-    // double lecp = -(square(constants::gA) * constants::pion_mass_fm);
-    // lecp /= (48 * constants::pi * constants::nuclear_magneton_fm
-    //          * square(constants::pion_decay_constant_fm));
-
-    // // Overall result.
-    // double result = lecp * T1_rme * (UfS1_term + S1_term);
-    // return result;
 
   double NLO1Body(const basis::RelativeCMStateLSJT& bra,
                   const basis::RelativeCMStateLSJT& ket,
