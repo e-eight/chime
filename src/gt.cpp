@@ -12,7 +12,7 @@ namespace chiral
   // Leading order matrix element.
   double GTOperator::LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
@@ -26,32 +26,9 @@ namespace chiral
     return result;
   }
 
-  double LO1Body(const basis::RelativeStateLSJT& bra,
-                 const basis::RelativeStateLSJT& ket)
-  {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
-
-    if (nr != nrp || L != Lp)
-      return 0;
-
-    // Angular momentum & isospin RMEs.
-    auto symm_term = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    symm_term *= am::SpinSymmetricRME(Tp, T);
-    auto asymm_term = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    asymm_term *= am::SpinAntisymmetricRME(Tp, T);
-
-    // Result.
-    auto result = (-constants::gA * (symm_term + asymm_term));
-    return result;
-  }
-
   double GTOperator::LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                      const basis::RelativeCMStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
@@ -63,7 +40,7 @@ namespace chiral
 
   double GTOperator::NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                       const basis::RelativeStateLSJT& ket,
-                                      const util::OscillatorParameter& b,
+                                      const ho::OscillatorParameter& b,
                                       const bool& regularize,
                                       const double& regulator,
                                       const std::size_t& T0,
@@ -73,7 +50,7 @@ namespace chiral
   }
   double GTOperator::NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                       const basis::RelativeCMStateLSJT& ket,
-                                      const util::OscillatorParameter& b,
+                                      const ho::OscillatorParameter& b,
                                       const bool& regularize,
                                       const double& regulator,
                                       const std::size_t& T0,
@@ -85,7 +62,7 @@ namespace chiral
   // Next to next to leading order matrix element
   double GTOperator::N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
@@ -101,129 +78,9 @@ namespace chiral
     return result;
   }
 
-  double c3Term(const basis::RelativeStateLSJT& bra,
-                const basis::RelativeStateLSJT& ket,
-                const util::OscillatorParameter& b,
-                const bool& regularize,
-                const double& regulator)
-  {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
-
-    // Isospin RMEs.
-    auto symm_rme_isospin = am::SpinSymmetricRME(Tp, T);
-    auto asymm_rme_isospin = am::SpinAntisymmetricRME(Tp, T);
-
-    // Angular momentum RMEs.
-    auto symm_rme_spin = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto symm_rme_spin_A6 = (std::sqrt(10)
-                             * am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 2, 1));
-    auto asymm_rme_spin = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    auto asymm_rme_spin_A6 = (std::sqrt(10)
-                              * am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 2, 1));
-
-    // Radial integrals.
-    auto brel = b.relative();
-    auto scaled_regulator = regulator / brel;
-    auto scaled_pion_mass = constants::pion_mass_fm * brel;
-    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
-    auto wpi_ypi_integral = quadrature::IntegralWPiRYPiR(p);
-    auto ypi_integral = quadrature::IntegralYPiR(p);
-
-    // Result.
-    auto prefactor = (2 * constants::gA * constants::c3_fm
-                      * cube(constants::pion_mass_fm));
-    prefactor /= (12 * square(constants::pion_decay_constant_fm)
-                  * constants::pi);
-    symm_rme_spin *= symm_rme_isospin;
-    symm_rme_spin_A6 *= symm_rme_isospin;
-    asymm_rme_spin *= asymm_rme_isospin;
-    asymm_rme_spin_A6 *= asymm_rme_isospin;
-    auto result = ((symm_rme_spin_A6 + asymm_rme_spin_A6) * wpi_ypi_integral
-                   - (symm_rme_spin + asymm_rme_spin) * ypi_integral);
-    result *= (prefactor);
-    return result;
-  }
-
-  double c4Term(const basis::RelativeStateLSJT& bra,
-                const basis::RelativeStateLSJT& ket,
-                const util::OscillatorParameter& b,
-                const bool& regularize,
-                const double& regulator)
-  {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
-
-    // Isospin RME.
-    auto pp_rme_isospin = am::PauliProductRME(Tp, T, 1);
-
-    // Angular momentum RMEs.
-    auto pp_rme_spin = am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 0, 1, 1);
-    auto pp_rme_spin_A6 = (std::sqrt(10)
-                           * am::RelativePauliProductRME(Lp, L, Sp, S, Jp, J, 2, 1, 1));
-
-    // Radial integrals.
-    auto brel = b.relative();
-    auto scaled_regulator = regulator / brel;
-    auto scaled_pion_mass = constants::pion_mass_fm * brel;
-    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
-    auto wpi_ypi_integral = quadrature::IntegralWPiRYPiR(p);
-    auto ypi_integral = quadrature::IntegralYPiR(p);
-
-    // Result.
-    auto prefactor = (constants::gA * constants::c4_fm
-                      * cube(constants::pion_mass_fm));
-    prefactor /= (12 * square(constants::pion_decay_constant_fm)
-                  * constants::pi);
-    auto result = (pp_rme_isospin * (pp_rme_spin_A6 * wpi_ypi_integral
-                                     + 2 * pp_rme_spin * ypi_integral));
-    result *= (prefactor);
-    return result;
-  }
-
-  double DTerm(const basis::RelativeStateLSJT& bra,
-               const basis::RelativeStateLSJT& ket,
-               const util::OscillatorParameter& b,
-               const bool& regularize,
-               const double& regulator)
-  {
-    std::size_t nr = ket.n(), nrp = bra.n();
-    std::size_t L = ket.L(), Lp = bra.L();
-    std::size_t S = ket.S(), Sp = bra.S();
-    std::size_t J = ket.J(), Jp = bra.J();
-    std::size_t T = ket.T(), Tp = bra.T();
-
-    if (Lp != 0 || L != 0)
-      return 0;
-
-    // Angular momentum and isospin RMEs.
-    auto symm_term = am::RelativeSpinSymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    symm_term *= am::SpinSymmetricRME(Tp, T);
-    auto asymm_term = am::RelativeSpinAntisymmetricRME(Lp, L, Sp, S, Jp, J, 0, 1);
-    asymm_term *= am::SpinAntisymmetricRME(Tp, T);
-
-    // Radial integral.
-    auto brel = b.relative();
-    auto scaled_regulator = regulator / brel;
-    auto scaled_pion_mass = constants::pion_mass_fm * brel;
-    quadrature::gsl_params_2n p {nrp, Lp, nr, L, regularize, scaled_regulator, scaled_pion_mass};
-    auto delta_integral = quadrature::IntegralRegularizedDelta(p) / cube(brel);
-
-    // Result.
-    auto result = (symm_term + asymm_term) * delta_integral;
-    result *= (-0.5 * constants::D_fm);
-    return result;
-  }
-
   double GTOperator::N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                        const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
@@ -234,7 +91,7 @@ namespace chiral
 
   double GTOperator::N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
@@ -244,7 +101,7 @@ namespace chiral
   }
   double GTOperator::N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                        const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
@@ -255,7 +112,7 @@ namespace chiral
 
   double GTOperator::N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                        const basis::RelativeStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
@@ -265,12 +122,187 @@ namespace chiral
   }
   double GTOperator::N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                        const basis::RelativeCMStateLSJT& ket,
-                                       const util::OscillatorParameter& b,
+                                       const ho::OscillatorParameter& b,
                                        const bool& regularize,
                                        const double& regulator,
                                        const std::size_t& T0,
                                        const std::size_t& Abody)
   {
+    return 0;
+  }
+
+  double LO1Body(const basis::RelativeStateLSJT& bra,
+                 const basis::RelativeStateLSJT& ket)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    if (am::AllowedTriangle(Jp, J, 1) && nr == nrp && L == Lp)
+      {
+        if (Tp == T && Sp == S)
+          {
+            double result = ParitySign(S + Jp + L + 1) * HatProduct(S, J);
+            result *= am::Wigner6J(Sp, S, 1, J, Jp, L);
+            result *= (std::sqrt(S * (S + 1) * T * (T + 1)));
+            return result;
+          }
+
+        if (Tp != T && Sp != S)
+          {
+            double result = ParitySign(S + Jp + L + 1) * HatProduct(Sp, J, S, T);
+            result *= am::Wigner6J(S, S, 1, J, Jp, L);
+            result *= ((Sp - S) * (Tp - T));
+            return result;
+          }
+      }
+    return 0;
+  }
+
+  double c3Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const ho::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    double mpi = constants::pion_mass_fm;
+    double gpi = (constants::gA / square(constants::pion_decay_constant_fm));
+    double c3 =  constants::c3_fm;
+    double brel = b.relative();
+
+    if (am::AllowedTriangle(Jp, J, 1))
+      {
+        if (Tp == T && Sp == S)
+          {
+            double result = std::sqrt(10) * HatProduct(Lp, 1);
+            result *= am::Wigner9J(L, S, J, 2, 1, 1, Lp, Sp, Jp);
+            result *= am::SphericalHarmonicCRME(Lp, L, 2);
+            result *= quadrature::IntegralWPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+
+            if (Lp == L)
+              {
+                double s1_term = ParitySign(S + L + Jp + 1);
+                s1_term *= am::Wigner6J(Sp, S, 1, J, Jp, L);
+                s1_term *= quadrature::IntegralYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+                result += s1_term;
+              }
+
+            result *= HatProduct(Sp, J);
+            result *= std::sqrt(S * (S + 1) * T * (T + 1));
+
+            result *= (gpi * c3 * cube(mpi) / 6);
+            return result;
+          }
+
+        if (Tp != T && Sp != S)
+          {
+            double result = std::sqrt(10) * HatProduct(Lp, 1);
+            result *= am::Wigner9J(L, S, J, 2, 1, 1, Lp, Sp, Jp);
+            result *= am::SphericalHarmonicCRME(Lp, L, 2);
+            result *= quadrature::IntegralWPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+
+            if (Lp == L)
+              {
+                double s1_term = ParitySign(S + L + Jp + 1);
+                s1_term *= am::Wigner6J(Sp, S, 1, J, Jp, L);
+                s1_term *= quadrature::IntegralYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+                result += s1_term;
+              }
+
+            result *= HatProduct(Sp, J, S, T);
+            result *= (Sp - S) * (Tp - T);
+
+            result *= (gpi * c3 * cube(mpi) / 6);
+            return result;
+          }
+        return 0;
+      }
+    return 0;
+  }
+
+  double c4Term(const basis::RelativeStateLSJT& bra,
+                const basis::RelativeStateLSJT& ket,
+                const ho::OscillatorParameter& b,
+                const bool& regularize,
+                const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    double mpi = constants::pion_mass_fm;
+    double gpi = (constants::gA / square(constants::pion_decay_constant_fm));
+    double c4 =  constants::c4_fm;
+    double brel = b.relative();
+
+    if (am::AllowedTriangle(Jp, J, 1) && Tp != T && Sp != S)
+      {
+        double result = std::sqrt(10) * HatProduct(Lp, 1);
+        result *= am::Wigner9J(L, S, J, 2, 1, 1, Lp, Sp, Jp);
+        result *= am::SphericalHarmonicCRME(Lp, L, 2);
+        result *= quadrature::IntegralWPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+
+        if (Lp == L)
+          {
+            double s1_term = 2 * ParitySign(S + L + Jp + 1);
+            s1_term *= am::Wigner6J(Sp, S, 1, J, Jp, L);
+            s1_term *= quadrature::IntegralYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
+            result += s1_term;
+          }
+
+        result *= HatProduct(Sp, J, S, T);
+
+        result *= (gpi * c4 * cube(mpi) / 6);
+        return result;
+      }
+    return 0;
+  }
+
+  double DTerm(const basis::RelativeStateLSJT& bra,
+               const basis::RelativeStateLSJT& ket,
+               const ho::OscillatorParameter& b,
+               const bool& regularize,
+               const double& regulator)
+  {
+    std::size_t nr = ket.n(), nrp = bra.n();
+    std::size_t L = ket.L(), Lp = bra.L();
+    std::size_t S = ket.S(), Sp = bra.S();
+    std::size_t J = ket.J(), Jp = bra.J();
+    std::size_t T = ket.T(), Tp = bra.T();
+
+    double brel = b.relative();
+    double D = constants::D_fm;
+
+    if (am::AllowedTriangle(J, Jp, 1) && L == 0 && Lp == 0)
+      {
+        if (Tp == T && Sp == S)
+          {
+            double result = (quadrature::IntegralRegularizedDelta(nr, brel, regulator)
+                             * quadrature::IntegralRegularizedDelta(nrp, brel, regulator));
+            result *= std::sqrt(S * (S + 1) * T * (T + 1));
+            result *= (-0.5 * D);
+            return result;
+          }
+        if (Tp != T && Sp != S)
+          {
+            double result = (quadrature::IntegralRegularizedDelta(nr, brel, regulator)
+                             * quadrature::IntegralRegularizedDelta(nrp, brel, regulator));
+            result *= HatProduct(S, T) * (Sp - S) * (Tp - T);
+            result *= (-0.5 * D);
+            return result;
+          }
+        return 0;
+      }
     return 0;
   }
 

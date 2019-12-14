@@ -8,6 +8,7 @@
 #include "fmt/format.h"
 #include "chiral.h"
 #include "utility.h"
+#include "threedho.h"
 #include "operators.h"
 
 namespace io
@@ -71,7 +72,7 @@ namespace io
                 for (std::size_t ket_index = 0; ket_index < ket_subspace.size(); ++ ket_index)
                   {
                     const basis::RelativeStateLSJT ket_state(ket_subspace, ket_index);
-                    util::OscillatorParameter b(hw);
+                    ho::OscillatorParameter b(hw);
                     auto rme = op->ReducedMatrixElement(ord, bra_state, ket_state, b,
                                                         regularize, regulator, T0, Abody);
                     matrices[T0][sector_index](bra_index, ket_index) = rme;
@@ -156,7 +157,7 @@ namespace io
                 for (std::size_t ket_index = 0; ket_index < ket_subspace.size(); ++ ket_index)
                   {
                     const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
-                    util::OscillatorParameter b(hw);
+                    ho::OscillatorParameter b(hw);
                     auto rme = op->ReducedMatrixElement(ord, bra_state, ket_state, b,
                                                         regularize, regulator, T0, Abody);
                     matrices[T0][sector_index](bra_index, ket_index) = rme;

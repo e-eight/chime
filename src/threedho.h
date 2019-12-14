@@ -9,6 +9,31 @@
 
 namespace ho
 {
+  // Oscillator parameter for relative & relative-cm cases.
+  struct OscillatorParameter
+  {
+    OscillatorParameter()
+      : oscillator_energy(0) {}
+    OscillatorParameter(double _energy)
+      : oscillator_energy(_energy) {}
+    ~OscillatorParameter() = default;
+
+    double relative() const
+    {
+      auto b = constants::hbarc;
+      b /= std::sqrt(constants::reduced_nucleon_mass_MeV * oscillator_energy);
+      return b;
+    }
+    double cm() const
+    {
+      auto b = constants::hbarc;
+      b /= std::sqrt(2 * constants::nucleon_mass_MeV * oscillator_energy);
+      return b;
+    }
+  private:
+    double oscillator_energy; // in MeV
+  };
+
   // Coordinate space normalization constant.
   static inline double CoordinateSpaceNorm(const std::size_t n,
                                            const std::size_t l,
@@ -49,56 +74,57 @@ namespace ho
   // B(n, a) = (1+a+2n) / \sqrt{(1+n)(1+a+n)}
   // C(n, a) = n(a+n) / \sqrt{n(1+n)(a+n)(1+a+n)}
 
-  double AW(int n, double a)
-  {
-    return -1.0 / std::sqrt((n + 1) * (n + a + 1));
-  }
-  double BW(int n, double a)
-  {
-    return (2*n + a + 1) / std::sqrt((n + 1) * (n + a + 1));
-  }
-  double CW(int n, double a)
-  {
-    return std::sqrt(n * (n + a) / ((n + 1) * (n + a + 1)));
-  }
+  // double AW(int n, double a)
+//   {
+//     return -1.0 / std::sqrt((n + 1) * (n + a + 1));
+//   }
+//   double BW(int n, double a)
+//   {
+//     return (2*n + a + 1) / std::sqrt((n + 1) * (n + a + 1));
+//   }
+//   double CW(int n, double a)
+//   {
+//     return std::sqrt(n * (n + a) / ((n + 1) * (n + a + 1)));
+//   }
 
-  // Calculate the value of the 3DHO basis function at a given point.
-  double WaveFunctionValue(int n, int l, double b, double x)
-  {
-    if (n == 0)
-      {
-        double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 1.5)));
-        value *= std::exp(-0.5 * square(x / b)) * std::pow(x / b, l);
-        return value;
-      }
-    if (n == 1)
-      {
-        double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 2.5)));
-        value *= (std::exp(-0.5 * square(x / b)) * std::pow(x / b, l)
-                  * (l + 1.5 - square(x / b)));
-        return value;
-      }
+//   // Calculate the value of the 3DHO basis function at a given point.
+//   double WaveFunctionValue(int n, int l, double b, double x)
+//   {
+//     if (n == 0)
+//       {
+//         double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 1.5)));
+//         value *= std::exp(-0.5 * square(x / b)) * std::pow(x / b, l);
+//         return value;
+//       }
+//     if (n == 1)
+//       {
+//         double value = std::sqrt(2.0 / (cube(b) * gsl_sf_gamma(l + 2.5)));
+//         value *= (std::exp(-0.5 * square(x / b)) * std::pow(x / b, l)
+//                   * (l + 1.5 - square(x / b)));
+//         return value;
+//       }
 
-    std::vector<double> table(n + 1);
-    table[0] = WaveFunctionValue(0, l, b, x);
-    table[1] = WaveFunctionValue(1, l, b, x);
-    for (int i = 2; i <= n; ++i)
-      {
-        table[i] = ((AW(i-1, l+0.5) * square(x / b) + BW(i-1, l+0.5)) * table[i-1]
-                    - CW(i-1, l+0.5) * table[i-2]);
-      }
-    return table.back();
-  }
+//     std::vector<double> table(n + 1);
+//     table[0] = WaveFunctionValue(0, l, b, x);
+//     table[1] = WaveFunctionValue(1, l, b, x);
+//     for (int i = 2; i <= n; ++i)
+//       {
+//         table[i] = ((AW(i-1, l+0.5) * square(x / b) + BW(i-1, l+0.5)) * table[i-1]
+//                     - CW(i-1, l+0.5) * table[i-2]);
+//       }
+//     return table.back();
+//   }
 
-  // Calculates the value of the 3DHO basis function at the given vector of points.
-  std::vector<double> WaveFunctionValue(int n, int l, double b, std::vector<double> xs)
-    {
-      int m = xs.size();
-      std::vector<double> values(m);
-      std::transform(xs.begin(), xs.end(), values.begin(),
-                     [=](double x)->double{return WaveFunctionValue(n, l, b, x);});
-      return values;
-    }
+//   // Calculates the value of the 3DHO basis function at the given vector of points.
+//   std::vector<double> WaveFunctionValue(int n, int l, double b, std::vector<double> xs)
+//     {
+//       int m = xs.size();
+//       std::vector<double> values(m);
+//       std::transform(xs.begin(), xs.end(), values.begin(),
+//                      [=](double x)->double{return WaveFunctionValue(n, l, b, x);});
+//       return values;
+//     }
+// }
 }
 
 #endif

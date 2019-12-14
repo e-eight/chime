@@ -14,18 +14,6 @@
 #include "integrals.h"
 #include "threedho.h"
 
-// Product of Hats.
-template <class T>
-double HatProduct(T x)
-{
-  return Hat(x);
-}
-template <class T, class... Args>
-double HatProduct(T x, Args... args)
-{
-  return Hat(x) * HatProduct(args...);
-}
-
 namespace am
 {
   // Calculate reduced matrix element of Pauli matrices in two-body (iso)spin

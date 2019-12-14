@@ -15,6 +15,18 @@ T square(const T a) { return a * a; }
 template <class T>
 T cube(const T a) { return a * a * a; }
 
+// Product of Hats.
+template <class T>
+double HatProduct(T x)
+{
+  return Hat(x);
+}
+template <class T, class... Args>
+double HatProduct(T x, Args... args)
+{
+  return Hat(x) * HatProduct(args...);
+}
+
 namespace util
 {
   // make_unique, because C++11 does not have one.
@@ -32,32 +44,6 @@ namespace util
     std::array<T, size> a;
     return a;
   }
-
-
-  // Oscillator parameter for relative & relative-cm cases.
-  struct OscillatorParameter
-  {
-    OscillatorParameter()
-      : oscillator_energy(0) {}
-    OscillatorParameter(double _energy)
-      : oscillator_energy(_energy) {}
-    ~OscillatorParameter() = default;
-
-    double relative() const
-    {
-      auto b = constants::hbarc;
-      b /= std::sqrt(constants::reduced_nucleon_mass_MeV * oscillator_energy);
-      return b;
-    }
-    double cm() const
-    {
-      auto b = constants::hbarc;
-      b /= std::sqrt(2 * constants::nucleon_mass_MeV * oscillator_energy);
-      return b;
-    }
-  private:
-    double oscillator_energy; // in MeV
-  };
 
   // General memoizer.
   // https://stackoverflow.com/a/17807129, and

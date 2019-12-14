@@ -9,6 +9,7 @@
 #include "basis/lsjt_scheme.h"
 #include "utility.h"
 #include "factory.h"
+#include "threedho.h"
 
 namespace chiral
 {
@@ -49,14 +50,14 @@ namespace chiral
 
     virtual double LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                    const basis::RelativeStateLSJT& ket,
-                                   const util::OscillatorParameter& b,
+                                   const ho::OscillatorParameter& b,
                                    const bool& regularize,
                                    const double& regulator,
                                    const std::size_t& T0,
                                    const std::size_t& Abody) = 0;
     virtual double LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                    const basis::RelativeCMStateLSJT& ket,
-                                   const util::OscillatorParameter& b,
+                                   const ho::OscillatorParameter& b,
                                    const bool& regularize,
                                    const double& regulator,
                                    const std::size_t& T0,
@@ -64,14 +65,14 @@ namespace chiral
 
     virtual double NLOMatrixElement(const basis::RelativeStateLSJT& bra,
                                     const basis::RelativeStateLSJT& ket,
-                                    const util::OscillatorParameter& b,
+                                    const ho::OscillatorParameter& b,
                                     const bool& regularize,
                                     const double& regulator,
                                     const std::size_t& T0,
                                     const std::size_t& Abody) = 0;
     virtual double NLOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                     const basis::RelativeCMStateLSJT& ket,
-                                    const util::OscillatorParameter& b,
+                                    const ho::OscillatorParameter& b,
                                     const bool& regularize,
                                     const double& regulator,
                                     const std::size_t& T0,
@@ -79,14 +80,14 @@ namespace chiral
 
     virtual double N2LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
                                      const std::size_t& Abody) = 0;
     virtual double N2LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                      const basis::RelativeCMStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
@@ -94,14 +95,14 @@ namespace chiral
 
     virtual double N3LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
                                      const std::size_t& Abody) = 0;
     virtual double N3LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                      const basis::RelativeCMStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
@@ -109,14 +110,14 @@ namespace chiral
 
     virtual double N4LOMatrixElement(const basis::RelativeStateLSJT& bra,
                                      const basis::RelativeStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
                                      const std::size_t& Abody) = 0;
     virtual double N4LOMatrixElement(const basis::RelativeCMStateLSJT& bra,
                                      const basis::RelativeCMStateLSJT& ket,
-                                     const util::OscillatorParameter& b,
+                                     const ho::OscillatorParameter& b,
                                      const bool& regularize,
                                      const double& regulator,
                                      const std::size_t& T0,
@@ -126,7 +127,7 @@ namespace chiral
     double ReducedMatrixElement(const Order& ord,
                                 const StateType& bra,
                                 const StateType& ket,
-                                const util::OscillatorParameter& b,
+                                const ho::OscillatorParameter& b,
                                 const bool& regularize,
                                 const double& regulator,
                                 const std::size_t& T0,
