@@ -2,8 +2,7 @@
 
 This is a framework for computing the two body matrix elements, reduced in total
 angular momentum and isospin spaces, of electroweak operators in the 3D harmonic
-oscillator basis. At present ChiME is capable of only producing relative matrix
-elements, i.e. matrix elements of operators without center of mass contribution.
+oscillator basis.
 
 ** Requirements
 ChiME depends on several libraries as follows:
