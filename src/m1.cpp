@@ -243,7 +243,7 @@ namespace chiral
                 result -= s1_term;
               }
 
-            result *= 2 * HatProduct(1, J, T) * std::abs(T - Tp);
+            result *= 2 * HatProduct(1, J, T); // * std::abs(T - Tp);
             result *= -mpi * mN * square(gpi) / (24 * constants::pi);
             return result;
           }
@@ -258,7 +258,7 @@ namespace chiral
                 result += quadrature::IntegralTPiYPiR(nrp, Lp, nr, L, brel, mpi, regularize, regulator);
               }
 
-            result *= 2 * HatProduct(1, Lp, T) * std::abs(T - Tp);
+            result *= 2 * HatProduct(1, Lp, T); // * std::abs(T - Tp);
             result *= -mpi * mN * square(gpi) / (24 * constants::pi);
             return result;
           }
@@ -405,15 +405,15 @@ namespace chiral
     return 0;
   }
 
-  double NLO2Body(const basis::RelativeCMStateLSJT& bra,
-                  const basis::RelativeCMStateLSJT& ket,
-                  const util::OscillatorParameter& b,
-                  const bool& regularize,
-                  const double& regulator,
-                  const std::size_t& T0)
-  {
-    // if (T0 != 1)
-      return 0;
+  // double NLO2Body(const basis::RelativeCMStateLSJT& bra,
+  //                 const basis::RelativeCMStateLSJT& ket,
+  //                 const util::OscillatorParameter& b,
+  //                 const bool& regularize,
+  //                 const double& regulator,
+  //                 const std::size_t& T0)
+  // {
+  //   // if (T0 != 1)
+  //     return 0;
 
     // int nr = ket.Nr(), nrp = bra.Nr();
     // int lr = ket.lr(), lrp = bra.lr();

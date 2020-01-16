@@ -87,7 +87,8 @@ namespace io
     std::string order_file = fmt::format("{}_{:d}n_rel_{}_Nmax{:d}_Jmax{:d}_hw{:.1f}",
                                          name, Abody, ord_str, Nmax, Jmax, hw);
     if(regularize)
-      order_file += fmt::format("_regulator{:.1f}.dat", regulator);
+      order_file += fmt::format("_regulator{:.1f}", regulator);
+    order_file += fmt::format(".dat");
 
     basis::WriteRelativeOperatorLSJT(order_file, space, labels, sectors, matrices, true);
   }
@@ -172,7 +173,8 @@ namespace io
     std::string order_file = fmt::format("{}_{:d}n_relcm_{}_Nmax{:d}_hw{:.1f}",
                                          name, Abody, ord_str, Nmax, hw);
     if(regularize)
-      order_file += fmt::format("_regulator_{:.1f}.dat", regulator);
+      order_file += fmt::format("_regulator{:.1f}", regulator);
+    order_file += fmt::format(".dat");
     basis::WriteRelativeCMOperatorLSJT(order_file, space, labels, sectors, matrices, true);
   }
 }
