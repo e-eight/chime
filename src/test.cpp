@@ -1,3 +1,4 @@
+#include <boost/math/quadrature/gauss_kronrod.hpp>
 #include "rme_extras.h"
 #include "integrals.h"
 #include "threedho.h"
@@ -8,6 +9,7 @@
 #include "m1.h"
 // #include "tprme.h"
 
+namespace bmq = boost::math::quadrature;
 int main()
 {
   fmt::print("Spin Symmetric: \n");
@@ -123,4 +125,35 @@ int main()
   //                     * am::tp::RelativeCMSpinRME(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, am::tp::SpinProductRME, 0, 1));
   // fmt::print("LS Coupled TPRME: {} \n", u1a_tprme);
 
+  fmt::print("# 3DHO basis function overlap integral for l=l'\n");
+  fmt::print("#  l\n");
+  fmt::print("#  n np integral\n");
+  fmt::print("\n\n");
+  for (std::size_t l = 0; l <= 20; ++l)
+    {
+      fmt::print("{}\n", l);
+      for (std::size_t n = 0; n <= 15; ++n)
+        for (std::size_t np = 0; np <= n; ++np)
+          {
+            auto integrand =
+              [&](double r)
+              {
+                return (std::exp(-square(r))
+                        * std::pow(r, 2 * l)
+                        * sf::Laguerre(n, l + 0.5, square(r))
+                        * sf::Laguerre(np, l + 0.5, square(r))
+                        * square(r));
+              };
+
+            double a = 0;
+            double epsrel = 1e-13;
+            double error;
+            double integral = bmq::gauss_kronrod<double, 15>::integrate(integrand, a, std::numeric_limits<double>::infinity(), 5, epsrel, &error);
+            double norm_product = (ho::CoordinateSpaceNorm(n, l, 1)
+                                   * ho::CoordinateSpaceNorm(np, l, 1));
+            integral *= norm_product;
+            fmt::print("{:>3d} {:>3d}   {:>6e}\n", n, np, integral);
+          }
+      fmt::print("\n\n\n");
+    }
 }

@@ -152,11 +152,12 @@ namespace io
             std::size_t ket_subspace_index = sectors[T0].GetSector(sector_index).ket_subspace_index();
             const basis::RelativeCMSubspaceLSJT& ket_subspace = sectors[T0].GetSector(sector_index).ket_subspace();
 
+#pragma omp parallel for collapse(2)
             for (std::size_t bra_index = 0; bra_index < bra_subspace.size(); ++bra_index)
               {
-                const basis::RelativeCMStateLSJT bra_state(bra_subspace, bra_index);
                 for (std::size_t ket_index = 0; ket_index < ket_subspace.size(); ++ ket_index)
                   {
+                    const basis::RelativeCMStateLSJT bra_state(bra_subspace, bra_index);
                     const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
                     ho::OscillatorParameter b(hw);
                     auto rme = op->ReducedMatrixElement(ord, bra_state, ket_state, b,

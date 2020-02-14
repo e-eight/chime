@@ -19,5 +19,10 @@ find_package(GSL REQUIRED)
 target_link_libraries(${TARGET} PUBLIC GSL::gsl GSL::gslcblas)
 target_link_libraries(${TEST} PUBLIC GSL::gsl GSL::gslcblas)
 
+find_package(OpenMP)
+if (OpenMP_CXX_FOUND)
+   target_link_libraries(${TARGET} PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_include_directories(${TEST} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
