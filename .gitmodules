@@ -4,3 +4,18 @@
 [submodule "lib/io"]
 	path = lib/io
 	url = git@github.com:e-eight/io.git
+[submodule "lib/quadpp"]
+	path = lib/quadpp
+	url = git@github.com:e-eight/quadpp.git
+[submodule "lib/basis_func"]
+	path = lib/basis_func
+	url = git@github.com:e-eight/basis_func.git
+[submodule "lib/basis"]
+	path = lib/basis
+	url = git@github.com:nd-nuclear-theory/basis.git
+[submodule "lib/am"]
+	path = lib/am
+	url = git@github.com:nd-nuclear-theory/am.git
+[submodule "lib/mcutils"]
+	path = lib/mcutils
+	url = git@github.com:nd-nuclear-theory/mcutils.git
