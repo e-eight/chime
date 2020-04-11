@@ -34,7 +34,7 @@ namespace constants
   constexpr double isoscalar_nucleon_charge_radius_sq_fm = 0.603729; // (in fm^2)
   constexpr double isoscalar_nucleon_magnetic_moment = 0.8798046315;
   constexpr double isovector_nucleon_magnetic_moment = 4.7058900815;
-  constexpr double gA = 1.25;
+  constexpr double gA = 1.29;
   constexpr double pion_decay_constant_MeV = 92.4;
   constexpr double pion_decay_constant_fm = pion_decay_constant_MeV / hbarc; // (in fm^{-1})
   constexpr double d9_GeV = -0.06; // (in GeV^{-2}, from Gasparyan, Lutz, 2010)
