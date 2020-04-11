@@ -1,18 +1,6 @@
-[submodule "lib/basis"]
-	path = lib/basis
-	url = ../basis.git
-[submodule "lib/am"]
-	path = lib/am
-	url = ../am.git
-[submodule "lib/mcutils"]
-	path = lib/mcutils
-	url = ../mcutils.git
 [submodule "lib/fmt"]
 	path = lib/fmt
 	url = https://github.com/fmtlib/fmt
-[submodule "lib/CLI11"]
-	path = lib/CLI11
-	url = https://github.com/CLIUtils/CLI11.git
-[submodule "lib/eigen3"]
-	path = lib/eigen3
-	url = https://github.com/eigenteam/eigen-git-mirror.git
+[submodule "lib/io"]
+	path = lib/io
+	url = git@github.com:e-eight/io.git
