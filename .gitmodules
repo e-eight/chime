@@ -3,19 +3,19 @@
 	url = https://github.com/fmtlib/fmt
 [submodule "lib/io"]
 	path = lib/io
-	url = git@github.com:e-eight/io.git
+	url = ../io.git
 [submodule "lib/quadpp"]
 	path = lib/quadpp
-	url = git@github.com:e-eight/quadpp.git
+	url = ../quadpp.git
 [submodule "lib/basis_func"]
 	path = lib/basis_func
-	url = git@github.com:e-eight/basis_func.git
+	url = ../basis_func.git
 [submodule "lib/basis"]
 	path = lib/basis
-	url = git@github.com:nd-nuclear-theory/basis.git
+	url = https://github.com/nd-nuclear-theory/basis
 [submodule "lib/am"]
 	path = lib/am
-	url = git@github.com:nd-nuclear-theory/am.git
+	url = https://github.com/nd-nuclear-theory/am
 [submodule "lib/mcutils"]
 	path = lib/mcutils
-	url = git@github.com:nd-nuclear-theory/mcutils.git
+	url = https://github.com/nd-nuclear-theory/mcutils
