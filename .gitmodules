@@ -1,6 +1,3 @@
-[submodule "lib/fmt"]
-	path = lib/fmt
-	url = https://github.com/fmtlib/fmt
 [submodule "lib/io"]
 	path = lib/io
 	url = ../io.git
@@ -19,3 +16,12 @@
 [submodule "lib/mcutils"]
 	path = lib/mcutils
 	url = https://github.com/nd-nuclear-theory/mcutils
+[submodule "lib/eigen"]
+	path = lib/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "lib/ndconfig"]
+	path = lib/ndconfig
+	url = https://github.com/nd-nuclear-theory/ndconfig.git
+[submodule "lib/ndmakefile"]
+	path = lib/ndmakefile
+	url = https://github.com/nd-nuclear-theory/ndmakefile.git
