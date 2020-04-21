@@ -1,27 +1,27 @@
-[submodule "lib/io"]
-	path = lib/io
+[submodule "libraries/io"]
+	path = libraries/io
 	url = ../io.git
-[submodule "lib/quadpp"]
-	path = lib/quadpp
-	url = ../quadpp.git
-[submodule "lib/basis_func"]
-	path = lib/basis_func
-	url = ../basis_func.git
-[submodule "lib/basis"]
-	path = lib/basis
-	url = https://github.com/nd-nuclear-theory/basis
-[submodule "lib/am"]
-	path = lib/am
-	url = https://github.com/nd-nuclear-theory/am
-[submodule "lib/mcutils"]
-	path = lib/mcutils
-	url = https://github.com/nd-nuclear-theory/mcutils
-[submodule "lib/eigen"]
-	path = lib/eigen
+[submodule "libraries/quadpp"]
+	path = libraries/quadpp
+	url = ../quadpp
+[submodule "libraries/basis_func"]
+	path = libraries/basis_func
+	url = ../basis_func
+[submodule "libraries/basis"]
+	path = libraries/basis
+	url = https://github.com/nd-nuclear-theory/basis.git
+[submodule "libraries/am"]
+	path = libraries/am
+	url = https://github.com/nd-nuclear-theory/am.git
+[submodule "libraries/mcutils"]
+	path = libraries/mcutils
+	url = https://github.com/nd-nuclear-theory/mcutils.git
+[submodule "libraries/eigen"]
+	path = libraries/eigen
 	url = https://gitlab.com/libeigen/eigen.git
-[submodule "lib/ndconfig"]
-	path = lib/ndconfig
+[submodule "libraries/ndconfig"]
+	path = libraries/ndconfig
 	url = https://github.com/nd-nuclear-theory/ndconfig.git
-[submodule "lib/ndmakefile"]
-	path = lib/ndmakefile
+[submodule "libraries/ndmakefile"]
+	path = libraries/ndmakefile
 	url = https://github.com/nd-nuclear-theory/ndmakefile.git
