@@ -24,7 +24,7 @@ InputParameters::InputParameters(std::string input_filename) {
   std::ifstream input_file(input_filename);
 
   if (input_file.is_open()) {
-    std::cout << "Reading input parameters..." << "\n";
+    std::cout << "Reading input parameters... " << "\n";
     while (input_file.good()) {
       // Line 1. Get tensor properties.
       {
@@ -116,6 +116,19 @@ int main()
 {
   // Read parameters.
   InputParameters input_params("relcm.in");
+  std::cout << "  Operator "
+            << input_params.op_name << " "
+            << input_params.order << " "
+            << input_params.abody << "n\n";
+  std::cout << "  Nmax "
+            << input_params.op_params.Nmax
+            << " hw "
+            << input_params.hbomega
+            << " R " << input_params.R << "\n";
+  std::cout << "  T0_min "
+            << input_params.op_params.T0_min
+            << " T0_max "
+            << input_params.op_params.T0_max << "\n";
 
   // Set up operator.
   basis::RelativeCMSpaceLSJT relcm_space;

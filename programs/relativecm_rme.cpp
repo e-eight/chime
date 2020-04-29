@@ -47,7 +47,7 @@ namespace relcm {
 
     std::cout << "  Generating basis functions..." << "\n";
     for (int lr = 0; lr <= Nmax; ++lr) {
-      basis_func::ho::WF(psi, r, Nmax, lr, brel, "coordinate");
+      basis_func::ho::WF(psi, r, Nmax, lr, brel, basis_func::Space::coordinate);
       ho_wfs.push_back(psi);
     }
 
