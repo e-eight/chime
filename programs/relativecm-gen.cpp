@@ -1,3 +1,38 @@
+/*******************************************************************************
+ relativecm-gen.cpp
+
+ Generates relativecm matrix elements for defined operators. Currently only the
+ magnetic moment operator has been defined.
+
+ Standard input:
+   J0 g0 T0_min T0_max
+   Nmax hw
+   R
+   operator_name chiral_order one_or_two_body
+   output_filename
+
+ The operator_name may be:
+
+   mm
+     Magnetic moment operator
+
+ The chiral_order may be:
+
+   lo, nlo, n2lo
+
+ The one_or_two_body may be:
+
+   1
+     One body current
+
+   2
+     Two body current
+
+ Language: C++11
+ Soham Pal
+ Iowa State University
+*******************************************************************************/
+
 #include <fstream>
 #include "mcutils/parsing.h"
 #include "relativecm_rme.h"
