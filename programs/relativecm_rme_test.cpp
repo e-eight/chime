@@ -1,6 +1,12 @@
-#include <fstream>
-#include "constants.h"
 #include "relativecm_rme.h"
+
+#include <fstream>
+
+#include "basis_func/ho.h"
+#include "chime.h"
+#include "constants.h"
+#include "quadpp/quadpp.h"
+#include "quadpp/spline.h"
 
 int main()
 {
@@ -10,16 +16,16 @@ int main()
   double mPi = constants::pion_mass_fm;
 
   int npts = 1001;
-  Eigen::ArrayXd x = Eigen::ArrayXd::LinSpaced(npts, 0., 1.);
-  Eigen::ArrayXd r = x / (1. - x);
-  Eigen::ArrayXd dr = 1. / Eigen::square(1. - x);
-  Eigen::ArrayXd wt = r * r * dr;
+  Eigen::ArrayXd x, r, jac;
+  quadpp::SemiInfiniteIntegralMesh(npts, 0, 1, x, r, jac);
+  Eigen::ArrayXd wt = r * r * jac;
 
   Eigen::ArrayXXd psi(Nmax + 1, npts);
-  double brel = util::brel(hbomega);
-  double bcm = util::bcm(hbomega);
+  double brel = chime::RelativeOscillatorLength(hbomega);
+  double bcm = chime::CMOscillatorLength(hbomega);
 
-  basis_func::ho::WF(psi, r, Nmax, Nmax, brel, "coordinate");
+  basis_func::ho::WaveFunctionsUptoMaxN(psi, r, Nmax, Nmax, brel,
+                                        basis_func::Space::coordinate);
   // psi.col(npts - 1) = 0;
   // std::cout << psi << "\n";
 
@@ -67,13 +73,12 @@ int main()
 
   for (int bra_nr = 0; bra_nr <= Nmax; ++bra_nr) {
     for (int ket_nr = 0; ket_nr <= bra_nr; ++ket_nr) {
-
       Eigen::ArrayXd psin2 = psi.row(bra_nr) * psi.row(ket_nr);
       Eigen::ArrayXd y = wt * scs_reg * psin2 * zpir * ypir;
 
       y.head(1) = 0;
       y.tail(1) = 0;
-      double integ_zpir_ypir = quad::spline::Integrate(x, y);
+      double integ_zpir_ypir = quadpp::spline::Integrate(x, y);
 
       std::cout << bra_nr << " " << ket_nr << " " << integ_zpir_ypir << "\n";
     }

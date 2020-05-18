@@ -1,8 +1,7 @@
 /*******************************************************************************
- relativecm-gen.cpp
+ relative-gen.cpp
 
- Generates relativecm matrix elements for defined operators. Currently only the
- magnetic moment operator has been defined.
+ Generates relative matrix elements for defined operators.
 
  Standard input:
    J0 g0 T0_min T0_max
@@ -37,14 +36,14 @@
 
 #include "chime.h"
 #include "mcutils/parsing.h"
-#include "relativecm_rme.h"
+#include "relative_rme.h"
 
-// Input parameters for relative-cm operators.
+// Input parameters for relative operators.
 struct InputParameters {
   InputParameters();
   InputParameters(std::string input_filename);
 
-  basis::RelativeCMOperatorParametersLSJT basis_params;
+  basis::RelativeOperatorParametersLSJT basis_params;
   double hbomega;
   double R;
   std::string op_name;
@@ -78,7 +77,7 @@ InputParameters::InputParameters(std::string input_filename)
         ++line_count;
         std::getline(input_file, line);
         std::istringstream line_stream(line);
-        line_stream >> basis_params.Nmax >> hbomega;
+        line_stream >> basis_params.Nmax >> basis_params.Jmax >> hbomega;
         mcutils::ParsingCheck(line_stream, line_count, line);
       }
 
@@ -120,23 +119,23 @@ InputParameters::InputParameters(std::string input_filename)
 
 // Populate operator.
 void PopulateOperator(
-    const InputParameters &input_params,
-    basis::RelativeCMSpaceLSJT &relcm_space,
-    std::array<basis::RelativeCMSectorsLSJT, 3> &relcm_sectors,
-    std::array<basis::OperatorBlocks<double>, 3> &relcm_matrices)
+    const InputParameters &input_params, basis::RelativeSpaceLSJT &rel_space,
+    std::array<basis::RelativeSectorsLSJT, 3> &rel_sectors,
+    std::array<basis::OperatorBlocks<double>, 3> &rel_matrices)
 {
   std::cout << "Populating operator...\n";
 
   // Set up relative-cm space.
-  relcm_space = basis::RelativeCMSpaceLSJT(input_params.basis_params.Nmax);
+  rel_space = basis::RelativeSpaceLSJT(input_params.basis_params.Nmax,
+                                       input_params.basis_params.Jmax);
 
   // Populate operator containers.
   if (input_params.op_name == "mm") {
     if (input_params.op_order == "nlo") {
       if (input_params.op_abody == 2) {
-        chime::relcm::ConstructMu2nNLOOperator(
-            input_params.basis_params, relcm_space, relcm_sectors,
-            relcm_matrices, input_params.hbomega, input_params.R);
+        chime::relative::ConstructMu2nNLOOperator(
+            input_params.basis_params, rel_space, rel_sectors, rel_matrices,
+            input_params.hbomega, input_params.R);
       }
     }
   }
@@ -145,22 +144,23 @@ void PopulateOperator(
 int main()
 {
   // Read parameters.
-  InputParameters input_params("relcm.in");
+  InputParameters input_params("relative.in");
   std::cout << "  Operator " << input_params.op_name << " "
             << input_params.op_order << " " << input_params.op_abody << "n\n";
-  std::cout << "  Nmax " << input_params.basis_params.Nmax << " hw "
-            << input_params.hbomega << " R " << input_params.R << "\n";
+  std::cout << "  Nmax " << input_params.basis_params.Nmax << " Jmax "
+            << input_params.basis_params.Jmax << " hw " << input_params.hbomega
+            << " R " << input_params.R << "\n";
   std::cout << "  T0_min " << input_params.basis_params.T0_min << " T0_max "
             << input_params.basis_params.T0_max << "\n";
 
   // Set up operator.
-  basis::RelativeCMSpaceLSJT relcm_space;
-  std::array<basis::RelativeCMSectorsLSJT, 3> relcm_sectors;
-  std::array<basis::OperatorBlocks<double>, 3> relcm_matrices;
-  PopulateOperator(input_params, relcm_space, relcm_sectors, relcm_matrices);
+  basis::RelativeSpaceLSJT rel_space;
+  std::array<basis::RelativeSectorsLSJT, 3> rel_sectors;
+  std::array<basis::OperatorBlocks<double>, 3> rel_matrices;
+  PopulateOperator(input_params, rel_space, rel_sectors, rel_matrices);
 
   // Write operator.
-  basis::WriteRelativeCMOperatorLSJT(input_params.target_filename, relcm_space,
-                                     input_params.basis_params, relcm_sectors,
-                                     relcm_matrices, true);
+  basis::WriteRelativeOperatorLSJT(input_params.target_filename, rel_space,
+                                   input_params.basis_params, rel_sectors,
+                                   rel_matrices, true);
 }
