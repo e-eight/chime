@@ -1,6 +1,3 @@
-[submodule "libraries/io"]
-	path = libraries/io
-	url = ../io.git
 [submodule "libraries/quadpp"]
 	path = libraries/quadpp
 	url = ../quadpp
