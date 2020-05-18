@@ -4,8 +4,8 @@ $(eval $(begin-module))
 # unit definitions
 ################################################################
 
-module_units_h += constants tprme
-module_units_cpp-h := chime relative_rme relativecm_rme
+module_units_h += chime constants tprme
+module_units_cpp-h := relative_rme relativecm_rme
 # module_units_f :=
 
 module_programs_cpp += relative-gen relativecm-gen
