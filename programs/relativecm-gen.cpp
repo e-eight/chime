@@ -4,7 +4,7 @@
  Generates relativecm matrix elements for defined operators. Currently only the
  magnetic moment operator has been defined.
 
- Standard input:
+ Input (relcm.in):
    J0 g0 T0_min T0_max
    Nmax hw
    R

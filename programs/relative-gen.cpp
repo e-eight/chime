@@ -3,7 +3,7 @@
 
  Generates relative matrix elements for defined operators.
 
- Standard input:
+ Input (relative.in):
    J0 g0 T0_min T0_max
    Nmax hw
    R
