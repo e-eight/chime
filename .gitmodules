@@ -22,3 +22,9 @@
 [submodule "libraries/ndmakefile"]
 	path = libraries/ndmakefile
 	url = https://github.com/nd-nuclear-theory/ndmakefile.git
+[submodule "config/ndmakefile"]
+	path = config/ndmakefile
+	url = https://github.com/nd-nuclear-theory/ndmakefile.git
+[submodule "config/ndconfig"]
+	path = config/ndconfig
+	url = https://github.com/nd-nuclear-theory/ndconfig.git
