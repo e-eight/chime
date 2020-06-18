@@ -105,10 +105,12 @@ void ConstructMu2nNLOOperator(
     }
 
     // Loop over bra and ket states.
+    const std::size_t bra_subspace_size = bra_subspace.size();
+    const std::size_t ket_subspace_size = ket_subspace.size();
 #pragma omp parallel for collapse(2)
-    for (std::size_t bra_index = 0; bra_index < bra_subspace.size();
+    for (std::size_t bra_index = 0; bra_index < bra_subspace_size;
          ++bra_index) {
-      for (std::size_t ket_index = 0; ket_index < ket_subspace.size();
+      for (std::size_t ket_index = 0; ket_index < ket_subspace_size;
            ++ket_index) {
         const basis::RelativeCMStateLSJT bra_state(bra_subspace, bra_index);
         const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
