@@ -13,7 +13,7 @@ int main()
   int Nmax = 20;
   double hbomega = 20;
   double R = 1.;
-  double mPi = constants::pion_mass_fm;
+  double mPi = chime::constants::pion_mass_fm;
 
   int npts = 1001;
   Eigen::ArrayXd x, r, jac;
