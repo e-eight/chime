@@ -11,10 +11,10 @@
 
 int main()
 {
-  constexpr double mPi = constants::pion_mass_fm;
-  constexpr double mN = constants::nucleon_mass_fm;
-  constexpr double FPi = constants::pion_decay_constant_fm;
-  constexpr double gA = constants::gA;
+  constexpr double mPi = chime::constants::pion_mass_fm;
+  constexpr double mN = chime::constants::nucleon_mass_fm;
+  constexpr double FPi = chime::constants::pion_decay_constant_fm;
+  constexpr double gA = chime::constants::gA;
 
   int Lp = 0, Sp = 0, Jp = 0, Tp = 1;
   int L = 0, S = 1, J = 1, T = 0;
@@ -25,9 +25,9 @@ int main()
   basis::RelativeSubspaceLSJT ket_subspace(L, S, J, T, g, Nmax);
 
   double tp_f =
-      am::tp::CSpinTensorProductRME(bra_subspace, ket_subspace, 2, 1, 1);
+      chime::tp::CSpinTensorProductRME(bra_subspace, ket_subspace, 2, 1, 1);
   double tp_g =
-      am::tp::CSpinTensorProductRME(bra_subspace, ket_subspace, 0, 1, 1);
+      chime::tp::CSpinTensorProductRME(bra_subspace, ket_subspace, 0, 1, 1);
   std::cout << "tp_f: " << tp_f << " tp_g: " << tp_g << "\n";
 
   std::size_t npts = 1001;
@@ -60,8 +60,9 @@ int main()
 
   std::cout << "tp_g * integ_tpi_ypi: " << tp_g * integ_tpi_ypi << "\n";
 
-  double prefactor = -(mPi * mN * gA * gA) / (24 * constants::pi * FPi * FPi);
-  double isospin = am::tp::SpinTensorProductRME(Tp, T, 1);
+  double prefactor =
+      -(mPi * mN * gA * gA) / (24 * chime::constants::pi * FPi * FPi);
+  double isospin = chime::tp::SpinTensorProductRME(Tp, T, 1);
   std::cout << "prefactor: " << prefactor << "\n";
   std::cout << "isospin: " << isospin << "\n";
   std::cout << "tp_g full result: "
