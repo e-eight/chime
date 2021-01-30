@@ -19,7 +19,7 @@ int main()
   int Lp = 0, Sp = 0, Jp = 0, Tp = 1;
   int L = 0, S = 1, J = 1, T = 0;
   int Nmax = 2, g = 0;
-  int Np = 0, N = 2;
+  int Np = 16, N = 16;
   int np = (Np - Lp) / 2, n = (N - L) / 2;
   basis::RelativeSubspaceLSJT bra_subspace(Lp, Sp, Jp, Tp, g, Nmax);
   basis::RelativeSubspaceLSJT ket_subspace(L, S, J, T, g, Nmax);
