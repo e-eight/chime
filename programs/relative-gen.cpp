@@ -5,7 +5,7 @@
 
  Input (relative.in):
    J0 g0 T0_min T0_max
-   Nmax hw
+   Nmax Jmax hw
    R
    operator_name chiral_order one_or_two_body
    output_filename
