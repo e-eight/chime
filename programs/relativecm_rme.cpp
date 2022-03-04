@@ -116,14 +116,20 @@ void ConstructMu2nNLOOperator(
         const basis::RelativeCMStateLSJT ket_state(ket_subspace, ket_index);
 
         // Extract state labels.
-        int bra_nr = bra_state.Nr();
+        int bra_Nr = bra_state.Nr();
         int bra_lr = bra_state.lr();
-        int bra_nc = bra_state.Nc();
+        int bra_Nc = bra_state.Nc();
         int bra_lc = bra_state.lc();
-        int ket_nr = ket_state.Nr();
+        int ket_Nr = ket_state.Nr();
         int ket_lr = ket_state.lr();
-        int ket_nc = ket_state.Nc();
+        int ket_Nc = ket_state.Nc();
         int ket_lc = ket_state.lc();
+
+	// Radial quantum numbers.
+	int bra_nr = (bra_Nr - bra_lr) / 2;
+	int bra_nc = (bra_Nc - bra_lc) / 2;
+	int ket_nr = (ket_Nr - ket_lr) / 2;
+	int ket_nc = (ket_Nc - ket_lc) / 2;
 
         // Common part of all radial integrals.
         Eigen::ArrayXd common_integrand = wt * scs_reg;
@@ -162,11 +168,11 @@ void ConstructMu2nNLOOperator(
 
             double tp_d =
                 tp::CCSpinTensorProductRME(bra_state, ket_state, 3, 1, 2, 2, 1);
-            tp_d *= std::sqrt(14. / 5.);
+            tp_d *= std::sqrt(42. / 5.);
 
             double tp_e =
                 tp::CCSpinTensorProductRME(bra_state, ket_state, 3, 1, 3, 2, 1);
-            tp_e *= std::sqrt(28. / 5.);
+            tp_e *= std::sqrt(84. / 5.);
 
             y *= wpir;
             y.head(1) = 0;  // Required to avoid divide by 0.
