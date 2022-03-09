@@ -125,11 +125,11 @@ void ConstructMu2nNLOOperator(
         int ket_Nc = ket_state.Nc();
         int ket_lc = ket_state.lc();
 
-	// Radial quantum numbers.
-	int bra_nr = (bra_Nr - bra_lr) / 2;
-	int bra_nc = (bra_Nc - bra_lc) / 2;
-	int ket_nr = (ket_Nr - ket_lr) / 2;
-	int ket_nc = (ket_Nc - ket_lc) / 2;
+        // Radial quantum numbers.
+        int bra_nr = (bra_Nr - bra_lr) / 2;
+        int bra_nc = (bra_Nc - bra_lc) / 2;
+        int ket_nr = (ket_Nr - ket_lr) / 2;
+        int ket_nc = (ket_Nc - ket_lc) / 2;
 
         // Common part of all radial integrals.
         Eigen::ArrayXd common_integrand = wt * scs_reg;
@@ -168,11 +168,11 @@ void ConstructMu2nNLOOperator(
 
             double tp_d =
                 tp::CCSpinTensorProductRME(bra_state, ket_state, 3, 1, 2, 2, 1);
-            tp_d *= std::sqrt(42. / 5.);
+            tp_d *= std::sqrt(14. / 5.);
 
             double tp_e =
                 tp::CCSpinTensorProductRME(bra_state, ket_state, 3, 1, 3, 2, 1);
-            tp_e *= std::sqrt(84. / 5.);
+            tp_e *= std::sqrt(28. / 5.);
 
             y *= wpir;
             y.head(1) = 0;  // Required to avoid divide by 0.
@@ -185,11 +185,11 @@ void ConstructMu2nNLOOperator(
           double integ_cm = 0;  // CM coordinate integral; analytical result.
           if (bra_lc == ket_lc + 1) {
             integ_cm = ((std::sqrt(ket_nc + ket_lc + 1.5) * (bra_nc == ket_nc))
-                        + (std::sqrt(ket_nc) * (bra_nc + 1 == ket_nc)));
+                        - (std::sqrt(ket_nc) * (bra_nc + 1 == ket_nc)));
           }
           else if (bra_lc + 1 == ket_lc) {
-            integ_cm = ((std::sqrt(bra_nc + ket_nc + 1.5)) * (bra_nc == ket_nc)
-                        + (std::sqrt(bra_nc) * (bra_nc == ket_nc + 1)));
+            integ_cm = ((std::sqrt(ket_nc + ket_lc + 0.5)) * (bra_nc == ket_nc)
+                        - (std::sqrt(ket_nc + 1) * (bra_nc == ket_nc + 1)));
           }
           integ_cm *= mPi * bcm;
 
